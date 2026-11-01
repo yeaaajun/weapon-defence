@@ -200,7 +200,7 @@ Object.assign(ART,{
  chakram:['<rect x="30" y="44" width="5" height="14" rx="2" fill="#4e342e"/><path d="M26 46 H39" stroke="#ffb300" stroke-width="3"/>','<circle cx="32.5" cy="24" r="15" fill="none" stroke="#cfd8dc" stroke-width="5"/><circle cx="32.5" cy="24" r="15" fill="none" stroke="#78909c" stroke-width="1"/><path d="M32.5 5 l2 -4 l2 4 M32.5 43 l-2 4 l-2 -4 M13 24 l-4 -2 l4 -2 M52 24 l4 2 l-4 2" fill="#eceff1" stroke="#78909c"/>',32.5,24]
 });
 Object.assign(ART,{
- chaos:['<circle cx="32" cy="46" r="8" fill="#6a1b9a" stroke="#ce93d8"/><circle cx="32" cy="46" r="3" fill="#e040fb"/><rect x="29" y="52" width="6" height="10" rx="2" fill="#4a148c"/>',`<g transform="rotate(-50 32 44)"><path d="M32 8 L35 12 V36 H29 V12Z" ${BL}/></g><g transform="rotate(-25 32 44)"><rect x="31" y="10" width="2" height="30" fill="#8d6e63"/><path d="M32 10 Q46 10 44 26 L32 28Z" ${HD}/></g><path d="M32 2 L36 12 V36 H28 V12Z" ${BL}/><g transform="rotate(25 32 44)"><rect x="31" y="14" width="2" height="24" fill="#8d6e63"/><path d="M32 6 L36 14 H28Z" ${BL}/></g><g transform="rotate(50 32 44)"><rect x="31" y="22" width="2" height="16" fill="#6d4c41"/><circle cx="32" cy="16" r="7" ${HD}/></g>`,32,44],
+ chaos:['<rect x="14" y="38" width="36" height="22" rx="3" fill="#6a1b9a" stroke="#ce93d8"/><rect x="18" y="42" width="28" height="4" fill="#e040fb"/><circle cx="32" cy="52" r="3" fill="#ffd54f"/>','<path d="M18 12 H46 V38 H18Z" fill="#4a148c" stroke="#ce93d8"/><path d="M18 20 H46 M24 12 V38 M40 12 V38" stroke="#ce93d8" stroke-width="1.5"/><path d="M28 8 H36 L38 12 H26Z" fill="#ffd54f" stroke="#f9a825"/><circle cx="32" cy="25" r="4" fill="#e040fb"/>',32,38],
  kusarigama:['<rect x="30" y="30" width="5" height="30" fill="#6d4c41"/><circle cx="32.5" cy="62" r="2.5" fill="#ffb300"/><path d="M35 32 Q56 26 53 48 Q47 36 35 40Z" fill="#cfd8dc" stroke="#78909c"/>',`<path d="M32.5 30 V12" stroke="#78909c" stroke-width="2.5" stroke-dasharray="3 2" fill="none"/><circle cx="32.5" cy="8" r="6" ${HD}/><path d="M32.5 0 l2 3 h-4z M39 8 l-3 -2 v4z M26 8 l3 -2 v4z" fill="#90a4ae"/>`,32.5,30]
 });
 Object.assign(ART,{
@@ -282,9 +282,9 @@ const WP=[
  {id:'hammer',n:'전투망치',price:700,cost:330,dmg:110,range:75,cd:1.5,hits:99,d:'범위 내 전체 강타'},
  {id:'claymore',n:'클레이모어',price:1000,cost:500,dmg:220,range:105,cd:1.6,hits:2,d:'양손으로 휘두르는 거대한 대검'},
  {id:'multi',n:'만능 도구',price:1200,cost:380,dmg:0,range:110,cd:.75,hits:1,pool:['dagger','katana','sword2','axe','scythe','bastard','spear','mace'],d:'공격마다 무기가 무작위로 바뀜'},
- {id:'excal',n:'엑스칼리버',price:null,cost:400,dmg:230,range:110,cd:1.2,hits:3,d:'성스러운 3연 참격'},
- {id:'gungnir',n:'궁니르',price:null,cost:520,dmg:150,range:180,cd:.9,hits:4,d:'긴 사거리 4연 관통'},
- {id:'mjolnir',n:'묠니르',price:null,cost:700,dmg:420,range:90,cd:1.7,hits:99,d:'벼락 범위 강타'},
+ {id:'excal',n:'엑스칼리버',price:null,cost:400,dmg:230,range:110,cd:1.2,hits:3,g:'crit',gd:'전설의 성검 – 25% 확률 치명타 (x2)',d:'성스러운 3연 참격'},
+ {id:'gungnir',n:'궁니르',price:null,cost:520,dmg:150,range:180,cd:.9,hits:4,g:'boss',gd:'오딘의 창 – 보스에게 피해 +60%',d:'긴 사거리 4연 관통 (절대 빗나가지 않는 창)'},
+ {id:'mjolnir',n:'묠니르',price:null,cost:700,dmg:420,range:90,cd:1.7,hits:99,g:'knock',gd:'토르의 망치 – 맞은 적을 뒤로 밀어냄',d:'벼락 범위 강타'},
  {id:'kukri',n:'쿠크리',price:100,cost:70,dmg:22,range:90,cd:.45,hits:1,d:'빠른 단도 베기'},
  {id:'flail',n:'플레일',price:380,cost:190,dmg:62,range:95,cd:1,hits:2,d:'휘둡러지는 철퇴형 무기'},
  {id:'guandao',n:'월도',price:600,cost:290,dmg:60,range:120,cd:1.1,hits:5,d:'청룡언월도풍 긴 자루 큰 초승달 베기'},
@@ -723,10 +723,38 @@ const PERKS=[
  {n:'장거리',d:'사거리 +10% / 적 체력 +6%',f:()=>{G.pr*=1.1;G.eh*=1.06}},
  {n:'탐욕',d:'골드 +25% / 적 체력 +10%',f:()=>{G.pg*=1.25;G.eh*=1.1}},
  {n:'방벽 수리',d:'체력 20% 회복 / 적 이동 +8%',f:()=>{G.lives+=G.d.lives*.2;G.es*=1.08}},
- {n:'광란',d:'우리 피해 +25% / 적 수 +25%',f:()=>{G.pd*=1.25;G.cnt*=1.25}}
+ {n:'광란',d:'우리 피해 +25% / 적 수 +25%',f:()=>{G.pd*=1.25;G.cnt*=1.25}},
+ {n:'강철 의지',d:'체력 +15% / 적 이동 +5%',f:()=>{G.lives*=1.15;G.es*=1.05}},
+ {n:'학살',d:'처치 골드 +30% / 적 체력 +12%',f:()=>{G.pg*=1.3;G.eh*=1.12}}
 ];
-function perk(){G.pause=true;const o=[...PERKS].sort(()=>Math.random()-.5).slice(0,3);$('pkb').innerHTML='<h2 style="margin-top:0">✨ 퍽 선택 (웨이브 '+G.wave+')</h2>'+o.map(p=>`<div class="card" style="margin:8px 0" onclick="pickPerk(${PERKS.indexOf(p)})"><b>${p.n}</b><small>${p.d}</small></div>`).join('');$('pk').style.display='flex'}
-function pickPerk(i){PERKS[i].f();S.st.perks=(S.st.perks||0)+1;G.pause=false;$('pk').style.display='none';hud();chk();side()}
+let perkTimer=null,perkChoices=[];
+function perk(){
+  G.pause=true;
+  perkChoices=[...PERKS].sort(()=>Math.random()-.5).slice(0,3);
+  const o=perkChoices;
+  $('pkb').innerHTML='<h2 style="margin-top:0">✨ 퍽 선택 (웨이브 '+G.wave+')</h2><div class="sub" id="pktimer">15초 후 자동 선택됩니다</div>'+o.map((p,i)=>`<div class="card" style="margin:8px 0" onclick="pickPerk(${i})"><b>${p.n}</b><small>${p.d}</small></div>`).join('');
+  $('pk').style.display='flex';
+  let left=15;
+  clearInterval(perkTimer);
+  perkTimer=setInterval(()=>{
+    left--;
+    const el=$('pktimer');
+    if(el)el.textContent=left+'초 후 자동 선택됩니다';
+    if(left<=0){
+      clearInterval(perkTimer);
+      pickPerk(Math.floor(Math.random()*o.length));
+    }
+  },1000);
+}
+function pickPerk(i){
+  clearInterval(perkTimer);
+  const p=perkChoices[i]||PERKS[i];
+  if(p)p.f();
+  S.st.perks=(S.st.perks||0)+1;
+  G.pause=false;
+  $('pk').style.display='none';
+  hud();chk();side();
+}
 function end(win,quit){
  if(G.over)return;G.over=true;snd(quit?'click':win?'win':'lose');
  let earn=quit?0:Math.round(G.wave*15*G.d.rew+(win?150*G.d.rew:0));earn=Math.round(earn*(G.cm||1));if(win)dq('clear',1);let rw='';
@@ -789,7 +817,7 @@ const NW=[
  {id:'glaive',n:'글레이브',t:5,cost:540,dmg:105,range:165,cd:.8,hits:99,d:'긴 곡도 달린 장병기 (낫 진화)'},
  {id:'zanbato',n:'참마도',t:6,cost:420,dmg:230,range:115,cd:1.2,hits:3,d:'[공격 트리 보상] 거대한 일본 대도'},
  {id:'katar',n:'카타르',t:6,cost:260,dmg:42,range:80,cd:.3,hits:1,d:'[경제 트리 보상] 인도의 찌르기 단검'},
- {id:'repeater',n:'연노',t:6,cost:360,dmg:30,range:270,cd:.22,hits:1,d:'[사거리 트리 보상] 연발 쇠뇌'},
+ {id:'repeater',n:'연노',t:6,cost:360,dmg:48,range:290,cd:.18,hits:1,d:'[사거리 트리 보상] 연발 쇠뇌 – 매우 빠른 연사'},
  {id:'chainsaw',n:'전기톱',t:7,cost:900,dmg:22,range:75,cd:.1,hits:1,price:3000,d:'미친 듯이 갈아내는 연속 베기'},
  {id:'stunbaton',n:'전기충격봉',t:7,cost:850,dmg:160,range:95,cd:.9,hits:3,g:'slow',gd:'맞은 적 1초간 둔화',price:3200,d:'전류로 3명 제압'},
  {id:'pistol',n:'권총',t:7,cost:1100,dmg:95,range:230,cd:.42,hits:1,price:4500,d:'정확한 연속 사격'},
@@ -896,7 +924,7 @@ function evtR(){const d=new Date();$('sc').innerHTML='<div class="sub" style="ma
 function evClaim(i){const e=EVENTS[i];if(!e.test(new Date()))return;S.ach['ev_'+e.id]=1;e.ws.forEach(w=>{if(!S.owned.includes(w))S.owned.push(w)});e.skins.forEach(s=>{const ix=WS[s[0]].findIndex(k=>k[0]==s[1])+1;if(ix&&!S.skins.includes(s[0]+':'+ix))S.skins.push(s[0]+':'+ix)});save();shopR();reveal(e.ws[0])}
 // 등급 필터 + 검색 (특별 등급은 맨 아래)
 const TORD=[0,1,2,3,5,6,7,8,4];let tierF=-1,qS='',TG=null;
-function tvis(w){return w.t!=8||S.owned.includes(w.id)||evActive(w.id)}
+function tvis(w){if(w.unlock&&!w.unlock()&&!S.owned.includes(w.id))return false;return w.t!=8||S.owned.includes(w.id)||evActive(w.id)}
 function tbody(){const q=qS.trim();return TORD.map(i=>{if(tierF>=0&&tierF!=i)return'';const L=TG.list.filter(w=>w.t==i&&tvis(w)&&(!q||w.n.includes(q)));return L.length?`<h2 style="color:${TC[i]}">${TIER[i]} 등급 (${L.length})</h2><div class="row">${L.map(TG.fn).join('')}</div>`:''}).join('')||'<div class="sub">해당하는 무기가 없습니다.</div>'}
 function tchips(){const c=i=>`<button class="${tierF==i?'':'alt'}" style="border:2px solid ${TC[i]};padding:5px 10px;font-size:12px" onclick="setTier(${i})">${TIER[i]} ${TG.list.filter(w=>w.t==i&&tvis(w)).length}</button>`;return `<div class="row" id="tb" style="margin:4px 0 8px;gap:6px"><button class="${tierF<0?'':'alt'}" style="padding:5px 10px;font-size:12px" onclick="setTier(-1)">전체</button>${TORD.map(c).join('')}</div>`}
 function grouped(list,fn){TG={list,fn};return tchips()+`<input value="${qS}" placeholder="🔍 무기 이름 검색" oninput="qS=this.value;tRe(1)" style="width:100%;padding:8px;border-radius:8px;border:2px solid var(--line);background:var(--card);color:var(--tx);margin-bottom:6px"><div id="tl">${tbody()}</div>`}
@@ -906,8 +934,22 @@ function tRe(s){$('tl').innerHTML=tbody();if(!s)$('tb').outerHTML=tchips()}
 function dkey(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
 function dqInit(){const k=dkey();if(S.dq&&S.dq.d==k)return;let s=0;for(const c of k)s=(s*31+c.charCodeAt(0))%100003;const r=()=>{s=(s*9301+49297)%233280;return s/233280};
  const ow=S.owned.filter(id=>WM[id]&&!WM[id].pool),pw=ow[Math.floor(r()*ow.length)]||'dagger';
- const T=[['kill',150+Math.floor(r()*5)*50,'적 {g}마리 처치'],['boss',1+Math.floor(r()*3),'보스 {g}마리 처치'],['clear',1+Math.floor(r()*2),'게임 {g}회 클리어'],['w:'+pw,50+Math.floor(r()*4)*20,WM[pw].n+'로 적 {g}마리 처치'],['wave',10+Math.floor(r()*3)*5,'웨이브 {g}개 돌파 (누적)']];
- S.dq={d:k,all:0,q:[0,1,2,3,4].sort(()=>r()-.5).slice(0,3).map(i=>{const t=T[i],g=t[1];return{t:t[0],g,p:0,c:0,txt:t[2].replace('{g}',g),coin:Math.round({kill:g*1.2,boss:g*150,clear:g*300,wave:g*18}[t[0]]||g*4),gem:t[0]=='clear'?1:0}})};save()}
+ const T=[
+  ['kill',150+Math.floor(r()*5)*50,'적 {g}마리 처치'],
+  ['boss',1+Math.floor(r()*3),'보스 {g}마리 처치'],
+  ['clear',1+Math.floor(r()*2),'게임 {g}회 클리어'],
+  ['w:'+pw,50+Math.floor(r()*4)*20,WM[pw].n+'로 적 {g}마리 처치'],
+  ['wave',10+Math.floor(r()*3)*5,'웨이브 {g}개 돌파 (누적)'],
+  ['up',3+Math.floor(r()*4),'무기 강화 {g}회'],
+  ['place',8+Math.floor(r()*6),'무기 설치 {g}회'],
+  ['gold',200+Math.floor(r()*8)*50,'골드 {g} 획득 (누적)'],
+  ['leak',0,'한 번도 새지 않고 클리어 (라이프 손실 0)'],
+  ['infw',20+Math.floor(r()*3)*10,'무한모드 웨이브 {g} 도달']
+ ];
+ // 매일 다른 조합이 나오도록 셔플 후 3개
+ const idx=[0,1,2,3,4,5,6,7,8,9].sort(()=>r()-.5).slice(0,3);
+ S.dq={d:k,all:0,q:idx.map(i=>{const t=T[i],g=t[1];const coinMap={kill:g*1.2,boss:g*150,clear:g*300,wave:g*18,up:g*40,place:g*25,gold:g*0.8,leak:400,infw:g*12};
+ return{t:t[0],g,p:0,c:0,txt:t[2].replace('{g}',g),coin:Math.round(coinMap[t[0].split(':')[0]]||g*4),gem:t[0]=='clear'||t[0]=='leak'?1:0}})};save()}
 function dq(t,n){dqInit();let ch=0;for(const q of S.dq.q)if(q.t==t&&q.p<q.g){q.p=Math.min(q.g,q.p+n);if(q.p>=q.g){toast('📜 퀘스트 완료: '+q.txt);ch=1}}if(ch)save()}
 function dqR(){dqInit();const q=S.dq,left=Math.ceil((new Date().setHours(24,0,0,0)-Date.now())/3600000),all=q.q.every(x=>x.c);$('qs2').innerHTML=`<div class="sub" style="margin-bottom:8px">매일 새 퀘스트 3개! 모두 받으면 보너스 💎2 + 🪙500. (약 ${left}시간 뒤 새로 고침)</div>`+q.q.map((x,i)=>`<div class="srow"><b style="width:auto;flex:1;min-width:180px">${x.c?'✅':'📜'} ${x.txt}<br><span class="sub">${x.p}/${x.g} · 보상 🪙${x.coin}${x.gem?' 💎'+x.gem:''}</span></b><button ${x.p>=x.g&&!x.c?'':'disabled'} onclick="dqClaim(${i})">${x.c?'수령 완료':x.p>=x.g?'받기':'진행 중'}</button></div>`).join('')+`<div class="srow"><b style="width:auto;flex:1">🎁 전체 완료 보너스</b><button ${all&&!q.all?'':'disabled'} onclick="dqAll()">${q.all?'수령 완료':'받기'}</button></div>`;syncC()}
 function dqClaim(i){const x=S.dq.q[i];if(x.c||x.p<x.g)return;x.c=1;S.coins+=x.coin;S.gems=(S.gems||0)+x.gem;save();chk();dqR();snd('ach')}
@@ -955,7 +997,7 @@ let TRM={},TRE=null;
 function trN(n){if(n.nodeType==3){const v=n.nodeValue;if(/[가-힣]/.test(v)){const t=v.replace(TRE,m=>TRM[m]);if(t!==v)n.nodeValue=t}}else if(n.nodeType==1){if(n.placeholder&&/[가-힣]/.test(n.placeholder))n.placeholder=n.placeholder.replace(TRE,m=>TRM[m]);for(const c of n.childNodes)trN(c)}}
 function langInit(){if(LANG!='en'||TRE)return;TRM=Object.fromEntries(TRD);TRE=new RegExp(TRD.map(x=>x[0]).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|'),'g');new MutationObserver(ms=>{for(const m of ms){if(m.type=='characterData')trN(m.target);else m.addedNodes.forEach(trN)}}).observe(document.body,{childList:true,subtree:true,characterData:true});trN(document.body)}
 function setLang(l){try{localStorage.setItem('wtd_lang',l)}catch(e){}if(l=='en'&&LANG!='en'){LANG='en';langInit()}else if(l=='ko'&&LANG!='ko'){LANG='ko';try{location.reload()}catch(e){}}setR()}
-function setR(){$('stb').innerHTML=`<h2 style="margin-top:0">⚙️ 설정</h2><label>🔊 전체 음량<input class="rng" type="range" min="0" max="1" step=".05" value="${VM}" oninput="VM=+this.value;vsave()"></label><label>🎵 배경음악<input class="rng" type="range" min="0" max="1" step=".05" value="${VB}" oninput="VB=+this.value;vsave()"></label><label>💥 효과음<input class="rng" type="range" min="0" max="1" step=".05" value="${VS}" oninput="VS=+this.value;vsave()"></label><label style="flex-direction:row;align-items:center"><input type="checkbox" ${mute?'checked':''} onchange="mute=this.checked"> 모두 음소거</label><label>언어 / Language<div class="row"><button class="${LANG=='ko'?'':'alt'}" onclick="setLang('ko')">한국어</button><button class="${LANG=='en'?'':'alt'}" onclick="setLang('en')">English</button></div></label><div class="sub">English: UI and weapon names are translated; some descriptions stay in Korean.</div><button class="alt" style="margin-top:12px;width:100%" onclick="$('st').style.display='none'">닫기</button>`;$('st').style.display='flex'}
+function setR(){$('stb').innerHTML=`<h2 style="margin-top:0">⚙️ 설정</h2><label>🔊 전체 음량<input class="rng" type="range" min="0" max="1" step=".05" value="${VM}" oninput="VM=+this.value;vsave()"></label><label>🎵 배경음악<input class="rng" type="range" min="0" max="1" step=".05" value="${VB}" oninput="VB=+this.value;vsave()"></label><label>💥 효과음<input class="rng" type="range" min="0" max="1" step=".05" value="${VS}" oninput="VS=+this.value;vsave()"></label><label style="flex-direction:row;align-items:center"><input type="checkbox" ${mute?'checked':''} onchange="mute=this.checked"> 모두 음소거</label><label>언어 / Language<div class="row"><button class="${LANG=='ko'?'':'alt'}" onclick="setLang('ko')">한국어</button><button class="${LANG=='en'?'':'alt'}" onclick="setLang('en')">English</button></div></label><div class="sub">English: UI and weapon names are translated; some descriptions stay in Korean.</div><hr style="border-color:var(--line);margin:16px 0"><button style="background:#c62828;width:100%;margin-bottom:8px" onclick="ask('정말 계정을 초기화하시겠습니까? 모든 진행도, 코인, 무기, 업적, 트리가 삭제됩니다.',()=>{localStorage.removeItem('wtd2');location.reload()})">⚠️ 계정 초기화</button><button class="alt" style="width:100%" onclick="$('st').style.display='none'">닫기</button>`;$('st').style.display='flex'}
 // ===== 호버 툴팁 / 자세히 보기 / 새 트리 / 번역 확장 =====
 WM.poseidon.wv=1;
 const EN_N=['슬라임','박쥐','고블린','해골','오크','드래곤','유령','악마','거북이','병사','모아이'];
@@ -969,7 +1011,7 @@ function tip(e){const i=EN.indexOf(e.k),nm=(EN_N[i]||'적')+(e.k.r>=30?' (보스
 function detail(id){const w=WM[id],lv=[1,2,3,4].map(l=>{const k=l-1;return `Lv.${l}: 피해 ${w.pool?'랜덤':Math.round(w.dmg*Math.pow(1.45,k))} · 사거리 ${w.range+k*8} · 간격 ${(w.cd*Math.pow(.93,k)).toFixed(2)}s`}).join('<br>'),up=[1,2,3].map(k=>Math.round(w.cost*.7*k));
  skOpen=null;$('skmb').innerHTML=`<h2 style="margin-top:0;color:${TC[w.t]}">${TIER[w.t]} 등급</h2><div style="display:flex;gap:12px;align-items:center;justify-content:center">${svg(id,skOf(id))}<h1 style="margin:0">${w.n}</h1></div><div class="sub">${w.d}</div><div style="text-align:left;margin:10px 0;line-height:1.7;font-size:13px">설치비 💰${w.cost}${w.price!=null?' · 상점가 🪙'+w.price:''}<br>타격 수 ${w.hits>9?'범위 전체':w.hits}${w.pool?' (공격마다 무기 무작위)':''}${w.gd?'<br>✨ '+w.gd:''}<br>강화비용 💰${up.join(' → ')}<br>${lv}<br>처치 ${wk(id)}회${w.pool?'<br>사용 무기: '+w.pool.map(p=>WM[p].n).join(', '):''}<br>보유 스킨 ${S.skins.filter(s=>s.startsWith(id+':')).length}개 / 전체 ${WS[id].length}개</div><button class="alt" onclick="$('skm').style.display='none'">닫기</button>`;$('skm').style.display='flex'}
 Object.assign(ART,{
- falx:['<rect x="29" y="44" width="6" height="16" rx="2" fill="#4e342e"/><rect x="22" y="43" width="20" height="3" fill="#8d6e63"/>',`<path d="M24 2 Q50 6 44 44 L34 44 Q38 20 24 2Z" ${BL}/>`,32,44],
+ falx:['<rect x="29" y="44" width="6" height="16" rx="2" fill="#4e342e"/><rect x="22" y="43" width="20" height="3" fill="#8d6e63"/>',`<path d="M28 2 Q46 8 40 44 L28 44 Q32 20 28 2Z" ${BL}/>`,32,44],
  sai:['<rect x="29" y="44" width="6" height="14" rx="2" fill="#4e342e"/>',`<path d="M32 4 L35 44 L29 44Z" ${BL}/><path d="M22 30 Q20 18 26 14 L29 32Z M42 30 Q44 18 38 14 L35 32Z" ${BL}/>`,32,44],
  harpoon:['<rect x="30" y="22" width="4" height="38" fill="#8d6e63"/><path d="M32 60 Q44 52 40 44" stroke="#bcaaa4" stroke-width="2" fill="none"/>',`<path d="M32 0 L38 14 L34 14 L34 24 L30 24 L30 14 L26 14Z" ${BL}/><path d="M26 14 L21 21 L29 18Z M38 14 L43 21 L35 18Z" ${BL}/>`,32,24]
 });
@@ -1007,16 +1049,80 @@ function tpu(){PD=null}
 function treeR(){const pan=document.getElementById('tpan');if(pan){TS.l=pan.scrollLeft;TS.t=pan.scrollTop}
  let ln='',nd='';const pos=id=>id=='root'?[900,840]:[TN[id].x,TN[id].y];
  for(const id in TN){const n=TN[id];for(const p of n.par){const a=pos(p),on=(p=='root'||pst(TN[p]))&&pst(n);ln+=`<line x1="${a[0]}" y1="${a[1]}" x2="${n.x}" y2="${n.y}" stroke="${on?'#76ff03':'#3b4256'}" stroke-width="${on?4:2}" ${on?'':'stroke-dasharray="6 6"'}/>`}
-  const op=opn(n),l=tlv(id),c=tcost(n),pos2=`left:${n.x}px;top:${n.y}px`;
-  if(!op)nd+=`<div class="tn lock" style="${pos2}"><b style="font-size:20px">???</b></div>`;
-  else if(n.k=='w'){const got=S.owned.includes(n.wid);nd+=`<div class="tn rw ${got?'max':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')">${svg(n.wid,skOf(n.wid))}<b>${WM[n.wid].n}</b><small>${got?'✅ 획득':'🪙'+c}</small></div>`}
-  else nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b>${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${n.ds(l||1)}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`}
+  const op=opn(n),l=tlv(id),c=tcost(n);
+  // small nodes (weapon-specific upgrades) are smaller and closer
+  const isSmall=n.k==='s';
+  const sz=isSmall?'width:64px;height:64px;font-size:10px;padding:3px;':'';
+  const pos2=`left:${n.x}px;top:${n.y}px;${sz}`;
+  if(!op){
+    // even locked nodes show as circles; weapon nodes keep circle shape
+    if(n.k==='w') nd+=`<div class="tn rw lock" style="${pos2}"><b style="font-size:22px">?</b><small>🔒</small></div>`;
+    else nd+=`<div class="tn lock" style="${pos2}"><b style="font-size:18px">???</b></div>`;
+  } else if(n.k==='w'){
+    const got=S.owned.includes(n.wid);
+    nd+=`<div class="tn rw ${got?'max':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')">${svg(n.wid,skOf(n.wid))}<b>${WM[n.wid].n}</b><small>${got?'✅ 획득':'🪙'+c}</small></div>`;
+  } else if(isSmall){
+    nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b style="font-size:11px">${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
+  } else {
+    nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b>${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${n.ds(l||1)}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
+  }
+ }
  nd+=`<div class="tn root" style="left:900px;top:840px;width:96px;height:96px;font-size:40px;flex-direction:column">🌳<small style="font-size:10px">${S.tspent}</small></div>`;
  $('tr').innerHTML=`<div class="sub" style="margin-bottom:8px">영구 강화입니다. 화면을 드래그해서 움직이세요. 공격(위), 경제(오른쪽), 사거리·방어(왼쪽) 세 방향으로 가지가 뻗고, 두 갈래가 합쳐지는 노드는 양쪽을 모두 올려야 열립니다. 가지 사이를 잇는 합동 노드도 있고, 무기를 얻으면 그 무기만 강화하는 작은 노드가 열려요. 노드는 다음 단계만 보이고 그 뒤는 ???입니다. 초기화(🪙500)하면 투자 비용이 전부 🌳트리머니로 바뀌고, 트리머니는 이 트리에서만 쓸 수 있습니다.<br>보유: 🪙${S.coins} · 🌳 ${S.tm} · 투자 합계 ${S.tspent} <button class="alt" ${S.coins<500||!S.tspent?'disabled':''} onclick="treeReset()">초기화 🪙500</button></div><div id="tpan" style="overflow:auto;height:68vh;min-height:420px;border:2px solid var(--line);border-radius:12px;cursor:grab" onpointerdown="tpd(event)" onpointermove="tpm(event)" onpointerup="tpu()" onpointerleave="tpu()"><div class="tmap" style="width:1800px;height:1150px;border:none;border-radius:0"><svg class="ln" viewBox="0 0 1800 1150" width="1800" height="1150">${ln}</svg>${nd}</div></div>`;
  const p2=document.getElementById('tpan');if(p2){p2.scrollLeft=TS.l==null?900-p2.clientWidth/2:TS.l;p2.scrollTop=TS.t==null?840-p2.clientHeight/2:TS.t}syncC()}
+
 TRD.push(['자세히 보기','Details'],['강화비용','Upgrade cost'],['상점가','Shop price'],['보유 스킨','Skins owned'],['설치비','Cost'],['피해 경감','damage reduction'],['출혈','Bleed'],['드래곤','Dragon'],['슬라임','Slime'],['박쥐','Bat'],['고블린','Goblin'],['해골','Skeleton'],['오크','Orc'],['유령','Ghost'],['악마','Demon'],['거북이','Turtle'],['모아이','Moai'],['보스','Boss'],
 ['빠른 연타','Rapid strikes'],['균형형','Balanced'],['2명 동시 타격','Hits 2 at once'],['긴 사거리','Long range'],['범위 내 전체 타격','Hits everything in range'],['넓은 범위 휩쓸기','Wide sweeping arc'],['강력한 3연 타격','Powerful triple strike'],['빠른 찌르기','Fast thrusts'],['빠른 2명 베기','Fast double slash'],['묵직한 강타','Heavy blow'],['3명 동시 찌르기','Pierces 3 at once'],['긴 사거리 3연 타격','Long-range triple hit'],['범위 내 전체 강타','Smashes everything in range'],['양손으로 휘두르는 거대한 대검','Huge two-handed greatsword'],['공격마다 무기가 무작위로 바뀜','Weapon changes randomly each attack'],['공격마다 강력한 무기가 무작위로 바뀜','Strong weapon randomly each attack'],['빠른 단도 베기','Quick knife slashes'],['휘둘러지는 철퇴형 무기','Swinging mace-like weapon'],['긴 자루 큰 초승달 베기','Long-handled crescent slash'],['빠르게 두 명을 후려침','Whips two quickly'],['싸고 튼튼한 몽둥이','Cheap sturdy club'],['저렴한 원거리 투척','Cheap ranged throw'],['돌진 찌르기, 긴 사거리','Lunging thrust, long range'],['매우 느리지만 초장거리 대형 화살','Very slow, extreme-range bolt'],['보스를 노린 거대한 검','Giant blade made for bosses'],['긴 사거리의 정밀 사격','Long-range precision shots'],['물결 날의 거대한 양손검','Wave-bladed two-handed sword'],['매우 긴 대형 일본도','Very long Japanese sword'],['사슬 달린 낫, 넓은 범위','Chain sickle, wide range'],['뱀의 꼬리에서 나온 일본 신화의 검','Japanese myth sword from a serpent’s tail'],['날아가는 회전 고리','Flying spinning ring'],['성스러운 3연 참격','Holy triple slash'],['긴 사거리 4연 관통','Long-range 4-target pierce'],['벼락 범위 강타','Thunderous area smash'],['기병의 곡검','Cavalry curved sword'],['가시 박힌 철구','Spiked iron ball'],['눈 깜짝할 새 3연타','Triple hit in a blink'],['전설 장인의 명검','Masterwork of a legendary smith'],['삼국지 여포의 장병기','Lü Bu’s polearm'],['바다의 신의 삼지창','Trident of the sea god'],['켈트 신화의 필중 창','Celtic spear that never misses'],['미친 듯이 갈아내는 연속 베기','Frantic rapid cutting'],['전류로 3명 제압','Shocks 3 enemies'],['정확한 연속 사격','Accurate rapid fire'],['가까이서 5명 제압','Blasts 5 up close'],['초장거리 일격','Extreme-range one-shot'],['물결 모양 날의 단검 (단검 진화)','Wavy-bladed dagger (Dagger evolution)'],['허리에 차던 긴 일본도 (외날검 진화)','Long Japanese sword (Katana evolution)'],['넓은 날의 양손 대검 (양날검 진화)','Broad two-handed sword (Broadsword evolution)'],['매우 긴 보병 창 (창 진화)','Very long infantry spear (Spear evolution)'],['양날 도끼 (도끼 진화)','Double-bitted axe (Axe evolution)'],['긴 곡도 달린 장병기 (낫 진화)','Curved-blade polearm (Scythe evolution)'],['[공격 트리 보상] 거대한 일본 대도','[Attack tree reward] Huge Japanese cleaver'],['[경제 트리 보상] 인도의 찌르기 단검','[Economy tree reward] Indian push dagger'],['[사거리 트리 보상] 연발 쇠뇌','[Range tree reward] Repeating crossbow'],['[공격 트리 보상] 다키아의 휘어진 대형 낫검','[Attack tree reward] Dacian curved war blade'],['[경제 트리 보상] 오키나와의 갈래 단검','[Economy tree reward] Okinawan forked dagger'],['[사거리 트리 보상] 멀리 꽂는 작살','[Range tree reward] Long-range harpoon'],['[할로윈 한정]','[Halloween only]'],['[크리스마스 한정]','[Christmas only]'],['[만우절 한정]','[April Fools only]'],['심장을 노리는 나무 말뚝','Wooden stake aimed at the heart'],['쓸어내는 빗자루','Sweeping broom'],['호박 머리 철퇴','Pumpkin-headed mace'],['갈고리 사탕','Hooked candy'],['차갑게 꿰뚫는 창','Coldly piercing spear'],['딸랑딸랑 때리는 철퇴','Jingling mace'],['의외로 아프다','Surprisingly painful'],['미끄러운 공격','Slippery attack'],['뿅뿅 소리 나는 망치','Squeaking hammer'],['보스 피해 +60% · 맞은 적 출혈(4초간 지속 피해)','Boss damage +60% · Bleed (4s damage over time)'],['보스에게 피해 +60%','+60% damage to bosses'],['25% 확률로 치명타 (피해 x2)','25% crit chance (x2 damage)'],['체력 20% 미만 적 즉시 처형','Executes enemies under 20% HP'],['맞은 적을 뒤로 밀어냄','Knocks enemies back'],['맞은 적 1초간 둔화','Slows hit enemies for 1s'],['공격마다 무기 무작위','Random weapon each attack']);
 langInit();
+
+// 연노 스킨 추가
+if(!WS.repeater||WS.repeater.length<3){
+  WS.repeater = WS.repeater || [];
+  WS.repeater.push(
+    ['흑철',400,'#90a4ae','#263238','<circle cx="32" cy="20" r="2" fill="#40c4ff"/>','<rect x="24" y="44" width="16" height="6" rx="2" fill="#212121"/>'],
+    ['황금 연노',800,'#ffd54f','#ff8f00','<path d="M32 4 l2 4 h-4z" fill="#fff"/>','<rect x="24" y="44" width="16" height="6" rx="2" fill="#ff8f00"/>'],
+    ['용린 연노',1200,'#80cbc4','#004d40','<path d="M28 12 h8 M28 18 h8" stroke="#00e676"/>','']
+  );
+}
+
+
+// 인게임 단축키: U/Space = 강화, S = 판매, Esc = 선택 해제
+document.addEventListener('keydown',e=>{
+  if(!G||G.over||G.pause)return;
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+  const k=e.key.toLowerCase();
+  if((k==='u'||k===' ')&&G.sel){e.preventDefault();upg();}
+  else if(k==='s'&&G.sel){e.preventDefault();sell();}
+  else if(k==='escape'){G.sel=null;side();}
+});
+
+
+// 조건 해금 무기
+[{id:'aegis',n:'아이기스 방패창',t:6,cost:550,dmg:180,range:140,cd:1.3,hits:4,d:'[조건 해금] 트리 투자 합계 2000 이상 시 해금되는 방패형 창',unlock:()=>S.tspent>=2000},
+ {id:'tyrfing',n:'티르핑',t:6,cost:600,dmg:280,range:110,cd:1.1,hits:2,d:'[조건 해금] 공격 트리 노드 합 12 이상 시 해금되는 저주받은 검',unlock:()=>{const sum=Object.keys(S.tree||{}).filter(k=>k.startsWith('a')).reduce((a,k)=>a+(S.tree[k]||0),0);return sum>=12}}
+].forEach(w=>{
+  if(w.price===undefined)w.price=null;
+  WP.push(w);WM[w.id]=w;WS[w.id]=[];
+  GEN.forEach(g=>WS[w.id].push([g[0],g[1],g[2],g[3],`<circle cx="32" cy="38" r="3.2" fill="${g[4]}" stroke="${g[3]}"/>`,`<rect x="28" y="54" width="8" height="2.5" rx="1" fill="${g[4]}"/>`]));
+});
+// ART for new weapons
+Object.assign(ART,{
+  aegis:['<rect x="29" y="40" width="6" height="18" fill="#5d4037"/>','<path d="M32 0 L38 18 H26Z" fill="#cfd8dc" stroke="#78909c"/><circle cx="32" cy="28" r="14" fill="#90caf9" stroke="#1565c0"/><path d="M32 18 V38 M22 28 H42" stroke="#fff" stroke-width="2"/>',32,40],
+  tyrfing:['<rect x="14" y="42" width="36" height="4" rx="1" fill="#b71c1c"/><rect x="29" y="46" width="6" height="12" fill="#4e342e"/>','<path d="M32 0 L40 14 L38 42 L26 42 L24 14Z" fill="#ef9a9a" stroke="#b71c1c"/><path d="M32 8 V40" stroke="#ff1744"/>',32,42]
+});
+AN.aegis=AN.spear;AN.tyrfing=AN.bastard;
+
+
+ACH.push(
+  ['inf100','끝없는 전쟁','무한모드 웨이브 100 도달',1500,()=>(S.st.binf||0)>=100],
+  ['perk20','퍽 수집가','퍽 20회 선택',250,()=>(S.st.perks||0)>=20],
+  ['tree1k','나무의 친구','트리 투자 합계 1000',250,()=>(S.tspent||0)>=1000],
+  ['tree5k','숲의 주인','트리 투자 합계 5000',800,()=>(S.tspent||0)>=5000],
+  ['allsp','특별 정복자','모든 특별맵 클리어',1000,()=>(S.st.spm||[]).length>=SMAPS.length],
+  ['gem50','보석 수집가','젬 50개 누적 획득',400,()=>(S.st.gt||0)>=50],
+  ['cond1','조건의 증명','조건 해금 무기 1종 획득',300,()=>S.owned.includes('aegis')||S.owned.includes('tyrfing')]
+);
+
 show('home');
 </script>
 </body>
