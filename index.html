@@ -79,15 +79,6 @@ button,.card,.chip,.slot{touch-action:manipulation;-webkit-tap-highlight-color:t
 #ac,.gr{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}#ac .srow{margin:0;flex-direction:column;align-items:flex-start}#ac .srow>b{width:auto}
 @media(max-width:720px){button{padding:10px 12px}.wrap{padding:8px}.card{flex:1 1 100px;min-width:90px}#hud{gap:8px;font-size:14px}#hud button{padding:8px 10px;font-size:13px}#side{font-size:12px}.ttl{font-size:32px}.hero{width:180px}#bar .slot{flex:1 1 70px}h1{font-size:22px}}
 .hide{display:none!important}
-
-/* 요청 반영: 작은 무기 강화 노드는 분명한 원형으로 표시 */
-.tn.small-node{width:68px!important;height:68px!important;min-height:68px;border-radius:50%!important;padding:4px!important;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;overflow:hidden;}
-.tn.small-node b{font-size:10px!important;max-width:58px;overflow-wrap:anywhere;}
-.tn.small-node small{font-size:8px!important;margin-top:2px;white-space:nowrap;}
-.tn.branch-label{background:transparent!important;border:0!important;box-shadow:none!important;cursor:default!important;width:180px!important;transform:translate(-50%,-50%);font-size:13px;font-weight:800;color:var(--gold);}
-.tn.branch-label small{font-size:10px;}
-@media(max-width:720px){.tmap{min-width:900px}}
-
 </style>
 </head>
 <body>
@@ -535,7 +526,7 @@ cv.onpointerdown=e=>{
 function end(win,quit){
  if(G.over)return;G.over=true;snd(quit?'click':win?'win':'lose');
  const earn=quit?0:Math.round(G.wave*15*G.d.rew+(win?150*G.d.rew:0));
- S.coins+=earn;if(!quit&&!G.special)S.best=Math.max(S.best||0,win?MAXW:G.wave-1);let rw='';if(win&&G.special&&!S.owned.includes(G.m.reward)){S.owned.push(G.m.reward);rw=' · 🎁 '+WM[G.m.reward].n+' 획득!'}if(win){if(G.special){S.st.sp++;S.st.spm=S.st.spm||[];if(!S.st.spm.includes(G.m.reward))S.st.spm.push(G.m.reward)}else{S.st.wins++;if(G.di>=2)S.st.hard++;if(G.di>=4)S.st.hell=1}}save();chk();
+ S.coins+=earn;if(!quit&&!G.special)S.best=Math.max(S.best||0,win?MAXW:G.wave-1);let rw='';if(win&&G.special&&!S.owned.includes(G.m.reward)){S.owned.push(G.m.reward);rw=' · 🎁 '+WM[G.m.reward].n+' 획득!'}if(win){if(G.special){S.st.sp++;S.st.spm=S.st.spm||[];if(!S.st.spm.includes(G.m.reward))S.st.spm.push(G.m.reward)}else{S.st.wins++;if(G.di>=2)S.st.hard++;if(G.di==4)S.st.hell=1}}save();chk();
  $('ot').textContent=quit?'전투 종료':win?'🏆 승리!':'💀 패배...';
  $('od').textContent=`도달 웨이브: ${G.wave} · 획득 코인: 🪙 ${earn}${rw}`;
  $('over').style.display='flex';
@@ -557,9 +548,9 @@ function update(dt){
    const w=WM[t.id],tg=G.en.filter(e=>Math.hypot(e.x-t.x,e.y-t.y)<=s.range+e.k.r*.5).sort((a,b)=>b.d-a.d);
    if(tg.length){
     let ww=w,dm=s.dmg;if(w.pool){const pid=w.pool[Math.random()*w.pool.length|0];t.cur=pid;ww=WM[pid];dm=ww.dmg*Math.pow(1.45,t.lv-1)*(w.pm||.9)*(G.pd||1)}
-    snd('swing',t.cur||t.id);snd('hit');t.idle=0;const fk=skFx(w.pool?t.id:(t.cur||t.id));if(ww.wv)G.fx.push({type:'wave',x:t.x,y:t.y,a:t.aim,r:s.range,t:.65,m:.65});if(fk=='ding'||fk=='chain')snd(fk);t.cd=s.cd;t.sw=1;t.atk=(t.atk||0)+1;t.aim=Math.atan2(tg[0].y-t.y,tg[0].x-t.x);
+    snd('swing',t.cur||t.id);snd('hit');t.idle=0;const fk=skFx(w.pool?t.id:(t.cur||t.id));if(ww.wv)G.fx.push({type:'wave',x:t.x,y:t.y,a:t.aim,r:s.range,t:.65,m:.65});if(fk=='ding'||fk=='chain')snd(fk);t.cd=s.cd;t.sw=1;t.aim=Math.atan2(tg[0].y-t.y,tg[0].x-t.x);
     G.fx.push({type:'arc',x:t.x,y:t.y,a:t.aim,r:THRUST.includes(t.cur||t.id)?s.range*.75:Math.min(s.range,75)+10,t:.25,m:.25,th:THRUST.includes(t.cur||t.id)});
-    const gm=ww.g;for(const e of tg.slice(0,ww.hits+(gm=='pierce'?1:0))){let d2=dm;if(gm=='crit'&&Math.random()<.25)d2*=2;if(gm=='dbl'&&Math.random()<.3)d2*=2;if(gm&&gm.includes('boss')&&e.k.r>=30)d2*=1.6;if(gm&&gm.includes('bleed')){e.bl=4;e.bd=dm*.18}if(e.k.r>=30)d2*=(G.bd||1);d2*=towerTrait(t,e,tg,ww);d2*=1-(e.k.df||0)/100;if(gm=='exec'&&e.hp<e.mx*.2)d2=e.hp+1;e.hp-=d2;if(gm=='slow')e.slow=1;if(gm=='knock')e.d=Math.max(0,e.d-30);e.hit=.12;e.by=t;G.fx.push({type:'dmg',x:e.x+(Math.random()-.5)*10,y:e.y-e.k.r,v:Math.round(d2),c:d2>dm*1.4,t:.7,m:.7});G.fx.push({type:'spark',x:e.x,y:e.y,t:.3,m:.3});if(fk&&PF[fk])G.fx.push({type:'p',k:fk,x:e.x,y:e.y,t:.55,m:.55,s:rs()})}
+    const gm=ww.g;for(const e of tg.slice(0,ww.hits+(gm=='pierce'?1:0))){let d2=dm;if(gm=='crit'&&Math.random()<.25)d2*=2;if(gm=='dbl'&&Math.random()<.3)d2*=2;if(gm&&gm.includes('boss')&&e.k.r>=30)d2*=1.6;if(gm&&gm.includes('bleed')){e.bl=4;e.bd=dm*.18}if(e.k.r>=30)d2*=(G.bd||1);d2*=1-(e.k.df||0)/100;if(gm=='exec'&&e.hp<e.mx*.2)d2=e.hp+1;e.hp-=d2;if(gm=='slow')e.slow=1;if(gm=='knock')e.d=Math.max(0,e.d-30);e.hit=.12;e.by=t;G.fx.push({type:'dmg',x:e.x+(Math.random()-.5)*10,y:e.y-e.k.r,v:Math.round(d2),c:d2>dm*1.4,t:.7,m:.7});G.fx.push({type:'spark',x:e.x,y:e.y,t:.3,m:.3});if(fk&&PF[fk])G.fx.push({type:'p',k:fk,x:e.x,y:e.y,t:.55,m:.55,s:rs()})}
    }
   }
  }
@@ -772,7 +763,7 @@ function end(win,quit){
   if(win){
    if(G.special){S.st.sp++;S.st.spm=S.st.spm||[];if(!S.st.spm.includes(G.m.reward))S.st.spm.push(G.m.reward);const gm=3+(G.m.df||0);S.gems=(S.gems||0)+gm;S.st.gt=(S.st.gt||0)+gm;rw+=' · 💎 젬 '+gm+'개';if(!S.owned.includes(G.m.reward)){S.owned.push(G.m.reward);rw+=' · 🎁 '+WM[G.m.reward].n+' 획득!';G.rv=G.m.reward}}
    else if(G.chal){S.st.chal=(S.st.chal||0)+1;if(!S.mods.includes(G.chal.id)){S.mods.push(G.chal.id);rw+=' · 🧪 모디파이어 "'+G.chal.n+'" 획득!'}}
-   else{S.st.wins++;if(G.di>=2)S.st.hard++;if(G.di>=4)S.st.hell=1}
+   else{S.st.wins++;if(G.di>=2)S.st.hard++;if(G.di==4)S.st.hell=1}
   }
  }
  S.coins+=earn;save();chk();
@@ -1049,7 +1040,7 @@ const XN=[['x1','화력 집중',1150,580,['a3','b2'],l=>`피해 +${l*8}%`,(g,l)=
 XN.forEach(x=>{TN[x[0]]={id:x[0],k:'x',n:x[1],x:x[2],y:x[3],par:x[4],mx:3,c0:350,c1:250,ds:x[5],ef:x[6]}});
 function tcost(n){return n.k=='w'?n.c0:n.c0+n.c1*tlv(n.id)}
 function pst(n){return n.k=='w'?S.owned.includes(n.wid):tlv(n.id)>0}
-function opn(n){return n.par.every(p=>p=='root'||pst(TN[p]))&&(!n.req||n.req())}
+function opn(n){return n.par.every(p=>p=='root'||pst(TN[p]))}
 function applyTree(g){for(const id in TN){const n=TN[id];if(n.k=='w')continue;const l=tlv(id);if(l)n.ef(g,l)}}
 function treeBuy(id){const n=TN[id];if(!n||!opn(n))return;if(n.k=='w'){if(S.owned.includes(n.wid))return}else if(tlv(id)>=n.mx)return;const c=tcost(n);if(S.tm+S.coins<c)return;const u=Math.min(S.tm,c);S.tm-=u;S.coins-=c-u;S.tspent+=c;if(n.k=='w'){S.owned.push(n.wid);setTimeout(()=>reveal(n.wid),300)}else S.tree[id]=tlv(id)+1;save();chk();treeR()}
 function tpd(e){const p=document.getElementById('tpan');PM=0;if(e.pointerType=='touch')return;PD={x:e.clientX,y:e.clientY,l:p.scrollLeft,t:p.scrollTop}}
@@ -1061,23 +1052,23 @@ function treeR(){const pan=document.getElementById('tpan');if(pan){TS.l=pan.scro
   const op=opn(n),l=tlv(id),c=tcost(n);
   // small nodes (weapon-specific upgrades) are smaller and closer
   const isSmall=n.k==='s';
-  const sz=isSmall?'width:68px;height:68px;border-radius:50%;font-size:10px;padding:4px;':'';
+  const sz=isSmall?'width:64px;height:64px;font-size:10px;padding:3px;':'';
   const pos2=`left:${n.x}px;top:${n.y}px;${sz}`;
   if(!op){
     // even locked nodes show as circles; weapon nodes keep circle shape
     if(n.k==='w') nd+=`<div class="tn rw lock" style="${pos2}"><b style="font-size:22px">?</b><small>🔒</small></div>`;
-    else nd+=`<div class="tn ${isSmall?'small-node':''} lock" style="${pos2}"><b style="font-size:18px">???</b></div>`;
+    else nd+=`<div class="tn lock" style="${pos2}"><b style="font-size:18px">???</b></div>`;
   } else if(n.k==='w'){
     const got=S.owned.includes(n.wid);
     nd+=`<div class="tn rw ${got?'max':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')">${svg(n.wid,skOf(n.wid))}<b>${WM[n.wid].n}</b><small>${got?'✅ 획득':'🪙'+c}</small></div>`;
   } else if(isSmall){
-    nd+=`<div class="tn small-node ${l>=n.mx?'max':l?'on':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b style="font-size:11px">${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
+    nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b style="font-size:11px">${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
   } else {
     nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b>${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${n.ds(l||1)}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
   }
  }
  nd+=`<div class="tn root" style="left:900px;top:840px;width:96px;height:96px;font-size:40px;flex-direction:column">🌳<small style="font-size:10px">${S.tspent}</small></div>`;
- $('tr').innerHTML=`<div class="sub" style="margin-bottom:8px">영구 강화입니다. 화면을 드래그해서 움직이세요. 공격(위), 경제(오른쪽), 사거리·방어(왼쪽) 세 방향으로 가지가 뻗고, 두 갈래가 합쳐지는 노드는 양쪽을 모두 올려야 열립니다. 무기를 얻으면 그 무기만 강화하는 작은 원형 노드가 열려요. 트리 등급의 조건 해금 무기는 가운데 뿌리에서 뻗는 독립 가지로 표시됩니다. 노드는 다음 단계만 보이고 그 뒤는 ???입니다. 초기화(🪙500)하면 투자 비용이 전부 🌳트리머니로 바뀌고, 트리머니는 이 트리에서만 쓸 수 있습니다.<br>보유: 🪙${S.coins} · 🌳 ${S.tm} · 투자 합계 ${S.tspent} <button class="alt" ${S.coins<500||!S.tspent?'disabled':''} onclick="treeReset()">초기화 🪙500</button></div><div id="tpan" style="overflow:auto;height:68vh;min-height:420px;border:2px solid var(--line);border-radius:12px;cursor:grab" onpointerdown="tpd(event)" onpointermove="tpm(event)" onpointerup="tpu()" onpointerleave="tpu()"><div class="tmap" style="width:1800px;height:1150px;border:none;border-radius:0"><svg class="ln" viewBox="0 0 1800 1150" width="1800" height="1150">${ln}</svg>${nd}</div></div>`;
+ $('tr').innerHTML=`<div class="sub" style="margin-bottom:8px">영구 강화입니다. 화면을 드래그해서 움직이세요. 공격(위), 경제(오른쪽), 사거리·방어(왼쪽) 세 방향으로 가지가 뻗고, 두 갈래가 합쳐지는 노드는 양쪽을 모두 올려야 열립니다. 가지 사이를 잇는 합동 노드도 있고, 무기를 얻으면 그 무기만 강화하는 작은 노드가 열려요. 노드는 다음 단계만 보이고 그 뒤는 ???입니다. 초기화(🪙500)하면 투자 비용이 전부 🌳트리머니로 바뀌고, 트리머니는 이 트리에서만 쓸 수 있습니다.<br>보유: 🪙${S.coins} · 🌳 ${S.tm} · 투자 합계 ${S.tspent} <button class="alt" ${S.coins<500||!S.tspent?'disabled':''} onclick="treeReset()">초기화 🪙500</button></div><div id="tpan" style="overflow:auto;height:68vh;min-height:420px;border:2px solid var(--line);border-radius:12px;cursor:grab" onpointerdown="tpd(event)" onpointermove="tpm(event)" onpointerup="tpu()" onpointerleave="tpu()"><div class="tmap" style="width:1800px;height:1150px;border:none;border-radius:0"><svg class="ln" viewBox="0 0 1800 1150" width="1800" height="1150">${ln}</svg>${nd}</div></div>`;
  const p2=document.getElementById('tpan');if(p2){p2.scrollLeft=TS.l==null?900-p2.clientWidth/2:TS.l;p2.scrollTop=TS.t==null?840-p2.clientHeight/2:TS.t}syncC()}
 
 TRD.push(['자세히 보기','Details'],['강화비용','Upgrade cost'],['상점가','Shop price'],['보유 스킨','Skins owned'],['설치비','Cost'],['피해 경감','damage reduction'],['출혈','Bleed'],['드래곤','Dragon'],['슬라임','Slime'],['박쥐','Bat'],['고블린','Goblin'],['해골','Skeleton'],['오크','Orc'],['유령','Ghost'],['악마','Demon'],['거북이','Turtle'],['모아이','Moai'],['보스','Boss'],
@@ -1131,128 +1122,6 @@ ACH.push(
   ['gem50','보석 수집가','젬 50개 누적 획득',400,()=>(S.st.gt||0)>=50],
   ['cond1','조건의 증명','조건 해금 무기 1종 획득',300,()=>S.owned.includes('aegis')||S.owned.includes('tyrfing')]
 );
-
-
-// ================= 요청 반영 확장팩 =================
-// 난이도: 기존 5단계 이후 5단계를 추가. 보상은 커지지만 시작 자원과 라이프는 감소합니다.
-DIFF.push(
- {n:'심연',hp:4.2,gold:95,lives:260,rew:6.5},
- {n:'재앙',hp:5.8,gold:80,lives:210,rew:8.5},
- {n:'종말',hp:8,gold:65,lives:170,rew:12},
- {n:'초월',hp:11,gold:50,lives:135,rew:17},
- {n:'아스트라',hp:15,gold:40,lives:100,rew:24}
-);
-
-// 연노 과성능 조정: 사거리는 강점으로 남기고 DPS와 설치비 대비 효율을 낮춥니다.
-WM.repeater.dmg=28;
-WM.repeater.range=250;
-WM.repeater.cd=.42;
-WM.repeater.d='[사거리 트리 보상] 긴 사거리의 연발 쇠뇌 – 느려진 연사와 조정된 피해';
-
-// 아스트라 등급의 진화 타워와 시즌 이벤트 타워를 위한 도형입니다.
-Object.assign(ART,{
- astralblade:['<rect x="12" y="40" width="40" height="5" rx="2" fill="#7c4dff"/><rect x="29" y="45" width="6" height="13" fill="#263238"/><circle cx="32" cy="42" r="4" fill="#00e5ff"/>','<path d="M32 0 L40 12 L38 40 L26 40 L24 12Z" fill="#e1f5fe" stroke="#7c4dff"/><path d="M32 5 V38" stroke="#00e5ff" stroke-width="2"/><circle cx="32" cy="18" r="3" fill="#fff"/>',32,40],
- nebula:['<path d="M8 42 Q32 8 56 42" stroke="#ab47bc" stroke-width="4" fill="none"/><path d="M8 42 L32 54 L56 42" stroke="#e1bee7" fill="none"/><rect x="29" y="48" width="6" height="12" rx="2" fill="#4527a0"/>','<path d="M32 2 L36 12 L32 40 L28 12Z" fill="#80deea" stroke="#4a148c"/><circle cx="32" cy="18" r="5" fill="#fff176"/><path d="M22 16 Q32 6 42 16 M24 26 Q32 20 40 26" fill="none" stroke="#ce93d8" stroke-width="2"/>',32,40],
- starlance:['<rect x="30" y="15" width="4" height="45" fill="#3949ab"/><path d="M29 44 L23 51 L29 49 M35 44 L41 51 L35 49" fill="#ffca28"/>','<path d="M32 0 L39 18 L32 14 L25 18Z" fill="#fff59d" stroke="#5e35b1"/><path d="M32 20 L35 28 L32 26 L29 28Z" fill="#80deea"/>',32,20],
- eclipse:['<rect x="30" y="25" width="5" height="35" fill="#263238"/><circle cx="32.5" cy="22" r="5" fill="#ffca28"/>','<circle cx="32" cy="15" r="13" fill="#311b92" stroke="#b388ff" stroke-width="3"/><path d="M38 5 A12 12 0 1 0 42 23 A10 10 0 0 1 38 5Z" fill="#fff176"/><circle cx="32" cy="15" r="3" fill="#fff"/>',32,25],
- dragonfan:['<rect x="30" y="34" width="4" height="26" fill="#8d6e63"/><circle cx="32" cy="34" r="4" fill="#ffca28"/>','<path d="M32 4 Q52 6 48 28 Q40 24 32 32 Q24 24 16 28 Q12 6 32 4Z" fill="#ef5350" stroke="#ffd54f"/><path d="M20 14 Q32 18 44 14 M22 22 Q32 25 42 22" stroke="#fff59d" fill="none"/>',32,34],
- firecracker:['<rect x="28" y="24" width="9" height="36" rx="3" fill="#e53935"/><path d="M32 24 Q38 17 36 12" stroke="#ffca28" stroke-width="3" fill="none"/>','<circle cx="32" cy="12" r="9" fill="#ff7043" stroke="#ffca28"/><path d="M32 0 V-6 M44 12 H50 M20 12 H14 M40 4 L45 0 M24 4 L19 0" stroke="#fff176" stroke-width="2"/>',32,24],
- sunblade:['<rect x="30" y="44" width="5" height="16" fill="#6d4c41"/><path d="M20 43 Q32 37 44 43" fill="none" stroke="#ffca28" stroke-width="4"/>','<path d="M32 0 L39 12 L37 40 L27 40 L25 12Z" fill="#fff59d" stroke="#ff8f00"/><circle cx="32" cy="18" r="5" fill="#fff"/><path d="M32 4 V10 M22 18 H27 M37 18 H42" stroke="#ff8f00"/>',32,40],
- seashell:['<rect x="30" y="35" width="4" height="25" fill="#4e342e"/>','<path d="M16 30 Q12 7 32 4 Q52 7 48 30 Q32 40 16 30Z" fill="#80deea" stroke="#006064"/><path d="M32 7 V31 M22 12 L29 31 M42 12 L35 31" stroke="#e0f7fa" fill="none" stroke-width="2"/>',32,34],
- harvestscythe:['<rect x="30" y="12" width="4" height="48" fill="#795548"/><path d="M27 34 L37 34" stroke="#ffca28" stroke-width="4"/>','<path d="M33 4 Q59 -2 55 29 Q48 12 33 17Z" fill="#ffb74d" stroke="#6d4c41"/><path d="M35 7 Q50 8 53 23" fill="none" stroke="#fff59d"/>',32,20],
- moonbow:['<path d="M10 45 Q32 5 54 45" stroke="#7986cb" stroke-width="4" fill="none"/><path d="M10 45 L32 54 L54 45" stroke="#e1bee7" fill="none"/><rect x="29" y="50" width="6" height="10" fill="#4527a0"/>','<path d="M32 4 L36 14 L32 42 L28 14Z" fill="#b3e5fc" stroke="#3949ab"/><path d="M32 0 L34 5 L40 6 L35 10 L36 16 L32 12 L28 16 L29 10 L24 6 L30 5Z" fill="#fff59d"/>',32,42]
-});
-
-function addTower(w){
- addW(w);
-}
-[
- {id:'astralblade',n:'성운의 성검',t:7,cost:780,dmg:520,range:150,cd:1.15,hits:4,price:null,d:'[아스트라 진화] 네 번째 공격마다 별빛 폭발',gd:'4번째 공격 피해 x2.2'},
- {id:'nebula',n:'성운포',t:7,cost:760,dmg:180,range:260,cd:.55,hits:3,price:null,d:'[아스트라 진화] 둔화된 적을 추적하는 성운 발사체',gd:'둔화된 적에게 피해 +75%'},
- {id:'starlance',n:'항성 창',t:7,cost:800,dmg:260,range:360,cd:1.3,hits:4,g:'boss+bleed',gd:'보스에게 추가 피해 · 장거리 보너스',price:null,d:'[아스트라 진화] 사거리 끝에서 보스를 관통'},
- {id:'eclipse',n:'월식 낫',t:7,cost:850,dmg:390,range:145,cd:1.1,hits:99,price:null,d:'[아스트라 진화] 체력이 낮은 적을 마무리하는 월식의 낫',gd:'적 체력 35% 미만에게 피해 +60%'},
- {id:'dragonfan',n:'용춤 부채',t:8,cost:260,dmg:150,range:155,cd:.95,hits:4,price:null,d:'[설날 이벤트] 여섯 번째 공격이 용의 기운을 두름',gd:'보스에게 피해 +35%'},
- {id:'firecracker',n:'폭죽 창',t:8,cost:240,dmg:95,range:210,cd:.65,hits:2,price:null,d:'[여름 축제] 5의 배수 웨이브에서 폭죽 피해 증가',gd:'5의 배수 웨이브 피해 +60%'},
- {id:'sunblade',n:'태양 축제검',t:8,cost:270,dmg:180,range:130,cd:.8,hits:3,price:null,d:'[여름 축제] 전투 시간에 따라 낮과 밤의 힘이 교대',gd:'낮의 주기마다 피해 +35%'},
- {id:'seashell',n:'파도 소라고둥',t:8,cost:230,dmg:115,range:240,cd:.85,hits:3,price:null,d:'[가을 축제] 멀리 있는 적을 향해 파도 음파 발사',gd:'사거리 바깥쪽 적에게 피해 +40%'},
- {id:'harvestscythe',n:'풍년 낫',t:8,cost:280,dmg:120,range:150,cd:.9,hits:99,price:null,d:'[추수 축제] 주변 적이 많을수록 수확의 힘 증가',gd:'한 번에 4명 이상 공격 시 피해 +35%'},
- {id:'moonbow',n:'달맞이 활',t:8,cost:250,dmg:165,range:330,cd:1.05,hits:2,price:null,d:'[달맞이 이벤트] 사거리 끝에 가까울수록 강해지는 화살',gd:'사거리 바깥쪽 적에게 피해 +45%'}
-].forEach(addTower);
-AN.astralblade=AN.excal;AN.nebula=AN.bow;AN.starlance=AN.gungnir;AN.eclipse=AN.scythe;
-AN.dragonfan=AN.guandao;AN.firecracker=AN.spear;AN.sunblade=AN.katana;AN.seashell=AN.trident;AN.harvestscythe=AN.scythe;AN.moonbow=AN.bow;
-THRUST.push('starlance','firecracker','moonbow');
-TC[7]='#d88cff';
-TLBL[7]='진화 탭 전용 아스트라 타워';
-
-// 네 아스트라 타워는 진화 탭에서만 획득됩니다.
-EVO.push(
- ['dagger','astralblade',500,3000,8],
- ['bow','nebula',600,3300,8],
- ['spear','starlance',600,3500,9],
- ['scythe','eclipse',650,3700,10]
-);
-
-// 시즌 이벤트를 추가합니다. 각 이벤트 보상은 이벤트 화면의 '모두 받기'로 획득합니다.
-EVENTS.push(
- {id:'lunar',n:'🧧 설날',test:d=>d.getMonth()==1&&d.getDate()<=15,range:'2월 1일~15일',w:'dragonfan',ws:['dragonfan'],skins:[]},
- {id:'summer',n:'🎆 여름 축제',test:d=>d.getMonth()==6&&d.getDate()<=15,range:'7월 1일~15일',w:'firecracker',ws:['firecracker','sunblade'],skins:[]},
- {id:'harvest',n:'🌾 추수 축제',test:d=>d.getMonth()==8&&d.getDate()>=15&&d.getDate()<=30,range:'9월 15일~30일',w:'harvestscythe',ws:['harvestscythe'],skins:[]},
- {id:'moon',n:'🌕 달맞이',test:d=>d.getMonth()==9&&d.getDate()>=1&&d.getDate()<=15,range:'10월 1일~15일',w:'moonbow',ws:['moonbow','seashell'],skins:[]},
- {id:'anniversary',n:'🎉 무기 디펜스 기념일',test:d=>d.getMonth()==10&&d.getDate()>=1&&d.getDate()<=7,range:'11월 1일~7일',w:'sunblade',ws:['sunblade','dragonfan','firecracker'],skins:[]}
-);
-
-// 특수 기믹: 타워의 고유 조건이 충족된 공격에만 피해 배율을 곱합니다.
-function towerTrait(t,e,targets,w){
- const id=t.id,ratio=e.mx?e.hp/e.mx:1;
- if(id==='kris'&&ratio<.5)return 1.5;
- if(id==='tachi'&&e.d>G.tot*.72)return 1.5;
- if(id==='greatsword'&&t.atk%4===0)return 2;
- if(id==='pike'&&Math.hypot(e.x-t.x,e.y-t.y)>wpStat(t).range*.72)return 1.45;
- if(id==='labrys'&&e.k.r>=30)return 1.6;
- if(id==='glaive'&&targets.length>=4)return 1+Math.min(.6,(targets.length-3)*.12);
- if(id==='astralblade'&&t.atk%4===0)return 2.2;
- if(id==='nebula'&&(e.slow||0)>0)return 1.75;
- if(id==='starlance'&&e.k.r>=30)return 1.55;
- if(id==='eclipse'&&ratio<.35)return 1.6;
- if(id==='dragonfan'&&e.k.r>=30&&t.atk%6===0)return 1.35;
- if(id==='firecracker'&&G.wave%5===0)return 1.6;
- if(id==='sunblade'&&Math.floor((G.sp||0)/20)%2===0)return 1.35;
- if(id==='seashell'&&Math.hypot(e.x-t.x,e.y-t.y)>wpStat(t).range*.7)return 1.4;
- if(id==='harvestscythe'&&targets.length>=4)return 1.35;
- if(id==='moonbow'&&Math.hypot(e.x-t.x,e.y-t.y)>wpStat(t).range*.72)return 1.45;
- return 1;
-}
-
-// 트리 등급 중 기존 세 갈래 보상에 없던 조건 해금 무기도 트리 안의 독립 가지로 둡니다.
-// 아이기스는 누적 트리 투자, 티르핑은 공격 가지 성장 조건을 그대로 요구합니다.
-TN.orphanAegis={id:'orphanAegis',k:'w',n:WM.aegis.n,x:520,y:1030,par:['root'],mx:1,c0:1800,c1:0,wid:'aegis',req:()=>S.tspent>=2000};
-TN.orphanTyrfing={id:'orphanTyrfing',k:'w',n:WM.tyrfing.n,x:1280,y:1030,par:['root'],mx:1,c0:2200,c1:0,wid:'tyrfing',req:()=>{const sum=Object.keys(S.tree||{}).filter(k=>k.startsWith('a')).reduce((a,k)=>a+(S.tree[k]||0),0);return sum>=12}};
-
-// 난이도에 따라 적 조합도 단계적으로 강화합니다(일반/무한 모드).
-startWave=function(force){
- if(G.over||(G.active&&!force)||G.wave>=G.max)return;
- if(G.active)G.gold+=30+G.wave*8;
- G.wave++;
- const w=G.wave;
- const pools=[[0,1,2],[0,1,2,3],[0,1,2,3,4,8],[1,2,3,4,6,8,9],[3,4,6,7,9,10],[4,6,7,8,9,10],[4,6,7,8,9,10],[5,7,8,9,10],[5,7,8,9,10],[5,7,8,9,10]];
- const pl=G.special?[1,2,3,4,6,8,9,10]:pools[Math.max(0,Math.min(pools.length-1,G.di||0))];
- let t=G.active?G.sp:0;
- const n=Math.min(80,Math.round((4+Math.floor(w*1.7))*(G.cnt||1)));
- for(let i=0;i<n;i++){t+=Math.max(.28,1-w*.03);G.q.push({t,k:pl[Math.floor(Math.random()*Math.min(pl.length,Math.floor(w/3)+2))]})}
- if(w%5===0)G.q.push({t:t+1.5,k:5});
- G.q.sort((a,b)=>a.t-b.t);snd('wave');if(!G.active)G.sp=0;G.ws=G.sp;G.active=true;hud();
-};
-
-// 진화/아스트라/이벤트 타워의 조건부 효과 설명을 전투 상세 패널에 노출합니다.
-const oldSide=side;
-side=function(){
- oldSide();
- if(!G||!G.sel)return;
- const w=WM[G.sel.id];
- if(w&&w.gd&&!$('side').innerHTML.includes('특성:'))$('side').innerHTML+='<div class="sub" style="margin-top:4px;color:#ffd54f">특성: '+w.gd+'</div>';
-};
-
-// 아스트라 무기 상세 내용은 진화 탭에서 확인할 수 있으며 이벤트는 진행 중일 때만 표시됩니다.
 
 show('home');
 </script>
