@@ -242,7 +242,9 @@ Object.assign(ART,{
  fangtian:['<rect x="30" y="20" width="4" height="40" fill="#b71c1c"/>',`<path d="M32 0 L36 14 H28Z" ${BL}/><path d="M34 14 Q54 10 52 28 Q42 22 34 24Z" ${BL}/><path d="M30 14 Q10 10 12 28 Q22 22 30 24Z" ${BL}/>`,32,22],
  aegis:['<rect x="29" y="40" width="6" height="18" fill="#5d4037"/>','<path d="M32 0 L38 18 H26Z" fill="#cfd8dc" stroke="#78909c"/><circle cx="32" cy="28" r="14" fill="#90caf9" stroke="#1565c0"/><path d="M32 18 V38 M22 28 H42" stroke="#fff" stroke-width="2"/>',32,40],
  tyrfing:['<rect x="14" y="42" width="36" height="4" rx="1" fill="#b71c1c"/><rect x="29" y="46" width="6" height="12" fill="#4e342e"/>','<path d="M32 0 L40 14 L38 42 L26 42 L24 14Z" fill="#ef9a9a" stroke="#b71c1c"/><path d="M32 8 V40" stroke="#ff1744"/>',32,42],
- tnt:['<circle cx="32" cy="38" r="18" fill="#212121" stroke="#000" stroke-width="2"/><circle cx="26" cy="32" r="5" fill="#ffffff18"/><path d="M14 30 Q20 24 26 30" stroke="#ffffff10" stroke-width="3" fill="none"/>','<rect x="30" y="14" width="4" height="10" rx="2" fill="#8d6e63"/><path d="M32 14 Q26 8 32 2 Q34 6 38 4 Q40 10 32 14Z" fill="#ff9800" stroke="#e65100"/><path d="M32 12 Q29 8 32 5 Q35 9 32 12Z" fill="#ffeb3b"/><circle cx="36" cy="2" r="1.5" fill="#ffeb3b"/>',32,24]
+ tnt:['<circle cx="32" cy="38" r="18" fill="#212121" stroke="#000" stroke-width="2"/><circle cx="26" cy="32" r="5" fill="#ffffff18"/><path d="M14 30 Q20 24 26 30" stroke="#ffffff10" stroke-width="3" fill="none"/>','<rect x="30" y="14" width="4" height="10" rx="2" fill="#8d6e63"/><path d="M32 14 Q26 8 32 2 Q34 6 38 4 Q40 10 32 14Z" fill="#ff9800" stroke="#e65100"/><path d="M32 12 Q29 8 32 5 Q35 9 32 12Z" fill="#ffeb3b"/><circle cx="36" cy="2" r="1.5" fill="#ffeb3b"/>',32,24],
+ pencil:['<rect x="29" y="36" width="6" height="20" fill="#ffb300"/><rect x="28" y="54" width="8" height="4" fill="#d32f2f"/>',`<path d="M29 36 L32 12 L35 36Z" fill="#ffeb3b" stroke="#f9a825"/><path d="M32 12 L32 2 L29 20Z" fill="#ffcc80"/><rect x="30" y="2" width="4" height="4" fill="#f48fb1"/>`,32,36],
+ book:['<rect x="26" y="42" width="12" height="16" fill="#8d6e63"/>',`<rect x="18" y="4" width="28" height="38" rx="3" fill="#eceff1" stroke="#78909c"/><rect x="22" y="10" width="20" height="2" fill="#90a4ae"/><rect x="22" y="16" width="20" height="2" fill="#90a4ae"/><rect x="22" y="22" width="14" height="2" fill="#90a4ae"/><circle cx="32" cy="34" r="4" fill="#ff1744"/>`,32,42],
 });
 ART.poseidon=[ART.trident[0].replace('#8d6e63','#00acc1'),ART.trident[1].replace(/#cfd8dc/g,'#80deea').replace(/#78909c/g,'#006064'),32,30];
 ART.gaebolg=[ART.spear[0].replace('#8d6e63','#b71c1c'),`<path d="M32 0 L39 18 L32 14 L25 18Z" ${BL}/><path d="M32 14 L38 26 L32 23 L26 26Z" ${BL}/>`,32,18];
@@ -285,7 +287,7 @@ const WP=[
  {id:'nunchaku',n:'쿠사나기',price:null,cost:700,dmg:120,range:110,cd:.8,hits:3,d:'뱀의 꼬리에서 나온 일본 신화의 검'},
  {id:'chakram',n:'수다르샤나 차크라',price:null,cost:480,dmg:75,range:170,cd:.8,hits:4,d:'날아가는 회전 고리'},
  {id:'chaos',n:'판도라의 상자',price:null,cost:700,dmg:0,range:130,cd:.7,hits:1,pm:1.15,pool:['katana','sword2','axe','scythe','bastard','spear','mace','hammer','claymore','halberd','trident','zweihander','nodachi','kusarigama','bow','lance'],d:'공격마다 강력한 무기가 무작위로 바뀜'},
- {id:'tnt',n:'폭탄',price:1500,cost:300,dmg:100,range:200,cd:1.2,hits:9,d:'범위 내의 적을 터뜨리는 폭발성 무기'},
+ {id:'tnt',n:'폭탄',price:1500,cost:300,dmg:100,range:150,cd:2,hits:9,d:'범위 내의 적을 터뜨리는 폭발성 무기'},
  {id:'kris',n:'크리스',t:5,cost:200,dmg:30,range:90,cd:.28,hits:1,d:'물결 모양 날의 단검 (단검 진화)'},
  {id:'tachi',n:'타치',t:5,cost:360,dmg:85,range:125,cd:.55,hits:2,d:'허리에 차던 긴 일본도 (외날검 진화)'},
  {id:'greatsword',n:'그레이트소드',t:5,cost:520,dmg:135,range:120,cd:.9,hits:3,d:'넓은 날의 양손 대검 (양날검 진화)'},
@@ -320,7 +322,9 @@ const WP=[
  {id:'icicle',n:'고드름 창',t:8,cost:210,dmg:85,range:160,cd:.9,hits:2,d:'[크리스마스 한정] 차갑게 꿰뚫는 창'},
  {id:'bells',n:'방울 철퇴',t:8,cost:190,dmg:75,range:90,cd:.8,hits:3,d:'[크리스마스 한정] 딸랑딸랑 때리는 철퇴'},
  {id:'banana',n:'바나나 검',t:8,cost:120,dmg:55,range:95,cd:.5,hits:2,d:'[만우절 한정] 미끄러운 공격'},
- {id:'squeaky',n:'뿅망치',t:8,cost:160,dmg:120,range:80,cd:1.1,hits:99,d:'[만우절 한정] 뿅뿅 소리 나는 망치'}
+ {id:'squeaky',n:'뿅망치',t:8,cost:160,dmg:120,range:80,cd:1.1,hits:99,d:'[만우절 한정] 뿅뿅 소리 나는 망치'},
+ {id:'pencil',n:'연필',t:8,cost:200,dmg:90,range:100,cd:1,hits:3,d:'[수능 한정] 3명의 적에게 낙서하는 연필'},
+ {id:'book',n:'책',t:8,cost:300,dmg:100,range:150,cd:1,hits:5,d:'[수능 한정] 5명의 적을 때리는 책'}
 ];
 WP.forEach(w=>{if(w.price===undefined)w.price=null;if(w.t===undefined)w.t=0});
 const WM=Object.fromEntries(WP.map(w=>[w.id,w]));
@@ -339,6 +343,44 @@ for(const k in GM){WM[k].g=GM[k][0];WM[k].gd=GM[k][1]}
 // ============================================================
 const WS={};
 WP.forEach(w=>WS[w.id]=[]);
+// 1. 투창(javelin)에 씌울 '연필' 스킨 (거대한 연필 투척)
+WS.javelin.push([
+  '연필', 
+  0, 
+  '#ffeb3b', 
+  '#f9a825', 
+  // [4] 날 부분: 깎인 나무와 검은 심
+  '<path d="M27 14 L32 2 L37 14 Z" fill="#ffcc80" stroke="#8d6e63" stroke-width="1.5"/><path d="M30 6 L32 2 L34 6 Z" fill="#424242"/>', 
+  // [5] 몸체 부분: 노란 연필 몸통 + 홈 + 분홍 지우개
+  '<rect x="27" y="18" width="10" height="26" fill="#ffeb3b" stroke="#f9a825" stroke-width="1.5"/><path d="M27 18 h10 M27 44 h10" stroke="#f57f17" stroke-width="1.5"/><rect x="26" y="46" width="12" height="6" rx="1" fill="#f48fb1" stroke="#c2185b" stroke-width="1"/>', 
+  null, null, 'gold', 'ev_csat'
+]);
+
+// 2. 책(book)에 씌울 '시험지' 스킨 (적들의 뺨을 갈기는 시험지)
+WS.book.push([
+  '시험지', 
+  0, 
+  '#fafafa', 
+  '#9e9e9e', 
+  // [4] 앞면: 빨간 동그라미와 X 표시 (채점 흔적)
+  '<circle cx="32" cy="20" r="6" stroke="#e53935" stroke-width="2" fill="none"/><path d="M27 28 L37 38 M37 28 L27 38" stroke="#e53935" stroke-width="2" stroke-linecap="round"/>', 
+  // [5] 몸체: 하얀 종이에 그어진 검은 가로줄들
+  '<rect x="18" y="4" width="28" height="38" rx="2" fill="#fafafa" stroke="#9e9e9e" stroke-width="1.5"/><path d="M22 12 h20 M22 18 h20 M22 24 h20 M22 30 h20 M22 36 h12" stroke="#cfcfcf" stroke-width="1.5"/>', 
+  null, null, 'red', 'ev_csat'
+]);
+
+// 3. 연필(pencil)에 씌울 '컴퓨터 싸인펜' 스킨 (검은 OMR 마킹펜)
+WS.pencil.push([
+  '컴퓨터싸인펜', 
+  0, 
+  '#212121', 
+  '#000000', 
+  // [4] 날 부분: 둥글고 뭉툭한 사인펜 촉
+  '<path d="M28 20 L36 20 L34 8 L30 8 Z" fill="#424242" stroke="#000" stroke-width="1.5"/><rect x="30" y="2" width="4" height="6" fill="#212121"/>', 
+  // [5] 몸체: 검은 펜대와 띠
+  '<rect x="27" y="22" width="10" height="28" fill="#212121" stroke="#000" stroke-width="1.5"/><rect x="27" y="30" width="10" height="4" fill="#616161"/><rect x="27" y="44" width="10" height="4" fill="#616161"/>', 
+  null, null, 'multi', 'ev_csat'
+]);
 const GEN=[['황금',500,'#ffd54f','#ff8f00','#fff59d'],['심해',500,'#4dd0e1','#006064','#e0f7fa'],['루비',650,'#ef5350','#b71c1c','#ffcdd2'],['흑요석',800,'#455a64','#10151a','#b388ff']];
 const WS_DEF={
  dagger:[['독니',90,'#b2ff59','#33691e','<path d="M27 43 l2-7 l2 7z M33 43 l2-7 l2 7z" fill="#1b5e20"/>'],['톱날',160,'#ffd54f','#ef6c00','<path d="M38 44 l3-4 l-3-3 l3-4 l-3-3z" fill="#ef6c00"/>','<circle cx="32" cy="46" r="4" fill="#e53935"/>']],
@@ -462,6 +504,8 @@ AN.kukri=p=>({r:-1.2+p*2.4,f:sn(p*PI)*4,pr:sn(p*2*PI)*.4,pf:0});
 AN.flail=p=>({r:-1.4+p*2.8,f:0,pr:sn(p*2*PI)*1.2,pf:0});
 AN.guandao=p=>({r:-1.6+p*3.2,f:0,pr:sn(p*PI)*.3,pf:sn(p*PI)*4});
 AN.aegis=AN.spear;AN.tyrfing=AN.bastard;
+AN.pencil = p => ({r:-1.2+p*2.4, f:sn(p*PI)*5, pr:0, pf:0}); // 휘두르면서 찌르기
+AN.book = AN.hammer; // 묵직하게 내려찍기 (기존 망치 모션 재활용)
 const AN2={carambit:p=>({r:p*6*PI,f:0,pr:sn(p*6*PI)*.3,pf:0}),throw:p=>({r:0,f:sn(p*PI)*80,pr:0,pf:0}),iai:p=>({r:-2+eo(p)*4,f:sn(p*PI)*6,pr:0,pf:0}),spinthrow:p=>({r:0,f:sn(p*PI)*90,s:p*8*PI,pr:0,pf:0}),flurry:p=>({r:0,f:Math.abs(sn(p*3*PI))*28,pr:0,pf:0}),whirl:p=>({r:p*4*PI,f:0,pr:sn(p*2*PI)*.5,pf:0}),slam:p=>({r:p<.6?-2.4*(p/.6):-2.4+2.8*Math.pow((p-.6)/.4,2),f:0,pr:0,pf:p>.85?4:0})};
 function animKey(id){const v=skOf(id);return v>0&&WS[id][v-1]?WS[id][v-1][6]:null}
 function skFx(id){const v=skOf(id);return v>0&&WS[id][v-1]?WS[id][v-1][8]:null}
@@ -676,7 +720,8 @@ const EVO=[['dagger','kris',150,600,3],['katana','tachi',300,1500,6],['sword2','
 const EVENTS=[
  {id:'halloween',n:'🎃 할로윈',test:d=>d.getMonth()==9,range:'10월 한 달',w:'pumpkin',ws:['pumpkin','stake','broom'],skins:[['scythe','호박귀신']]},
  {id:'xmas',n:'🎄 크리스마스',test:d=>d.getMonth()==11&&d.getDate()>=15,range:'12월 15일~31일',w:'candycane',ws:['candycane','icicle','bells'],skins:[['rapier','눈꽃']]},
- {id:'aprilfool',n:'🐔 만우절',test:d=>d.getMonth()==3&&d.getDate()==1,range:'4월 1일 하루',w:'chicken',ws:['chicken','banana','squeaky'],skins:[['dagger','고무 칼']]}
+ {id:'aprilfool',n:'🐔 만우절',test:d=>d.getMonth()==3&&d.getDate()==1,range:'4월 1일 하루',w:'chicken',ws:['chicken','banana','squeaky'],skins:[['dagger','고무 칼']]},
+ {id:'csat',n:'📖 대학수학능력시험(수능)',test:d=>d.getMonth()==10&&d.getDate()>=14 && d.getDate()<=20,w:'pencil',ws:['pencil','book'],skins:[['javelin','연필'],['book','시험지'],['pencil','컴퓨터싸인펜']]}
 ];
 function evActive(id){const d=new Date();return EVENTS.some(e=>e.ws.includes(id)&&e.test(d))}
 function evtR(){const d=new Date();$('sc').innerHTML='<div class="sub" style="margin-bottom:8px">기간 한정 이벤트! 진행 중일 때만 무기가 보이고, 한 번에 모두 받습니다. 받은 무기와 스킨은 영구 보유됩니다.</div>'+EVENTS.map((e,i)=>{const on=e.test(d),got=S.ach['ev_'+e.id],allHave=e.ws.every(w=>S.owned.includes(w));return `<div class="srow">${(on||got)?e.ws.map(w=>svg(w,0)).join(''):'<b style="font-size:30px">🔒</b>'}<div style="flex:1;min-width:160px"><b style="width:auto">${e.n}</b> <span class="sub">${e.range}</span><br><span class="sub">${(on||got)?e.ws.map(w=>WM[w].n).join(', ')+' + 스킨 '+e.skins.map(s=>s[1]).join(', '):'??? (진행 중일 때 공개)'}</span></div><button ${on&&!allHave?'':'disabled'} onclick="evClaim(${i})">${got&&allHave?'획득 완료':on?'모두 받기 🎁':'기간 아님'}</button></div>`}).join('')}
