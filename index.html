@@ -246,8 +246,10 @@ Object.assign(ART,{
  pencil:['<rect x="29" y="36" width="6" height="20" fill="#ffb300"/><rect x="28" y="54" width="8" height="4" fill="#d32f2f"/>',`<path d="M29 36 L32 12 L35 36Z" fill="#ffeb3b" stroke="#f9a825"/><path d="M32 12 L32 2 L29 20Z" fill="#ffcc80"/><rect x="30" y="2" width="4" height="4" fill="#f48fb1"/>`,32,36],
  book:['<rect x="26" y="42" width="12" height="16" fill="#8d6e63"/>',`<rect x="18" y="4" width="28" height="38" rx="3" fill="#eceff1" stroke="#78909c"/><rect x="22" y="10" width="20" height="2" fill="#90a4ae"/><rect x="22" y="16" width="20" height="2" fill="#90a4ae"/><rect x="22" y="22" width="14" height="2" fill="#90a4ae"/><circle cx="32" cy="34" r="4" fill="#ff1744"/>`,32,42],
  ar:['<rect x="28" y="42" width="8" height="14" rx="1" fill="#6d4c41"/><rect x="26" y="30" width="12" height="14" rx="2" fill="#455a64"/><rect x="24" y="34" width="4" height="10" rx="1" fill="#37474f"/><rect x="28" y="46" width="8" height="4" rx="1" fill="#263238"/><circle cx="32" cy="38" r="1.5" fill="#90a4ae"/>',`<rect x="30" y="8" width="4" height="24" fill="#263238"/><rect x="28" y="4" width="8" height="6" rx="1" fill="#455a64"/><rect x="31" y="1" width="2" height="4" fill="#90a4ae"/><rect x="24" y="30" width="16" height="3" rx="1" fill="#546e7a"/>`,32,40],
-laev:['<rect x="29" y="40" width="6" height="16" rx="2" fill="#4a148c"/><circle cx="32" cy="38" r="3" fill="#ff1744"/><path d="M26 44 h12" stroke="#ffd54f" stroke-width="2"/>',`<path d="M32 0 Q38 10 35 22 Q41 30 34 40 L30 40 Q36 30 29 22 Q36 10 32 0Z" fill="#e040fb" stroke="#4a148c" stroke-width="1.5"/><path d="M32 6 V38" stroke="#fff" stroke-width="1" opacity="0.6"/><circle cx="32" cy="12" r="1.5" fill="#ffeb3b"/><circle cx="32" cy="22" r="1.5" fill="#ffeb3b"/><circle cx="32" cy="32" r="1.5" fill="#ffeb3b"/>`,32,40]
-
+laev:['<rect x="29" y="40" width="6" height="16" rx="2" fill="#4a148c"/><circle cx="32" cy="38" r="3" fill="#ff1744"/><path d="M26 44 h12" stroke="#ffd54f" stroke-width="2"/>',`<path d="M32 0 Q38 10 35 22 Q41 30 34 40 L30 40 Q36 30 29 22 Q36 10 32 0Z" fill="#e040fb" stroke="#4a148c" stroke-width="1.5"/><path d="M32 6 V38" stroke="#fff" stroke-width="1" opacity="0.6"/><circle cx="32" cy="12" r="1.5" fill="#ffeb3b"/><circle cx="32" cy="22" r="1.5" fill="#ffeb3b"/><circle cx="32" cy="32" r="1.5" fill="#ffeb3b"/>`,32,40],
+shovel:['<rect x="30" y="20" width="4" height="40" fill="#6d4c41"/><path d="M26 22 H38 V28 H26Z" fill="#546e7a"/>',`<path d="M20 0 Q32 -4 44 0 L42 16 L32 20 L22 16Z" fill="#78909c" stroke="#37474f" stroke-width="1.5"/><path d="M22 4 L42 4" stroke="#455a64" stroke-width="2"/>`,32,20],
+drone:['<circle cx="32" cy="38" r="4" fill="#212121"/><circle cx="32" cy="38" r="2" fill="#ff1744"/>',`<circle cx="32" cy="20" r="8" fill="#455a64" stroke="#263238" stroke-width="1.5"/><circle cx="32" cy="20" r="3" fill="#90a4ae"/><path d="M32 20 L16 12 M32 20 L48 12 M32 20 L16 28 M32 20 L48 28" stroke="#546e7a" stroke-width="2.5"/><circle cx="16" cy="12" r="6" fill="none" stroke="#cfd8dc" stroke-width="2" stroke-dasharray="3 2"/><circle cx="48" cy="12" r="6" fill="none" stroke="#cfd8dc" stroke-width="2" stroke-dasharray="3 2"/><circle cx="16" cy="28" r="6" fill="none" stroke="#cfd8dc" stroke-width="2" stroke-dasharray="3 2"/><circle cx="48" cy="28" r="6" fill="none" stroke="#cfd8dc" stroke-width="2" stroke-dasharray="3 2"/><rect x="28" y="28" width="8" height="4" rx="1" fill="#424242"/><rect x="30" y="32" width="4" height="4" fill="#ffeb3b"/>`,32,38]
+bayonet:['<rect x="28" y="42" width="8" height="14" rx="1" fill="#6d4c41"/><rect x="26" y="30" width="12" height="14" rx="2" fill="#455a64"/><rect x="24" y="34" width="4" height="10" rx="1" fill="#37474f"/><rect x="28" y="46" width="8" height="4" rx="1" fill="#263238"/><circle cx="32" cy="38" r="1.5" fill="#90a4ae"/>',`<rect x="30" y="10" width="4" height="20" fill="#263238"/><rect x="28" y="6" width="8" height="4" rx="1" fill="#455a64"/><rect x="31" y="2" width="2" height="4" fill="#90a4ae"/><path d="M28 32 L36 32 L36 34 L28 34 Z" fill="#546e7a"/><path d="M30 32 L34 32 L34 44 L30 44 Z" fill="#cfd8dc" stroke="#78909c" stroke-width="1.5"/><path d="M32 34 L32 44" stroke="#eceff1" stroke-width="1"/><path d="M29 28 L35 28 L33 32 L31 32 Z" fill="#78909c"/>`,32,38]
 });
 ART.poseidon=[ART.trident[0].replace('#8d6e63','#00acc1'),ART.trident[1].replace(/#cfd8dc/g,'#80deea').replace(/#78909c/g,'#006064'),32,30];
 ART.gaebolg=[ART.spear[0].replace('#8d6e63','#b71c1c'),`<path d="M32 0 L39 18 L32 14 L25 18Z" ${BL}/><path d="M32 14 L38 26 L32 23 L26 26Z" ${BL}/>`,32,18];
@@ -329,7 +331,10 @@ const WP=[
  {id:'pencil',n:'연필',t:8,cost:200,dmg:90,range:100,cd:1,hits:3,d:'[수능 한정] 3명의 적에게 낙서하는 연필'},
  {id:'book',n:'책',t:8,cost:300,dmg:100,range:150,cd:1,hits:5,d:'[수능 한정] 5명의 적을 때리는 책'},
  {id:'ar',n:'돌격소총',t:7,cost:1000,dmg:20,range:170,cd:0.12,hits:1,price:6000,d:'빠르게 적을 녹이는 총'},
- {id:'laev',n:'레바테인',t:4,cost:600,dmg:100,range:150,cd:0.7,hits:2,price:null,d:'보스에겐 강하지만 일반 적에겐 약한 불의 검',g:'laev+burn',gd:'일반 적에게 데미지 절반, 보스에게 데미지 3배 · 화상'}
+ {id:'laev',n:'레바테인',t:4,cost:600,dmg:100,range:150,cd:0.7,hits:2,price:null,d:'보스에겐 강하지만 일반 적에겐 약한 불의 검',g:'laev+burn',gd:'일반 적에게 데미지 절반, 보스에게 데미지 3배 · 화상'},
+ {id:'drone',n:'드론',t:8,cost:300,dmg:300,range:1001,cd:4,hits:5,price:null,d:'[국군의 날 한정] 맵 전체를 장악한 드론'},
+ {id:'shovel',n:'전술 삽',t:8,cost:100,dmg:50,range:100,cd:.5,hits:1,price:null,d:'[국군의 날 한정] 공격했을때 적을 잠깐 기절시키는 삽',g:'slow',gd:'적 둔'},
+ {id:'bayonet',n:'K2 총검',t:8,cost:350,dmg:120,range:140,cd:0.8,hits:2,price:null,g:'bayonet',gd:'사거리 내 적이 가까우면 찌르기(출혈), 멀면 사격',d:'[국군의 날] 총알이 떨어져도 싸울 수 있는 군인의 마지막 자존심'}
 ];
 WP.forEach(w=>{if(w.price===undefined)w.price=null;if(w.t===undefined)w.t=0});
 const WM=Object.fromEntries(WP.map(w=>[w.id,w]));
@@ -491,9 +496,9 @@ const AN={
  multi:p=>({r:p*3*PI,f:0,pr:p*4*PI,pf:sn(p*PI)*6}),
  tnt:p=>({r:-.3+Math.sin(p*Math.PI)*.6,f:Math.sin(p*Math.PI)*22,pr:Math.sin(p*3*Math.PI)*.3,pf:Math.sin(p*2*Math.PI)*3})
 };
-const THRUST=['dagger','rapier','spear','trident','halberd','gungnir','javelin','lance','ballista','bow','chakram','pike','pistol','shotgun','sniper','repeater','gaebolg','poseidon','stake','icicle','harpoon'];
+const THRUST=['dagger','rapier','spear','trident','halberd','gungnir','javelin','lance','ballista','bow','chakram','pike','pistol','shotgun','sniper','repeater','gaebolg','poseidon','stake','icicle','harpoon','shovel','combatknife','bayonet','katar','sai','kris','dirk','estoc','musket','rifle','smg','drone'];
 const BOOM_MAP={tnt:{r:70,c1:'#fff59d',c2:'#ff9800',c3:'#e53935'},mjolnir:{r:90,c1:'#ffffff',c2:'#fff176',c3:'#40c4ff'},chaos:{r:80,c1:'#e040fb',c2:'#b388ff',c3:'#7c4dff'},hammer:{r:60,c1:'#ffffff',c2:'#b0bec5',c3:'#546e7a'},squeaky:{r:75,c1:'#fff59d',c2:'#ffeb3b',c3:'#ff9800'},labrys:{r:65,c1:'#ffffff',c2:'#ef9a9a',c3:'#b71c1c'}};
-AN.bow=p=>({r:0,f:0,pr:0,pf:p<.35?-10*(p/.35):-10+(p-.35)/.65*10+34*sn((p-.35)/.65*PI)});
+AN.bow=p=>({r:0,f:0,pr:0,pf:p<.35?-10*(p/.35):-10+(p-.35)/.65*10+34*sn((p-.35)/.65*PI)}); 
 AN.zweihander=p=>({...AN.claymore(p),f:sn(p*PI)*10,pr:-sn(p*PI)*.2});
 AN.nodachi=p=>({r:-1.6+eo(p)*3.4,f:sn(p*PI)*8,pr:sn(p*PI)*.2,pf:0});
 AN.kusarigama=p=>({r:-1.2+p*2.4,f:0,pr:p*6*PI,pf:0});
@@ -528,6 +533,16 @@ AN.aegis=AN.spear;AN.tyrfing=AN.bastard;
 AN.pencil = p => ({r:-1.2+p*2.4, f:sn(p*PI)*5, pr:0, pf:0}); // 휘두르면서 찌르기
 AN.book = AN.hammer; // 묵직하게 내려찍기 (기존 망치 모션 재활용)
 AN.ar = p => ({r: 0, f: -Math.sin(p * PI) * 7, pr: 0,  pf: 0});
+  // 전술 삽 (기존 망치 모션 재활용)
+AN.shovel = AN.hammer; 
+
+// 자폭 드론 (날아가서 공격하는 모션)
+AN.drone = p => ({
+  r: Math.sin(p * 4 * Math.PI) * 0.3, // 앞뒤로 덜컹거리며 날아감
+  f: Math.sin(p * Math.PI) * 20,      // 목표를 향해 전진
+  pr: p * 8 * Math.PI,                // 프로펠러(부품) 격렬하게 회전
+  pf: 0
+});
 // 레바테인: 양손검처럼 묵직하게 휘두르되, 봉인이 풀리면 빠르게 내려찍는 모션
 AN.laev = p => ({r: -2.2 + (p < .5 ? 2*p*p : 1 - 2*(1-p)*(1-p)) * 3.1,f: Math.sin(p * Math.PI) * 12,pr: -Math.sin(p * Math.PI) * .4,pf: 0});
 const AN2={carambit:p=>({r:p*6*PI,f:0,pr:sn(p*6*PI)*.3,pf:0}),throw:p=>({r:0,f:sn(p*PI)*80,pr:0,pf:0}),iai:p=>({r:-2+eo(p)*4,f:sn(p*PI)*6,pr:0,pf:0}),spinthrow:p=>({r:0,f:sn(p*PI)*90,s:p*8*PI,pr:0,pf:0}),flurry:p=>({r:0,f:Math.abs(sn(p*3*PI))*28,pr:0,pf:0}),whirl:p=>({r:p*4*PI,f:0,pr:sn(p*2*PI)*.5,pf:0}),slam:p=>({r:p<.6?-2.4*(p/.6):-2.4+2.8*Math.pow((p-.6)/.4,2),f:0,pr:0,pf:p>.85?4:0})};
@@ -746,7 +761,8 @@ const EVENTS=[
  {id:'halloween',n:'🎃 할로윈',test:d=>d.getMonth()==9,range:'10월 한 달',w:'pumpkin',ws:['pumpkin','stake','broom'],skins:[['scythe','호박귀신']]},
  {id:'xmas',n:'🎄 크리스마스',test:d=>d.getMonth()==11&&d.getDate()>=15,range:'12월 15일~31일',w:'candycane',ws:['candycane','icicle','bells'],skins:[['rapier','눈꽃']]},
  {id:'aprilfool',n:'🐔 만우절',test:d=>d.getMonth()==3&&d.getDate()==1,range:'4월 1일 하루',w:'chicken',ws:['chicken','banana','squeaky'],skins:[['dagger','고무 칼']]},
- {id:'csat',n:'📖 대학수학능력시험(수능)',test:d=>d.getMonth()==10&&d.getDate()>=14 && d.getDate()<=20,range:'11월 14일~20일',w:'pencil',ws:['pencil','book'],skins:[['javelin','연필'],['book','시험지'],['pencil','컴퓨터싸인펜']]}
+ {id:'csat',n:'📖 대학수학능력시험(수능)',test:d=>d.getMonth()==10&&d.getDate()>=14 && d.getDate()<=20,range:'11월 14일~20일',w:'pencil',ws:['pencil','book'],skins:[['javelin','연필'],['book','시험지'],['pencil','컴퓨터싸인펜']]},
+ {id:'afd',n:'국군의 날',test:d=>d.getMonth()==9&&d.getDate()>=1 && d.getDate()<=14,range:'10월 1일~14일',w:'sniper',ws:['shovel','bayonet','ar','sniper','drone'],skins:[['ar','k2'],['sniper','k14'],['shovel','방탄'],['drone','헬리콥터'],['bayonet','건블레이드']]}
 ];
 function evActive(id){const d=new Date();return EVENTS.some(e=>e.ws.includes(id)&&e.test(d))}
 function evtR(){const d=new Date();$('sc').innerHTML='<div class="sub" style="margin-bottom:8px">기간 한정 이벤트! 진행 중일 때만 무기가 보이고, 한 번에 모두 받습니다. 받은 무기와 스킨은 영구 보유됩니다.</div>'+EVENTS.map((e,i)=>{const on=e.test(d),got=S.ach['ev_'+e.id],allHave=e.ws.every(w=>S.owned.includes(w));return `<div class="srow">${(on||got)?e.ws.map(w=>svg(w,0)).join(''):'<b style="font-size:30px">🔒</b>'}<div style="flex:1;min-width:160px"><b style="width:auto">${e.n}</b> <span class="sub">${e.range}</span><br><span class="sub">${(on||got)?e.ws.map(w=>WM[w].n).join(', ')+' + 스킨 '+e.skins.map(s=>s[1]).join(', '):'??? (진행 중일 때 공개)'}</span></div><button ${on&&!allHave?'':'disabled'} onclick="evClaim(${i})">${got&&allHave?'획득 완료':on?'모두 받기 🎁':'기간 아님'}</button></div>`}).join('')}
@@ -1053,11 +1069,19 @@ $('ob').onclick=()=>{$('over').style.display='none';G=null;show('home')};
 function update(dt){
  if(G.active){
   G.sp+=dt;
-  while(G.q.length&&G.q[0].t<=G.sp){const k=G.q.shift(),b=EN[k.k],hp=b.hp*G.d.hp*(G.eh||1)*(1+G.wave*.13);if(b.r>=30){snd('boss');G.bt=3}G.en.push({k:b,hp,mx:hp,d:0,x:0,y:0,hit:0})}
+  while(G.q.length&&G.q[0].t<=G.sp){const k=G.q.shift(),b=EN[k.k],hp=b.hp*G.d.hp*(G.eh||1)*(1+G.wave*.13);if(b.r>=30){snd('boss');G.bt=3}G.en.push({k:b,hp,mx:hp,d:0,x:0,y:0,hit:0,stun:0})}
   if(!G.q.length&&!G.en.length){G.active=false;G.gold+=30+G.wave*8;dq('wave',1);if(G.wave>=G.max){end(true);return}if(G.inf&&G.wave%10==0)perk();hud();side()}
  }
  if(G.auto&&!G.active&&!G.over){G.at+=dt;if(G.at>2){G.at=0;startWave()}}
- for(const e of G.en){e.slow=Math.max(0,(e.slow||0)-dt);if(e.bl>0){e.bl-=dt;e.hp-=(e.bd||0)*dt}if(e.burn > 0){ e.burn -= dt; e.hp -= (e.bdmg || 0) * dt; }e.d+=e.k.sp*dt*(G.es||1)*(e.slow>0?.5:1);e.hit=Math.max(0,e.hit-dt);[e.x,e.y]=posAt(e.d);if(e.d>=G.tot){e.dead=1;snd('leak');G.lives-=Math.ceil(e.hp);if(G.lives<=0){G.lives=0;hud();end(false);return}}}
+ for(const e of G.en){
+  e.slow=Math.max(0,(e.slow||0)-dt);
+  if(e.bl>0){e.bl-=dt;e.hp-=(e.bd||0)*dt}
+  if(e.burn > 0){ e.burn -= dt; e.hp -= (e.bdmg || 0) * dt; }
+  e.d+=e.k.sp*dt*(G.es||1)*(e.slow>0?.5:1);
+  e.hit=Math.max(0,e.hit-dt);
+  [e.x,e.y]=posAt(e.d);
+  if(e.d>=G.tot){e.dead=1;snd('leak');G.lives-=Math.ceil(e.hp);if(G.lives<=0){G.lives=0;hud();end(false);return}}
+ }
  G.en=G.en.filter(e=>e.hp>0?!e.dead:killed(e));
  for(const t of G.tw){
   const s=wpStat(t);t.cd-=dt;t.sw=Math.max(0,t.sw-dt/(animKey(t.cur||t.id)=='carambit'?.3:.45));
@@ -1069,10 +1093,18 @@ function update(dt){
     snd('swing',t.cur||t.id);snd('hit');t.idle=0;const fk=skFx(w.pool?t.id:(t.cur||t.id));if(ww.wv)G.fx.push({type:'wave',x:t.x,y:t.y,a:t.aim,r:s.range,t:.65,m:.65});if(fk=='ding'||fk=='chain')snd(fk);t.cd=s.cd;t.sw=1;t.aim=Math.atan2(tg[0].y-t.y,tg[0].x-t.x);
     const bwid=t.cur||t.id;
     if(BOOM_MAP[bwid]){const b=BOOM_MAP[bwid];G.fx.push({type:'boom',x:t.x+Math.cos(t.aim)*30,y:t.y+Math.sin(t.aim)*30,r:b.r,c1:b.c1,c2:b.c2,c3:b.c3,t:.5,m:.5})}
-    G.fx.push({type:'arc',x:t.x,y:t.y,a:t.aim,r:THRUST.includes(t.cur||t.id)?s.range*.75:Math.min(s.range,75)+10,t:.25,m:.25,th:THRUST.includes(t.cur||t.id)});
+    
+    // ★ 드론이 아닐 때만 참격(arc) 이펙트를 한 번만 그립니다.
+    if(t.id !== 'drone') {
+      G.fx.push({type:'arc',x:t.x,y:t.y,a:t.aim,r:THRUST.includes(t.cur||t.id)?s.range*.75:Math.min(s.range,75)+10,t:.25,m:.25,th:THRUST.includes(t.cur||t.id)});
+    }
+    
     const gm=ww.g;for(const e of tg.slice(0,ww.hits+(gm=='pierce'?1:0))){let d2=dm;if(gm=='crit'&&Math.random()<.25)d2*=2;if(gm=='dbl'&&Math.random()<.3)d2*=2;if(gm&&gm.includes('boss')&&e.k.r>=30)d2*=1.6;if(gm&&gm.includes('bleed')){e.bl=4;e.bd=dm*.18}if(gm && gm.includes('burn')){ e.burn = 5; e.bdmg = dm * 0.1; }if(gm && gm.includes('laev')){
     if(e.k.r >= 30) d2 *= 3;  // 보스 3배
     else d2 *= 0.5;            // 일반 적 절반
+  }if(gm && gm.includes('bayonet')){
+    const dist = Math.hypot(e.x - t.x, e.y - t.y);
+    if(dist < 70) { e.bl = 4; e.bd = dm * 0.2; }
   }if(e.k.r>=30)d2*=(G.bd||1);d2*=1-(e.k.df||0)/100;if(gm=='exec'&&e.hp<e.mx*.2)d2=e.hp+1;e.hp-=d2;if(gm=='slow')e.slow=1;if(gm=='knock')e.d=Math.max(0,e.d-30);e.hit=.12;e.by=t;G.fx.push({type:'dmg',x:e.x+(Math.random()-.5)*10,y:e.y-e.k.r,v:Math.round(d2),c:d2>dm*1.4,t:.7,m:.7});G.fx.push({type:'spark',x:e.x,y:e.y,t:.3,m:.3});if(fk&&PF[fk])G.fx.push({type:'p',k:fk,x:e.x,y:e.y,t:.55,m:.55,s:rs()})}
    }
   }
@@ -1111,10 +1143,40 @@ function draw(){
  }
  for(const t of G.tw){
   const s=wpStat(t);
+    // ★ 추가: 가장 가까운 적 찾기 ★
+  let nearDist = 9999;
+  for(const e of G.en) {
+    const d = Math.hypot(e.x - t.x, e.y - t.y);
+    if(d < nearDist) nearDist = d;
+  }
   if(t===G.sel){cx.beginPath();cx.arc(t.x,t.y,s.range,0,7);cx.fillStyle='rgba(255,200,60,.14)';cx.fill();cx.strokeStyle='#ffc83d';cx.lineWidth=2;cx.stroke()}
   cx.fillStyle='#3d4455';cx.fillRect(t.c*40+2,t.r*40+2,36,36);
   cx.strokeStyle=['#9aa1b5','#4caf7a','#4d8bff','#ffc83d'][t.lv-1];cx.lineWidth=3;cx.strokeRect(t.c*40+3,t.r*40+3,34,34);
-  const cur=t.cur||t.id,pl=WM[t.id].pool,po=t.sw>0?(pl?(AN[cur]||AN.dagger):anim(cur))(1-t.sw):null,sk=pl?(skOf(t.id)>0?t.id+':'+skOf(t.id):0):skOf(cur);
+  // ★ 수정된 버전 ★
+  const cur=t.cur||t.id, pl=WM[t.id].pool, sk=pl?(skOf(t.id)>0?t.id+':'+skOf(t.id):0):skOf(cur);
+  let po = null;
+  
+  if (t.sw > 0) {
+    if (cur === 'bayonet') {
+      // 총검: 가장 가까운 적과의 거리 계산
+      let nearDist = 9999;
+      for(const e of G.en) {
+        const d = Math.hypot(e.x - t.x, e.y - t.y);
+        if(d < nearDist) nearDist = d;
+      }
+      
+      if (nearDist <= 70) {
+        // 근거리: 찌르기 모션 (앞으로 확)
+        po = { r: 0, f: Math.sin((1-t.sw) * Math.PI) * 25, pr: 0, pf: Math.sin((1-t.sw) * Math.PI) * 10 };
+      } else {
+        // 원거리: 사격 반동 모션
+        po = { r: 0, f: -Math.sin((1-t.sw) * Math.PI) * 6, pr: 0, pf: 0 };
+      }
+    } else {
+      // 나머지 무기는 기존 그대로
+      po = (pl ? (AN[cur] || AN.dagger) : anim(cur))(1 - t.sw);
+    }
+  }
   if(po&&TGT[cur]&&!(pl?0:animKey(cur)))po.f*=TGT[cur]*s.range/PEAK[cur];
   if(skTrail(pl?t.id:cur)&&po){for(let i=1;i<=4;i++){const o2=(pl?(AN[cur]||AN.dagger):anim(cur))(Math.max(0,(1-t.sw)-i*.06));cx.save();cx.globalAlpha=.4/i;cx.translate(t.x,t.y);cx.rotate(t.aim+Math.PI/2+o2.r);drawW(cur,sk,.9+t.lv*.07,o2);cx.restore()}}
   if(humSk(pl?t.id:cur))drawHuman(t,po);
