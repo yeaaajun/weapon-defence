@@ -249,7 +249,28 @@ Object.assign(ART,{
 laev:['<rect x="29" y="40" width="6" height="16" rx="2" fill="#4a148c"/><circle cx="32" cy="38" r="3" fill="#ff1744"/><path d="M26 44 h12" stroke="#ffd54f" stroke-width="2"/>',`<path d="M32 0 Q38 10 35 22 Q41 30 34 40 L30 40 Q36 30 29 22 Q36 10 32 0Z" fill="#e040fb" stroke="#4a148c" stroke-width="1.5"/><path d="M32 6 V38" stroke="#fff" stroke-width="1" opacity="0.6"/><circle cx="32" cy="12" r="1.5" fill="#ffeb3b"/><circle cx="32" cy="22" r="1.5" fill="#ffeb3b"/><circle cx="32" cy="32" r="1.5" fill="#ffeb3b"/>`,32,40],
 shovel:['<rect x="30" y="20" width="4" height="40" fill="#6d4c41"/><path d="M26 22 H38 V28 H26Z" fill="#546e7a"/>',`<path d="M20 0 Q32 -4 44 0 L42 16 L32 20 L22 16Z" fill="#78909c" stroke="#37474f" stroke-width="1.5"/><path d="M22 4 L42 4" stroke="#455a64" stroke-width="2"/>`,32,20],
 drone:['<circle cx="32" cy="38" r="4" fill="#212121"/><circle cx="32" cy="38" r="2" fill="#ff1744"/>',`<circle cx="32" cy="20" r="8" fill="#455a64" stroke="#263238" stroke-width="1.5"/><circle cx="32" cy="20" r="3" fill="#90a4ae"/><path d="M32 20 L16 12 M32 20 L48 12 M32 20 L16 28 M32 20 L48 28" stroke="#546e7a" stroke-width="2.5"/><circle cx="16" cy="12" r="6" fill="none" stroke="#cfd8dc" stroke-width="2" stroke-dasharray="3 2"/><circle cx="48" cy="12" r="6" fill="none" stroke="#cfd8dc" stroke-width="2" stroke-dasharray="3 2"/><circle cx="16" cy="28" r="6" fill="none" stroke="#cfd8dc" stroke-width="2" stroke-dasharray="3 2"/><circle cx="48" cy="28" r="6" fill="none" stroke="#cfd8dc" stroke-width="2" stroke-dasharray="3 2"/><rect x="28" y="28" width="8" height="4" rx="1" fill="#424242"/><rect x="30" y="32" width="4" height="4" fill="#ffeb3b"/>`,32,38],
-bayonet:['<rect x="28" y="42" width="8" height="14" rx="1" fill="#6d4c41"/><rect x="26" y="30" width="12" height="14" rx="2" fill="#455a64"/><rect x="24" y="34" width="4" height="10" rx="1" fill="#37474f"/><rect x="28" y="46" width="8" height="4" rx="1" fill="#263238"/><circle cx="32" cy="38" r="1.5" fill="#90a4ae"/>',`<rect x="30" y="10" width="4" height="20" fill="#263238"/><rect x="28" y="6" width="8" height="4" rx="1" fill="#455a64"/><rect x="31" y="2" width="2" height="4" fill="#90a4ae"/><path d="M28 32 L36 32 L36 34 L28 34 Z" fill="#546e7a"/><path d="M30 32 L34 32 L34 44 L30 44 Z" fill="#cfd8dc" stroke="#78909c" stroke-width="1.5"/><path d="M32 34 L32 44" stroke="#eceff1" stroke-width="1"/><path d="M29 28 L35 28 L33 32 L31 32 Z" fill="#78909c"/>`,32,38]
+bayonet:['<rect x="28" y="42" width="8" height="14" rx="1" fill="#6d4c41"/><rect x="26" y="30" width="12" height="14" rx="2" fill="#455a64"/><rect x="24" y="34" width="4" height="10" rx="1" fill="#37474f"/><rect x="28" y="46" width="8" height="4" rx="1" fill="#263238"/><circle cx="32" cy="38" r="1.5" fill="#90a4ae"/>',`<rect x="30" y="10" width="4" height="20" fill="#263238"/><rect x="28" y="6" width="8" height="4" rx="1" fill="#455a64"/><rect x="31" y="2" width="2" height="4" fill="#90a4ae"/><path d="M28 32 L36 32 L36 34 L28 34 Z" fill="#546e7a"/><path d="M30 32 L34 32 L34 44 L30 44 Z" fill="#cfd8dc" stroke="#78909c" stroke-width="1.5"/><path d="M32 34 L32 44" stroke="#eceff1" stroke-width="1"/><path d="M29 28 L35 28 L33 32 L31 32 Z" fill="#78909c"/>`,32,38],
+ firework:[
+   // [0] 손잡이/몸체: 빨간 폭죽 통 + 금색 띠 + 심지
+   '<rect x="27" y="34" width="10" height="26" rx="3" fill="#c62828" stroke="#7f0000" stroke-width="1.5"/><path d="M27 42 h10 M27 50 h10" stroke="#ffd54f" stroke-width="2"/><path d="M32 34 Q28 28 32 22" stroke="#8d6e63" stroke-width="2" fill="none"/><circle cx="32" cy="21" r="2" fill="#ffeb3b"/>',
+   // [1] 날 부분: 발사통 + 터지는 불꽃
+   `<rect x="29" y="16" width="6" height="20" rx="1" fill="#455a64" stroke="#263238"/><path d="M32 16 L32 6" stroke="#8d6e63" stroke-width="2.5"/><circle cx="32" cy="4" r="3" fill="#ffeb3b" stroke="#ff9800"/><path d="M32 0 l2 3 h-4z M22 8 l3 1 l-1 3z M42 8 l-3 1 l1 3z M26 14 l2 -2 M38 14 l-2 -2" stroke="#ff7043" stroke-width="2" fill="none" stroke-linecap="round"/>`,
+   32,36
+ ],
+ calendar:[
+   // [0] 손잡이: 나무 손잡이 + 금색 고리
+   '<rect x="29" y="44" width="6" height="16" rx="2" fill="#6d4c41"/><circle cx="32" cy="61" r="2.5" fill="#ffb300"/>',
+   // [1] 날 부분: 펼친 달력 (빨간 상단 띠 + 격자 + 동그라미)
+   `<rect x="16" y="4" width="32" height="40" rx="2" fill="#fafafa" stroke="#9e9e9e" stroke-width="1.5"/><rect x="16" y="4" width="32" height="9" fill="#e53935"/><circle cx="22" cy="8" r="1.5" fill="#fff"/><circle cx="42" cy="8" r="1.5" fill="#fff"/><path d="M16 13 h32 M16 19 h32 M16 25 h32 M16 31 h32 M16 37 h32 M24 13 v31 M32 13 v31 M40 13 v31" stroke="#cfcfcf" stroke-width="1"/><circle cx="32" cy="26" r="4" fill="none" stroke="#e53935" stroke-width="2"/>`,
+   32,44
+ ],
+ newyearbell:[
+   // [0] 손잡이: 종을 매다는 줄
+   '<rect x="30" y="26" width="4" height="34" fill="#8d6e63"/><rect x="27" y="52" width="10" height="4" rx="2" fill="#5d4037"/>',
+   // [1] 날 부분: 거대한 범종 (금색 + 당좌 + 종뉴)
+   `<path d="M32 0 L36 6 L36 10 Q52 14 52 36 L52 44 L12 44 L12 36 Q12 14 28 10 L28 6 Z" fill="#ffd54f" stroke="#f57f17" stroke-width="2"/><path d="M20 20 Q32 16 44 20" stroke="#f9a825" stroke-width="1.5" fill="none"/><path d="M16 30 Q32 26 48 30" stroke="#f9a825" stroke-width="1.5" fill="none"/><circle cx="24" cy="24" r="2" fill="#f57f17"/><circle cx="40" cy="24" r="2" fill="#f57f17"/><circle cx="32" cy="36" r="2.5" fill="#f57f17"/><rect x="14" y="44" width="36" height="4" rx="2" fill="#f57f17"/>`,
+   32,44
+ ]
 });
 ART.poseidon=[ART.trident[0].replace('#8d6e63','#00acc1'),ART.trident[1].replace(/#cfd8dc/g,'#80deea').replace(/#78909c/g,'#006064'),32,30];
 ART.gaebolg=[ART.spear[0].replace('#8d6e63','#b71c1c'),`<path d="M32 0 L39 18 L32 14 L25 18Z" ${BL}/><path d="M32 14 L38 26 L32 23 L26 26Z" ${BL}/>`,32,18];
@@ -334,7 +355,10 @@ const WP=[
  {id:'laev',n:'레바테인',t:4,cost:600,dmg:100,range:150,cd:0.7,hits:2,price:null,d:'보스에겐 강하지만 일반 적에겐 약한 불의 검',g:'laev+burn',gd:'일반 적에게 데미지 절반, 보스에게 데미지 3배 · 화상'},
  {id:'drone',n:'드론',t:8,cost:300,dmg:300,range:1001,cd:4,hits:5,price:null,d:'[국군의 날 한정] 맵 전체를 장악한 드론'},
  {id:'shovel',n:'전술 삽',t:8,cost:100,dmg:50,range:100,cd:.5,hits:1,price:null,d:'[국군의 날 한정] 공격했을때 적을 잠깐 기절시키는 삽',g:'slow',gd:'적 둔'},
- {id:'bayonet',n:'K2 총검',t:8,cost:350,dmg:120,range:140,cd:0.8,hits:2,price:null,g:'bayonet',gd:'사거리 내 적이 가까우면 찌르기(출혈), 멀면 사격',d:'[국군의 날] 총알이 떨어져도 싸울 수 있는 군인의 마지막 자존심'}
+ {id:'bayonet',n:'총검',t:8,cost:350,dmg:120,range:140,cd:0.8,hits:2,price:null,g:'bayonet',gd:'사거리 내 적이 가까우면 찌르기(출혈), 멀면 사격',d:'[국군의 날 한정] 총알이 떨어져도 싸울 수 있는 군인의 마지막 자존심'},
+ {id:'firework',n:'폭죽',t:8,cost:800,dmg:300,range:500,cd:1.5,hits:5,price:null,g:'burn',gd:'화상',d:'[연말 한정] 멀리 쏘는 터지는 폭죽'},
+ {id:'calendar',n:'달력',t:8,cost:100,dmg:50,range:100,cd:.7,hits:3,price:null,d:'[연말 한정] 날짜를 볼수 있는 달력'},
+ {id:'newyearbell',n:'제야의 종',t:8,cost:800,dmg:1500,range:500,hits:99,cd:8,price:null,d:'[연말 한정] 큰 소리로 적들을 공격하는 종'}
 ];
 WP.forEach(w=>{if(w.price===undefined)w.price=null;if(w.t===undefined)w.t=0});
 const WM=Object.fromEntries(WP.map(w=>[w.id,w]));
@@ -470,6 +494,12 @@ WS.repeater.push(['용린 연노',1200,'#80cbc4','#004d40','<path d="M28 12 h8 M
 WS.ar = [];
 WS.ar.push(['택티컬', 0, '#556b2f', '#2e4a1f', '<circle cx="32" cy="20" r="1.5" fill="#212121"/>', '<rect x="26" y="32" width="12" height="4" fill="#2e4a1f"/>', null, null, 'sand', 'ev_military']);
 WS.ar.push(['데저트', 0, '#d2b48c', '#8b7355', '<circle cx="32" cy="20" r="1.5" fill="#212121"/>', '<rect x="26" y="32" width="12" height="4" fill="#8b7355"/>', null, null, 'sand', 'ev_military']);
+WS.spear.push(['폭죽',600,'#ff7043','#bf360c',
+  '<path d="M32 2 l2 4 h-4z" fill="#ffeb3b"/><circle cx="26" cy="8" r="2" fill="#ff9800"/><circle cx="38" cy="8" r="2" fill="#ff9800"/>','',null,null,'fire']);
+
+WS.tnt.push(['시계',700,'#ffd54f','#ff6f00',
+  '<circle cx="32" cy="38" r="18" fill="#37474f" stroke="#000" stroke-width="2"/><circle cx="32" cy="38" r="13" fill="#fafafa"/><path d="M32 38 V28 M32 38 L38 42" stroke="#212121" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="38" r="1.5" fill="#e53935"/>',
+  '<path d="M32 14 Q26 8 32 2 Q34 6 38 4 Q40 10 32 14Z" fill="#ffeb3b" stroke="#ff9800"/>',null,null,'gold']);
 const FXMAP={'용암':'fire','화염':'fire','화염구':'fire','불창':'fire','라그나로크':'fire','태양':'fire','마검':'purple','아발론':'purple','사신':'purple','흑요석':'purple','그림자':'purple','독니':'poison','월영':'trail','월식':'trail','월광':'trail','초승달':'trail','천둥':'lightning','번개':'lightning','토르':'lightning','해왕':'water','심해':'bubble','사막':'sand','구르카':'multi','공성':'multi','피의 도끼':'red','루비':'red','황금':'gold','귀족':'gold','왕의 검':'gold','황금왕':'gold','황금용':'gold','성검':'gold','사이버':'binary','벚꽃':'petal','쇠사슬':'chain','금속배트':'ding','클로 해머':'nail'};
 const AMAP={'귀족':'flurry','사신':'whirl','천둥':'slam','번개':'flurry'};
 for(const id in WS)WS[id].forEach(k=>{if(FXMAP[k[0]]&&!k[8])k[8]=FXMAP[k[0]];if(AMAP[k[0]]&&!k[6])k[6]=AMAP[k[0]]});
@@ -496,7 +526,7 @@ const AN={
  multi:p=>({r:p*3*PI,f:0,pr:p*4*PI,pf:sn(p*PI)*6}),
  tnt:p=>({r:-.3+Math.sin(p*Math.PI)*.6,f:Math.sin(p*Math.PI)*22,pr:Math.sin(p*3*Math.PI)*.3,pf:Math.sin(p*2*Math.PI)*3})
 };
-const THRUST=['dagger','rapier','spear','trident','halberd','gungnir','javelin','lance','ballista','bow','chakram','pike','pistol','shotgun','sniper','repeater','gaebolg','poseidon','stake','icicle','harpoon','shovel','combatknife','bayonet','katar','sai','kris','dirk','estoc','musket','rifle','smg','drone'];
+const THRUST=['dagger','rapier','spear','trident','halberd','gungnir','javelin','lance','ballista','bow','chakram','pike','pistol','shotgun','sniper','repeater','gaebolg','poseidon','stake','icicle','harpoon','shovel','combatknife','bayonet','katar','sai','kris','dirk','estoc','ar','drone','firework'];
 const BOOM_MAP={tnt:{r:70,c1:'#fff59d',c2:'#ff9800',c3:'#e53935'},mjolnir:{r:90,c1:'#ffffff',c2:'#fff176',c3:'#40c4ff'},chaos:{r:80,c1:'#e040fb',c2:'#b388ff',c3:'#7c4dff'},hammer:{r:60,c1:'#ffffff',c2:'#b0bec5',c3:'#546e7a'},squeaky:{r:75,c1:'#fff59d',c2:'#ffeb3b',c3:'#ff9800'},labrys:{r:65,c1:'#ffffff',c2:'#ef9a9a',c3:'#b71c1c'}};
 AN.bow=p=>({r:0,f:0,pr:0,pf:p<.35?-10*(p/.35):-10+(p-.35)/.65*10+34*sn((p-.35)/.65*PI)}); 
 AN.zweihander=p=>({...AN.claymore(p),f:sn(p*PI)*10,pr:-sn(p*PI)*.2});
@@ -542,6 +572,19 @@ AN.drone = p => ({
   f: Math.sin(p * Math.PI) * 20,      // 목표를 향해 전진
   pr: p * 8 * Math.PI,                // 프로펠러(부품) 격렬하게 회전
   pf: 0
+});
+// 폭죽: 발사 반동 (뒤로 살짝 밀림)
+AN.firework = p => ({r:0, f:-Math.sin(p*Math.PI)*10, pr:0, pf:0});
+
+// 달력: 펼쳐서 크게 후려치기 (휘두르며 살짝 회전)
+AN.calendar = p => ({r:-1.4 + eo(p)*2.8, f:Math.sin(p*Math.PI)*6, pr:sn(p*PI)*.3, pf:0});
+
+// 제야의 종: 묵직하게 흔들어 울리기 (앞뒤로 흔들림 + 하단 종뉴 흔들림)
+AN.newyearbell = p => ({
+  r: Math.sin(p*PI*2)*0.35,          // 종이 좌우로 흔들림
+  f: Math.sin(p*PI)*8,               // 살짝 앞으로
+  pr: Math.sin(p*PI*3)*0.2,          // 부품(줄) 흔들림
+  pf: Math.sin(p*PI*4)*4             // 종뉴(추)가 흔들림
 });
 // 레바테인: 양손검처럼 묵직하게 휘두르되, 봉인이 풀리면 빠르게 내려찍는 모션
 AN.laev = p => ({r: -2.2 + (p < .5 ? 2*p*p : 1 - 2*(1-p)*(1-p)) * 3.1,f: Math.sin(p * Math.PI) * 12,pr: -Math.sin(p * Math.PI) * .4,pf: 0});
@@ -762,7 +805,8 @@ const EVENTS=[
  {id:'xmas',n:'🎄 크리스마스',test:d=>d.getMonth()==11&&d.getDate()>=15,range:'12월 15일~31일',w:'candycane',ws:['candycane','icicle','bells'],skins:[['rapier','눈꽃']]},
  {id:'aprilfool',n:'🐔 만우절',test:d=>d.getMonth()==3&&d.getDate()==1,range:'4월 1일 하루',w:'chicken',ws:['chicken','banana','squeaky'],skins:[['dagger','고무 칼']]},
  {id:'csat',n:'📖 대학수학능력시험(수능)',test:d=>d.getMonth()==10&&d.getDate()>=14 && d.getDate()<=20,range:'11월 14일~20일',w:'pencil',ws:['pencil','book'],skins:[['javelin','연필'],['book','시험지'],['pencil','컴퓨터싸인펜']]},
- {id:'afd',n:'🪖국군의 날',test:d=>d.getMonth()==9&&d.getDate()>=1 && d.getDate()<=14,range:'10월 1일~14일',w:'sniper',ws:['shovel','bayonet','ar','sniper','drone'],skins:[['ar','k2'],['sniper','k14'],['shovel','방탄'],['drone','헬리콥터'],['bayonet','건블레이드']]}
+ {id:'afd',n:'🪖국군의 날',test:d=>d.getMonth()==9&&d.getDate()>=1 && d.getDate()<=14,range:'10월 1일~14일',w:'sniper',ws:['shovel','bayonet','ar','sniper','drone'],skins:[['ar','k2'],['sniper','k14'],['shovel','방탄'],['drone','헬리콥터'],['bayonet','건블레이드']]},
+ {id:'yearend',n:'📅연말',test:d=>d.getMonth()==11&&d.getDate()>=1 && d.getDate()<=31,range:'12월 한 달',w:'firework',ws:['firework','calendar','newyearbell'],skins:[['spear','폭죽'],['tnt','시계']]}
 ];
 function evActive(id){const d=new Date();return EVENTS.some(e=>e.ws.includes(id)&&e.test(d))}
 function evtR(){const d=new Date();$('sc').innerHTML='<div class="sub" style="margin-bottom:8px">기간 한정 이벤트! 진행 중일 때만 무기가 보이고, 한 번에 모두 받습니다. 받은 무기와 스킨은 영구 보유됩니다.</div>'+EVENTS.map((e,i)=>{const on=e.test(d),got=S.ach['ev_'+e.id],allHave=e.ws.every(w=>S.owned.includes(w));return `<div class="srow">${(on||got)?e.ws.map(w=>svg(w,0)).join(''):'<b style="font-size:30px">🔒</b>'}<div style="flex:1;min-width:160px"><b style="width:auto">${e.n}</b> <span class="sub">${e.range}</span><br><span class="sub">${(on||got)?e.ws.map(w=>WM[w].n).join(', ')+' + 스킨 '+e.skins.map(s=>s[1]).join(', '):'??? (진행 중일 때 공개)'}</span></div><button ${on&&!allHave?'':'disabled'} onclick="evClaim(${i})">${got&&allHave?'획득 완료':on?'모두 받기 🎁':'기간 아님'}</button></div>`}).join('')}
