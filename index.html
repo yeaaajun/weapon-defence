@@ -728,7 +728,97 @@ function tlv(id){return S.tree[id]||0}
 function pst(n){return n.k=='w'?S.owned.includes(n.wid):tlv(n.id)>0}
 function opn(n){return n.par.every(p=>p=='root'||pst(TN[p]))}
 function applyTree(g){for(const id in TN){const n=TN[id];if(n.k=='w')continue;const l=tlv(id);if(l)n.ef(g,l)}}
-function treeBuy(id){const n=TN[id];if(!n||!opn(n))return;if(n.k=='w'){if(S.owned.includes(n.wid))return}else if(tlv(id)>=n.mx)return;const c=tmCost(n);if(S.tm+S.coins<c)return;const u=Math.min(S.tm,c);S.tm-=u;S.coins-=c-u;S.tspent+=c;if(n.k=='w'){S.owned.push(n.wid);setTimeout(()=>reveal(n.wid),300)}else S.tree[id]=tlv(id)+1;save();chk();treeR()}
+function treeBuy(id){
+  const n=TN[id];
+  if(!n||!opn(n))return;
+  if(n.k=='w'){if(S.owned.includes(n.wid))return}
+  else if(tlv(id)>=n.mx)return;
+  
+  const c=tmCost(n);
+  if(S.tm+S.coins<c)return;
+  
+  // 재화 차감 및 상태 업데이트
+  const u=Math.min(S.tm,c);
+  S.tm-=u;S.coins-=c-u;S.tspent+=c;
+  
+  if(n.k=='w'){
+    S.owned.push(n.wid);
+    setTimeout(()=>reveal(n.wid),300);
+  } else {
+    S.tree[id]=tlv(id)+1;
+  }
+  
+  save(); chk();
+  
+  // ★ 1. 클릭한 노드 자체 업데이트
+  const el = document.querySelector(`[data-tnid="${id}"]`);
+  if(el){
+    const l = tlv(id);
+    if(n.k=='w'){
+      el.className = 'tn rw max';
+      el.innerHTML = `${svg(n.wid,skOf(n.wid))}<b>${WM[n.wid].n}</b><small>✅ 획득</small>`;
+    } else {
+      el.className = `tn ${l>=n.mx?'max':l?'on':''}`;
+      if(n.k==='s'){
+        el.innerHTML = `<b style="font-size:11px">${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${l>=n.mx?'MAX':'🪙'+tmCost(n)}</small>`;
+      } else {
+        el.innerHTML = `<b>${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${n.ds(l||1)}</small><small>${l>=n.mx?'MAX':'🪙'+tmCost(n)}</small>`;
+      }
+    }
+  }
+  
+  // ★ 2. 이 노드 때문에 "해금된" 자식 노드들 업데이트
+  for(const nextId in TN){
+    const next = TN[nextId];
+    if(next.par.includes(id) && opn(next)){
+      const nextEl = document.querySelector(`[data-tnid="${nextId}"]`);
+      if(nextEl && nextEl.classList.contains('lock')){
+        const l = tlv(nextId);
+        const c2 = tmCost(next);
+        const isSmall = next.k==='s';
+        const sz = isSmall ? 'width:64px;height:64px;font-size:10px;padding:3px;' : '';
+        nextEl.className = `tn ${next.k==='w'?'rw ':''}${l>=next.mx?'max':l?'on':''}`;
+        nextEl.style.cssText = `left:${next.x}px;top:${next.y}px;${sz}`;
+        
+        if(next.k==='w'){
+          nextEl.innerHTML = `${svg(next.wid,skOf(next.wid))}<b>${WM[next.wid].n}</b><small>${S.owned.includes(next.wid)?'✅ 획득':'🪙'+c2}</small>`;
+        } else if(isSmall){
+          nextEl.innerHTML = `<b style="font-size:11px">${next.n}</b><small>Lv.${l}/${next.mx}</small><small>${l>=next.mx?'MAX':'🪙'+c2}</small>`;
+        } else {
+          nextEl.innerHTML = `<b>${next.n}</b><small>Lv.${l}/${next.mx}</small><small>${next.ds(l||1)}</small><small>${l>=next.mx?'MAX':'🪙'+c2}</small>`;
+        }
+      }
+    }
+  }
+
+  // ★ 3. 선(Line) 연결 상태 업데이트
+  const svgEl = document.querySelector('.tmap svg.ln');
+  if(svgEl){
+    for(const line of svgEl.querySelectorAll('line')){
+      // 이 선이 어떤 노드로 향하는지 x,y 좌표로 역추적 (또는 line에 data 속성을 부여했으면 더 쉬움)
+      const x2 = Number(line.getAttribute('x2'));
+      const y2 = Number(line.getAttribute('y2'));
+      // 좌표가 일치하는 노드 찾기
+      const targetNode = Object.values(TN).find(node => node.x === x2 && node.y === y2);
+      
+      if(targetNode && opn(targetNode)){
+        // 자식 노드가 해금 상태라면 선을 밝게 변경
+        line.setAttribute('stroke', '#76ff03');
+        line.setAttribute('stroke-width', '4');
+        line.removeAttribute('stroke-dasharray');
+      }
+    }
+  }
+
+  // ★ 4. 하단/상단 텍스트 업데이트 (뿌리 노드 포함)
+  syncC();
+  const rootEl = document.querySelector('.tn.root small');
+  if(rootEl) rootEl.textContent = S.tspent;
+  
+  // 설명 텍스트(보유 코인, 트리머니, 투자 합계)도 갱신
+  const descEl = document.querySelector('#tr .sub');
+  if(descEl) descEl.innerHTML = `영구 강화입니다. 화면을 드래그해서 움직이세요. 공격(위), 경제(오른쪽), 사거리·방어(왼쪽) 세 방향으로 가지가 뻗고, 두 갈래가 합쳐지는 노드는 양쪽을 모두 올려야 열립니다. 초기화(🪙500)하면 투자 비용이 전부 🌳트리머니로 바뀌고, 트리머니는 이 트리에서만 쓸 수 있습니다.<br>보유: 🪙${S.coins} · 🌳 ${S.tm} · 투자 합계 ${S.tspent} <button class="alt" ${S.coins<500||!S.tspent?'disabled':''} onclick="treeReset()">초기화 🪙500</button>`;
+}
 function treeReset(){if(S.coins<500||!S.tspent)return;S.coins-=500;S.tm+=S.tspent;S.tspent=0;S.tree={};save();treeR()}
 function tpd(e){const p=document.getElementById('tpan');PM=0;if(e.pointerType=='touch')return;PD={x:e.clientX,y:e.clientY,l:p.scrollLeft,t:p.scrollTop}}
 function tpm(e){if(!PD)return;const p=document.getElementById('tpan'),dx=e.clientX-PD.x,dy=e.clientY-PD.y;if(Math.abs(dx)+Math.abs(dy)>5)PM=1;p.scrollLeft=PD.l-dx;p.scrollTop=PD.t-dy}
@@ -757,17 +847,16 @@ function treeR(){
   const sz=isSmall?'width:64px;height:64px;font-size:10px;padding:3px;':'';
   const pos2=`left:${n.x}px;top:${n.y}px;${sz}`;
   if(!op){
-    if(n.k==='w') nd+=`<div class="tn rw lock" style="${pos2}"><b style="font-size:22px">?</b><small>🔒</small></div>`;
-    else nd+=`<div class="tn lock" style="${pos2}"><b style="font-size:18px">???</b></div>`;
+    if(n.k==='w') nd+=`<div class="tn rw lock" data-tnid="${id}" style="${pos2}"><b style="font-size:22px">?</b><small>🔒</small></div>`;
+    else nd+=`<div class="tn lock" data-tnid="${id}" style="${pos2}"><b style="font-size:18px">???</b></div>`;
   } else if(n.k==='w'){
     const got=S.owned.includes(n.wid);
-    nd+=`<div class="tn rw ${got?'max':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')">${svg(n.wid,skOf(n.wid))}<b>${WM[n.wid].n}</b><small>${got?'✅ 획득':'🪙'+c}</small></div>`;
+    nd+=`<div class="tn rw ${got?'max':''}" data-tnid="${id}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')">${svg(n.wid,skOf(n.wid))}<b>${WM[n.wid].n}</b><small>${got?'✅ 획득':'🪙'+c}</small></div>`;
   } else if(isSmall){
-    nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b style="font-size:11px">${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
+    nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" data-tnid="${id}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b style="font-size:11px">${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
   } else {
-    nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b>${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${n.ds(l||1)}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
+    nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" data-tnid="${id}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b>${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${n.ds(l||1)}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
   }
- }
  nd+=`<div class="tn root" style="left:900px;top:840px;width:96px;height:96px;font-size:40px;flex-direction:column">🌳<small style="font-size:10px">${S.tspent}</small></div>`;
  $('tr').innerHTML=`<div class="sub" style="margin-bottom:8px">영구 강화입니다. 화면을 드래그해서 움직이세요. 공격(위), 경제(오른쪽), 사거리·방어(왼쪽) 세 방향으로 가지가 뻗고, 두 갈래가 합쳐지는 노드는 양쪽을 모두 올려야 열립니다. 초기화(🪙500)하면 투자 비용이 전부 🌳트리머니로 바뀌고, 트리머니는 이 트리에서만 쓸 수 있습니다.<br>보유: 🪙${S.coins} · 🌳 ${S.tm} · 투자 합계 ${S.tspent} <button class="alt" ${S.coins<500||!S.tspent?'disabled':''} onclick="treeReset()">초기화 🪙500</button></div><div id="tpan" style="overflow:auto;height:68vh;min-height:420px;border:2px solid var(--line);border-radius:12px;cursor:grab" onpointerdown="tpd(event)" onpointermove="tpm(event)" onpointerup="tpu()" onpointerleave="tpu()"><div class="tmap" style="width:1800px;height:1150px;border:none;border-radius:0"><svg class="ln" viewBox="0 0 1800 1150" width="1800" height="1150">${ln}</svg>${nd}</div></div>`;
  const p2=document.getElementById('tpan');
