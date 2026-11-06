@@ -809,6 +809,7 @@ function startGame(){
  $('bar').innerHTML=S.load.map(id=>{const w=WM[id];return `<div class="slot" data-id="${id}" onclick="pick('${id}')">${svg(id,skOf(id))}${w.n}<br>💰${w.cost}</div>`}).join('');
  side();hud();last=performance.now();requestAnimationFrame(loop);
 }
+$('start').onclick = startGame;
 function startWave(force){
  if(!G||G.over||(G.active&&!force)||G.wave>=G.max)return;
  if(G.active)G.gold+=30+G.wave*8;
