@@ -1073,6 +1073,161 @@ function treeR(){const pan=document.getElementById('tpan');if(pan){TS.l=pan.scro
 
 TRD.push(['자세히 보기','Details'],['강화비용','Upgrade cost'],['상점가','Shop price'],['보유 스킨','Skins owned'],['설치비','Cost'],['피해 경감','damage reduction'],['출혈','Bleed'],['드래곤','Dragon'],['슬라임','Slime'],['박쥐','Bat'],['고블린','Goblin'],['해골','Skeleton'],['오크','Orc'],['유령','Ghost'],['악마','Demon'],['거북이','Turtle'],['모아이','Moai'],['보스','Boss'],
 ['빠른 연타','Rapid strikes'],['균형형','Balanced'],['2명 동시 타격','Hits 2 at once'],['긴 사거리','Long range'],['범위 내 전체 타격','Hits everything in range'],['넓은 범위 휩쓸기','Wide sweeping arc'],['강력한 3연 타격','Powerful triple strike'],['빠른 찌르기','Fast thrusts'],['빠른 2명 베기','Fast double slash'],['묵직한 강타','Heavy blow'],['3명 동시 찌르기','Pierces 3 at once'],['긴 사거리 3연 타격','Long-range triple hit'],['범위 내 전체 강타','Smashes everything in range'],['양손으로 휘두르는 거대한 대검','Huge two-handed greatsword'],['공격마다 무기가 무작위로 바뀜','Weapon changes randomly each attack'],['공격마다 강력한 무기가 무작위로 바뀜','Strong weapon randomly each attack'],['빠른 단도 베기','Quick knife slashes'],['휘둘러지는 철퇴형 무기','Swinging mace-like weapon'],['긴 자루 큰 초승달 베기','Long-handled crescent slash'],['빠르게 두 명을 후려침','Whips two quickly'],['싸고 튼튼한 몽둥이','Cheap sturdy club'],['저렴한 원거리 투척','Cheap ranged throw'],['돌진 찌르기, 긴 사거리','Lunging thrust, long range'],['매우 느리지만 초장거리 대형 화살','Very slow, extreme-range bolt'],['보스를 노린 거대한 검','Giant blade made for bosses'],['긴 사거리의 정밀 사격','Long-range precision shots'],['물결 날의 거대한 양손검','Wave-bladed two-handed sword'],['매우 긴 대형 일본도','Very long Japanese sword'],['사슬 달린 낫, 넓은 범위','Chain sickle, wide range'],['뱀의 꼬리에서 나온 일본 신화의 검','Japanese myth sword from a serpent’s tail'],['날아가는 회전 고리','Flying spinning ring'],['성스러운 3연 참격','Holy triple slash'],['긴 사거리 4연 관통','Long-range 4-target pierce'],['벼락 범위 강타','Thunderous area smash'],['기병의 곡검','Cavalry curved sword'],['가시 박힌 철구','Spiked iron ball'],['눈 깜짝할 새 3연타','Triple hit in a blink'],['전설 장인의 명검','Masterwork of a legendary smith'],['삼국지 여포의 장병기','Lü Bu’s polearm'],['바다의 신의 삼지창','Trident of the sea god'],['켈트 신화의 필중 창','Celtic spear that never misses'],['미친 듯이 갈아내는 연속 베기','Frantic rapid cutting'],['전류로 3명 제압','Shocks 3 enemies'],['정확한 연속 사격','Accurate rapid fire'],['가까이서 5명 제압','Blasts 5 up close'],['초장거리 일격','Extreme-range one-shot'],['물결 모양 날의 단검 (단검 진화)','Wavy-bladed dagger (Dagger evolution)'],['허리에 차던 긴 일본도 (외날검 진화)','Long Japanese sword (Katana evolution)'],['넓은 날의 양손 대검 (양날검 진화)','Broad two-handed sword (Broadsword evolution)'],['매우 긴 보병 창 (창 진화)','Very long infantry spear (Spear evolution)'],['양날 도끼 (도끼 진화)','Double-bitted axe (Axe evolution)'],['긴 곡도 달린 장병기 (낫 진화)','Curved-blade polearm (Scythe evolution)'],['[공격 트리 보상] 거대한 일본 대도','[Attack tree reward] Huge Japanese cleaver'],['[경제 트리 보상] 인도의 찌르기 단검','[Economy tree reward] Indian push dagger'],['[사거리 트리 보상] 연발 쇠뇌','[Range tree reward] Repeating crossbow'],['[공격 트리 보상] 다키아의 휘어진 대형 낫검','[Attack tree reward] Dacian curved war blade'],['[경제 트리 보상] 오키나와의 갈래 단검','[Economy tree reward] Okinawan forked dagger'],['[사거리 트리 보상] 멀리 꽂는 작살','[Range tree reward] Long-range harpoon'],['[할로윈 한정]','[Halloween only]'],['[크리스마스 한정]','[Christmas only]'],['[만우절 한정]','[April Fools only]'],['심장을 노리는 나무 말뚝','Wooden stake aimed at the heart'],['쓸어내는 빗자루','Sweeping broom'],['호박 머리 철퇴','Pumpkin-headed mace'],['갈고리 사탕','Hooked candy'],['차갑게 꿰뚫는 창','Coldly piercing spear'],['딸랑딸랑 때리는 철퇴','Jingling mace'],['의외로 아프다','Surprisingly painful'],['미끄러운 공격','Slippery attack'],['뿅뿅 소리 나는 망치','Squeaking hammer'],['보스 피해 +60% · 맞은 적 출혈(4초간 지속 피해)','Boss damage +60% · Bleed (4s damage over time)'],['보스에게 피해 +60%','+60% damage to bosses'],['25% 확률로 치명타 (피해 x2)','25% crit chance (x2 damage)'],['체력 20% 미만 적 즉시 처형','Executes enemies under 20% HP'],['맞은 적을 뒤로 밀어냄','Knocks enemies back'],['맞은 적 1초간 둔화','Slows hit enemies for 1s'],['공격마다 무기 무작위','Random weapon each attack']);
+// ===== 업데이트 패치 2026.11.06 =====
+// 붙여넣을 위치: 게임 파일의 `langInit();` 바로 윗줄 (이전에 받은 update_patch.js는 쓰지 말고 이것만 넣으세요)
+
+// [1] 이모지 통일 (Noto Color Emoji) – UI와 캔버스 모두 같은 모양으로 표시
+(()=>{const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap';document.head.appendChild(l);
+ const s=document.createElement('style');s.textContent='html,body,button,input{font-family:system-ui,-apple-system,"Noto Sans KR",sans-serif,"Noto Color Emoji"}';document.head.appendChild(s);
+ try{document.fonts.load('20px "Noto Color Emoji"','🐉💰')}catch(e){}
+ const ft=cx.fillText.bind(cx);
+ cx.fillText=function(t,x,y,w){const T=String(t);
+  if(/\p{Extended_Pictographic}/u.test(T)){const f=cx.font,m=/[\x20-\x7e가-힣]/.test(T);
+   cx.font=f.replace(/(\d+(?:\.\d+)?px).*$/,m?'$1 sans-serif,"Noto Color Emoji"':'$1 "Noto Color Emoji",sans-serif');ft(T,x,y);cx.font=f}
+  else ft(T,x,y)}})();
+
+// [2] 연노 너프
+Object.assign(WM.repeater,{dmg:38,range:260,cd:.24});
+
+// [3] 신규 무기 (트리 D 보상 2종, 임파서블 보상 1종, 이벤트 5종)
+Object.assign(ART,{
+ ruyi:['<rect x="30" y="30" width="5" height="30" fill="#b71c1c"/>','<rect x="30" y="0" width="5" height="34" fill="#ffd54f" stroke="#ff8f00"/><rect x="28" y="0" width="9" height="5" fill="#ff8f00"/>',32.5,32],
+ kanabo:['<rect x="30" y="30" width="5" height="30" fill="#6d4c41"/>','<path d="M26 0 H39 L42 30 H23Z" fill="#455a64" stroke="#263238"/><path d="M28 6 l-4 2 M37 6 l4 2 M27 16 l-4 2 M38 16 l4 2" stroke="#90a4ae" stroke-width="3"/>',32.5,30],
+ oblivion:['<path d="M10 38 L32 42 L54 38 L54 43 L32 47 L10 43Z" fill="#4a148c" stroke="#ce93d8"/><rect x="29" y="46" width="6" height="13" fill="#1a0a1f"/><circle cx="32" cy="61" r="3" fill="#e040fb"/>','<path d="M32 0 L44 12 L42 40 L22 40 L20 12Z" fill="#311b92" stroke="#b388ff"/><path d="M32 6 V38 M26 18 L32 26 L38 18" stroke="#e040fb" stroke-width="2" fill="none"/>',32,40],
+ ricemallet:[SH,'<rect x="14" y="4" width="36" height="20" rx="8" fill="#a1887f" stroke="#5d4037"/>',33,14],
+ cupid:['<path d="M10 40 Q32 4 54 40" stroke="#e91e63" stroke-width="4" fill="none"/><rect x="29" y="44" width="6" height="14" fill="#4e342e"/>','<rect x="31" y="6" width="2" height="38" fill="#8d6e63"/><path d="M32 0 L37 10 L27 10Z" fill="#e91e63"/>',32,44],
+ fan:['<rect x="30" y="40" width="4" height="20" fill="#4e342e"/>','<path d="M32 40 L6 12 Q32 -6 58 12Z" fill="#f8bbd0" stroke="#ad1457"/><path d="M32 40 L18 8 M32 40 L32 4 M32 40 L46 8" stroke="#ad1457"/>',32,40],
+ watergun:['<rect x="28" y="38" width="8" height="22" rx="3" fill="#ff7043"/>','<rect x="24" y="10" width="16" height="30" rx="5" fill="#29b6f6" stroke="#0277bd"/><rect x="30" y="0" width="4" height="12" fill="#0277bd"/>',32,40],
+ pestle:['<rect x="30" y="22" width="5" height="38" fill="#a1887f"/>','<rect x="18" y="2" width="29" height="22" rx="6" fill="#ffe082" stroke="#f9a825"/><circle cx="32" cy="13" r="5" fill="#fff59d"/>',32.5,24]
+});
+[{id:'ruyi',n:'여의봉',t:6,cost:520,dmg:210,range:175,cd:1,hits:4,d:'[트리 D 보상] 길어지는 신화의 봉'},
+ {id:'kanabo',n:'도깨비 방망이',t:6,cost:560,dmg:340,range:100,cd:1.3,hits:99,d:'[트리 D 보상] 범위 내 전체 강타'},
+ {id:'oblivion',n:'종언의 대검',t:4,cost:800,dmg:1100,range:150,cd:1.5,hits:6,g:'boss+bleed',gd:'보스 피해 +60% · 맞은 적 출혈(4초간 지속 피해)',d:'[임파서블 보상] 모든 것을 끝내는 6연 참격'},
+ {id:'ricemallet',n:'떡메',t:8,cost:200,dmg:110,range:80,cd:1.1,hits:99,d:'[새해 한정] 쿵떡쿵떡 범위 강타'},
+ {id:'cupid',n:'큐피드 활',t:8,cost:210,dmg:80,range:230,cd:.8,hits:2,d:'[밸런타인 한정] 하트 화살'},
+ {id:'fan',n:'벚꽃 철선',t:8,cost:190,dmg:55,range:100,cd:.45,hits:3,d:'[벚꽃 한정] 꽃잎을 흩날리는 부채'},
+ {id:'watergun',n:'초강력 물총',t:8,cost:170,dmg:40,range:170,cd:.3,hits:1,d:'[한여름 한정] 시원한 연사'},
+ {id:'pestle',n:'달토끼 절굿공이',t:8,cost:220,dmg:130,range:85,cd:1.1,hits:2,d:'[한가위 한정] 보름달 같은 한 방'}].forEach(addW);
+AN.ruyi=AN.spear;AN.kanabo=AN.hammer;AN.oblivion=AN.dslayer;AN.ricemallet=AN.hammer;AN.cupid=AN.bow;AN.fan=AN.whip;AN.watergun=AN.javelin;AN.pestle=AN.mace;
+THRUST.push('ruyi','cupid','watergun');
+
+// [4] 신규 스킨 (뒤에 추가되므로 기존 스킨 번호는 그대로)
+const NS={sword2:['빙결',300,'#e1f5fe','#0277bd','<path d="M32 6 V42" stroke="#fff"/>','',null,null,'bubble'],
+ katana:['야차',500,'#ce93d8','#4a148c','<path d="M33 6 Q31 24 33 42" stroke="#e040fb" stroke-width="2" fill="none"/>','',null,null,'purple'],
+ claymore:['지옥불',700,'#ff8a65','#bf360c','<path d="M32 6 V38" stroke="#ffeb3b" stroke-width="2"/>','',null,null,'fire'],
+ axe:['용암',450,'#ff7043','#4e342e','<path d="M50 10 V30" stroke="#ffeb3b" stroke-width="2"/>','',null,null,'fire'],
+ spear:['낙뢰',500,'#fff59d','#f57f17','<path d="M32 2 L29 10 L34 10 L31 18" stroke="#fff" stroke-width="2" fill="none"/>','',null,null,'lightning'],
+ bow:['은하',600,'#b3e5fc','#1a237e','<circle cx="32" cy="12" r="2" fill="#fff"/>','',null,null,'gold'],
+ hammer:['황혼',500,'#ffcc80','#bf360c','','',null,null,'red'],
+ mace:['독가시',350,'#c5e1a5','#33691e','<circle cx="32.5" cy="14" r="3" fill="#76ff03"/>','',null,null,'poison'],
+ trident:['산호',400,'#ffab91','#bf360c','','',null,null,'bubble'],
+ scythe:['월하',550,'#e1bee7','#4a148c','<path d="M40 10 Q54 12 56 30" stroke="#fff" fill="none"/>','',null,null,'trail'],
+ dagger:['암살자',400,'#90a4ae','#1a1a2e','','',null,null,'purple'],
+ rapier:['성기사',450,'#fff9c4','#f9a825','','',null,null,'gold']};
+for(const id in NS)WS[id].push(NS[id]);TRAIL.add('월하');
+
+// [5] 신규 이벤트 5종 (진행 기간 중 무기 + 한정 스킨 영구 지급)
+const EVS=[
+ {id:'newyear',n:'🎍 새해',test:d=>d.getMonth()==0&&d.getDate()<=7,range:'1월 1일~7일',w:'ricemallet',skins:[['hammer','세뱃돈']]},
+ {id:'valentine',n:'💝 밸런타인',test:d=>d.getMonth()==1&&d.getDate()>=10&&d.getDate()<=16,range:'2월 10일~16일',w:'cupid',skins:[['rapier','하트']]},
+ {id:'sakura',n:'🌸 벚꽃',test:d=>d.getMonth()==3&&d.getDate()>=2&&d.getDate()<=15,range:'4월 2일~15일',w:'fan',skins:[['scimitar','꽃잎']]},
+ {id:'summer',n:'🏖️ 한여름',test:d=>(d.getMonth()==6&&d.getDate()>=15)||(d.getMonth()==7&&d.getDate()<=15),range:'7월 15일~8월 15일',w:'watergun',skins:[['trident','해변']]},
+ {id:'chuseok',n:'🌕 한가위',test:d=>d.getMonth()==8,range:'9월 한 달',w:'pestle',skins:[['mace','보름달']]}];
+const EVSK={newyear:['hammer',['세뱃돈',0,'#ffe082','#e65100','','<circle cx="32" cy="50" r="3" fill="#d32f2f"/>',null,null,'gold']],valentine:['rapier',['하트',0,'#f8bbd0','#ad1457','','<circle cx="32" cy="46" r="5" fill="#e91e63"/>',null,null,'red']],sakura:['scimitar',['꽃잎',0,'#f8bbd0','#ad1457','<circle cx="36" cy="20" r="2" fill="#fff"/>','',null,null,'petal']],summer:['trident',['해변',0,'#80deea','#006064','','',null,null,'bubble']],chuseok:['mace',['보름달',0,'#fff59d','#f9a825','','',null,null,'gold']]};
+EVS.forEach(e=>{const s=EVSK[e.id];s[1][9]='ev_'+e.id;WS[s[0]].push(s[1]);e.ws=[e.w];EVENTS.push(e)});
+
+// [6] 업그레이드 트리 4번째 갈래 (아래쪽) – 영역이 늘어나도록 높이 확장
+ORG.D=(u,v)=>[900-v,840+u];
+mkBr('D',[['보석 채굴',150,100,l=>`특별/임파서블 클리어 시 젬 +${l}`,(g,l)=>{g.gb=l}],['정밀 타격',150,100,l=>`피해 +${l*4}%`,(g,l)=>{g.pd*=1+.04*l}],['전술 지휘',150,100,l=>`공격 속도 +${l*3}%`,(g,l)=>{g.ps*=1-.03*l}],['용병 계약',400,250,l=>`시작 골드 +${l*25} · 피해 +${l*3}%`,(g,l)=>{g.gold+=25*l;g.pd*=1+.03*l}],['비전의 극의',600,300,l=>`피해 +${l*7}%`,(g,l)=>{g.pd*=1+.07*l}]],['ruyi','kanabo'],[900,1800,'여의봉 연마','여의봉 속사','도깨비방망이 연마','도깨비방망이 속사']);
+const _tr=treeR;
+treeR=function(){_tr();const m=$('tr').querySelector('.tmap');if(m){m.style.height='1700px';const s=m.querySelector('svg.ln');s.setAttribute('viewBox','0 0 1800 1700');s.setAttribute('height','1700')}};
+
+// [7] 임파서블 모드 (일반 맵 선택, 30웨이브)
+const IMPD={n:'임파서블',hp:5,gold:110,lives:260,rew:12};
+EN.push({e:'☠️',hp:1500,sp:52,r:19,g:60,df:55},{e:'👁️',hp:5000,sp:28,r:34,g:500,df:60});
+const AB1=EN.length-2,AB2=EN.length-1;EN_N.push('심연 기사','심연의 눈');
+$('md2').insertAdjacentHTML('afterend','<button id="md3" class="alt" onclick="setMode(3)">💀 임파서블</button>');
+const _sr=stageR;
+stageR=function(){_sr();$('md3').className=mode==3?'':'alt';
+ if(mode==3){$('dfh').textContent='💀 임파서블';$('diffs').innerHTML=`<div class="card sel" style="text-align:left"><b>임파서블 (고정)</b><small>30웨이브 · 적 HP x${IMPD.hp} · 이동 +20% · 골드 -20%<br>💰${IMPD.gold} · ❤️${IMPD.lives} · 적이 초당 0.2% 회복<br>방어 55~60% 심연 몬스터 · 10웨이브마다 보스 추가<br>🎁 첫 클리어: 종언의 대검 + 💎15 · 이후 💎5</small></div>`}
+ else $('dfh').textContent='🔥 난이도'};
+const _sg=startGame;
+startGame=function(){const m3=mode==3,g0=DIFF[selDiff];_sg();if(!G)return;
+ if(m3){G.imp=1;G.max=30;G.gold+=IMPD.gold-g0.gold;G.lives*=IMPD.lives/g0.lives;G.d=IMPD;G.es*=1.2;G.pg*=.8}
+ const u=S.gup||{};G.gold+=50*(u.g||0);G.lives*=1+.04*(u.l||0);G.gf=0;G.gg=0;hud()};
+$('start').onclick=startGame;
+const _sw0=startWave;
+startWave=function(f){const n0=G.q.length;_sw0(f);if(!G||!G.imp||G.q.length<=n0)return;
+ const w=G.wave;
+ for(let i=n0;i<G.q.length;i++){const q=G.q[i],r=Math.random();if(q.k==5){if(w>=10)q.k=AB2}else if(r<.4)q.k=AB1;else if(r<.55)q.k=10}
+ const t=G.q[G.q.length-1].t;
+ if(w%10==0)G.q.push({t:t+2,k:AB2});
+ if(w==30)G.q.push({t:t+3,k:AB2},{t:t+4,k:AB2});
+ G.q.sort((a,b)=>a.t-b.t)};
+const _up=update;
+update=function(dt){if(G&&G.imp&&G.active)for(const e of G.en)if(e.hp>0)e.hp=Math.min(e.mx,e.hp+e.mx*.002*dt);_up(dt)};
+const _en=end;
+end=function(win,quit){const g=G;
+ if(g&&!g.over&&win&&!quit&&(g.imp||g.special)){const b=tlv('d1');
+  if(g.imp){S.st.imp=(S.st.imp||0)+1;const f=!S.owned.includes('oblivion');if(f){S.owned.push('oblivion');setTimeout(()=>reveal('oblivion'),700)}
+   const n=(f?15:5)+b;S.gems=(S.gems||0)+n;S.st.gt=(S.st.gt||0)+n;toast('💎 임파서블 클리어! 젬 +'+n)}
+  else if(b){S.gems=(S.gems||0)+b;S.st.gt=(S.st.gt||0)+b}}
+ _en(win,quit)};
+
+// [8] 젬 사용처: 젬 상점 + 전투 중 긴급 사용
+function gemR(){const g=S.gems||0,u=S.gup=S.gup||{g:0,l:0},
+ row=(t,d,c,f,ok)=>`<div class="srow"><div style="flex:1;min-width:160px"><b style="width:auto">${t}</b><br><span class="sub">${d}</span></div><button ${g>=c&&ok!==0?'':'disabled'} onclick="${f}">💎${c}</button></div>`;
+ $('stb').innerHTML=`<div style="max-height:75vh;overflow-y:auto;min-width:min(86vw,420px)"><h2 style="margin-top:0">💎 젬 상점 <span class="coin">보유 ${g}</span></h2>`
+ +row('코인 교환','🪙 400 획득',1,'gemBuy(0)')
+ +row('랜덤 스킨 뽑기','보유 무기의 미보유 스킨 1개',5,'gemBuy(1)')
+ +row('트리 무료 초기화','투자 비용이 🌳트리머니로 전환 (코인 불필요)',3,'gemBuy(2)',S.tspent?1:0)
+ +row('시작 골드 강화 Lv.'+u.g+'/5','전투 시작 골드 +50씩',6+u.g*4,'gemBuy(3)',u.g<5?1:0)
+ +row('성벽 강화 Lv.'+u.l+'/5','전투 시작 체력 +4%씩',8+u.l*4,'gemBuy(4)',u.l<5?1:0)
+ +'<div class="sub">전투 중에는 상단 💎 버튼으로 수리(💎2 · 라이프 +15% · 3회)와 보급(💎1 · 골드 +250 · 5회)도 쓸 수 있어요.</div></div><button class="alt" style="margin-top:8px;width:100%" onclick="$(\'st\').style.display=\'none\'">닫기</button>`;
+ $('st').style.display='flex'}
+function gemBuy(i){const u=S.gup=S.gup||{g:0,l:0},c=[1,5,3,6+u.g*4,8+u.l*4][i];if((S.gems||0)<c)return;
+ if(i==0)S.coins+=400;
+ else if(i==1){const L=[];for(const id of S.owned)(WS[id]||[]).forEach((k,j)=>{if(k[1]>0&&!k[9]&&!k[10]&&!S.skins.includes(id+':'+(j+1)))L.push([id,j])});
+  if(!L.length)return toast('받을 수 있는 스킨이 없어요');const p=L[Math.random()*L.length|0];S.skins.push(p[0]+':'+(p[1]+1));toast('🎨 '+WM[p[0]].n+' 스킨 「'+WS[p[0]][p[1]][0]+'」 획득!')}
+ else if(i==2){if(!S.tspent)return;S.tm+=S.tspent;S.tspent=0;S.tree={}}
+ else if(i==3){if(u.g>=5)return;u.g++}else{if(u.l>=5)return;u.l++}
+ S.gems-=c;save();chk();syncC();gemR()}
+$('quit').insertAdjacentHTML('beforebegin','<button class="alt" id="gfx" onclick="gemUse(0)">💎2 수리</button><button class="alt" id="ggd" onclick="gemUse(1)">💎1 보급</button>');
+function gemUse(k){if(!G||G.over)return;
+ if(k==0){if((G.gf||0)>=3||(S.gems||0)<2)return toast('젬이 부족하거나 사용 한도(3회)예요');S.gems-=2;G.gf++;G.lives+=G.d.lives*.15}
+ else{if((G.gg||0)>=5||(S.gems||0)<1)return toast('젬이 부족하거나 사용 한도(5회)예요');S.gems--;G.gg++;G.gold+=250}
+ save();syncC();hud();side()}
+
+// [8.5] 업그레이드 트리 너프: 효과 x0.8, 비용 x1.25 (조정하려면 TK, TC 값만 바꾸세요)
+const TK=.8,TC2=1.25;
+const _tc=tcost;
+tcost=function(n){return Math.round(_tc(n)*TC2/5)*5};
+const _at=applyTree;
+applyTree=function(g){const F=['pd','ps','pr','pg','cm','gold','lives','bd','sv'],b={};
+ for(const f of F)b[f]=g[f];
+ _at(g);
+ for(const f of F){const o=(b[f]==null?(f=='bd'?1:0):b[f]);if(g[f]!=null)g[f]=o+(g[f]-o)*TK}
+ for(const k of['wd','wc'])if(g[k])for(const id in g[k])g[k][id]=1+(g[k][id]-1)*TK};
+
+// [9] 업적 + 업데이트 로그
+ACH.push(['imp1','불가능을 넘어서','임파서블 모드 클리어',1500,()=>(S.st.imp||0)>=1]);
+const LOGV='2026.11.06';
+const UPD=[{v:LOGV,items:[
+ '⚖️ 연노 너프: 피해 48 → 38, 사거리 290 → 260, 공격 간격 0.18초 → 0.24초',
+ '⚖️ 업그레이드 트리 너프: 모든 노드 효과 x0.8, 비용 x1.25',
+ '💀 임파서블 모드 추가 (스테이지 선택 → 💀 임파서블): 일반 맵 30웨이브, 적 HP x5, 적 이동 +20%, 적 자가 회복, 방어 55~60% 심연 몬스터, 10웨이브마다 보스 추가(30웨이브는 3마리)',
+ '🎁 임파서블 첫 클리어 보상: 종언의 대검 + 💎15 (이후 클리어는 💎5)',
+ '🎨 신규 스킨 12종 추가 (빙결·야차·지옥불·용암·낙뢰·은하·황혼·독가시·산호·월하·암살자·성기사)',
+ '🎉 이벤트 5종 추가: 새해 · 밸런타인 · 벚꽃 · 한여름 · 한가위 (이벤트별 한정 무기 1종 + 한정 스킨 1종)',
+ '🔤 이모지 표시를 통일했습니다 (인터넷 연결 시 Noto Color Emoji 사용)',
+ '🌳 업그레이드 트리에 4번째 갈래 추가 (아래쪽 · 보석 채굴/정밀 타격/전술 지휘 등, 전용 무기 여의봉 · 도깨비 방망이)',
+ '💎 젬 사용처 추가: 젬 상점(코인 교환, 랜덤 스킨, 트리 무료 초기화, 시작 골드/체력 영구 강화) + 전투 중 수리/보급',
+ '📋 메인 화면에 업데이트 로그 · 젬 상점 메뉴 추가']}];
+function showLog(){S.seenLog=LOGV;save();const b=$('logb');if(b)b.querySelector('b').textContent='업데이트 로그';
+ $('stb').innerHTML='<div style="max-height:70vh;overflow-y:auto;min-width:min(86vw,420px)"><h2 style="margin-top:0">📋 업데이트 로그</h2>'+UPD.map(u=>`<b style="color:var(--gold)">${u.v}</b><div style="line-height:1.8;font-size:13px;margin:6px 0 14px">${u.items.join('<br>')}</div>`).join('')+'</div><button class="alt" style="margin-top:8px;width:100%" onclick="$(\'st\').style.display=\'none\'">닫기</button>';
+ $('st').style.display='flex'}
+$('home').insertAdjacentHTML('beforeend',`<button class="hb" onclick="gemR()"><span class="hi">💎</span><span><b>젬 상점</b><small>젬으로 스킨·영구 강화·교환</small></span></button><button class="hb" id="logb" onclick="showLog()"><span class="hi">📋</span><span><b>업데이트 로그${S.seenLog==LOGV?'':' 🆕'}</b><small>최근 변경 사항 확인</small></span></button>`);
+TRD.push(['임파서블','Impossible'],['젬 상점','Gem Shop'],['업데이트 로그','Update Log'],['종언의 대검','Blade of Finality'],['여의봉','Ruyi Bong'],['도깨비 방망이','Dokkaebi Club'],['떡메','Rice Mallet'],['큐피드 활','Cupid’s Bow'],['벚꽃 철선','Sakura Fan'],['초강력 물총','Super Soaker'],['달토끼 절굿공이','Moon Rabbit Pestle'],['심연 기사','Abyss Knight'],['심연의 눈','Eye of the Abyss'],['최근 변경 사항 확인','See recent changes'],['젬으로 스킨·영구 강화·교환','Skins, upgrades & more']);
 langInit();
 
 // 연노 스킨 추가
