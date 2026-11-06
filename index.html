@@ -253,6 +253,15 @@ const AN={
  multi:p=>({r:p*3*PI,f:0,pr:p*4*PI,pf:sn(p*PI)*6})
 };
 const THRUST=['dagger','rapier','spear','trident','halberd','gungnir','javelin','lance','ballista','bow','chakram'];
+// 폭발 이펙트를 낼 무기 목록 + 무기별 폭발 설정
+const BOOM_MAP={
+  tnt:     {r:70, c1:'#fff59d', c2:'#ff9800', c3:'#e53935'},  // 주황 폭발
+  mjolnir: {r:90, c1:'#ffffff', c2:'#fff176', c3:'#40c4ff'},  // 번개 폭발
+  chaos:   {r:80, c1:'#e040fb', c2:'#b388ff', c3:'#7c4dff'},  // 보라 폭발
+  hammer:  {r:60, c1:'#ffffff', c2:'#b0bec5', c3:'#546e7a'},  // 회색 충격
+  squeaky: {r:75, c1:'#fff59d', c2:'#ffeb3b', c3:'#ff9800'},  // 노랑
+  labrys:  {r:65, c1:'#ffffff', c2:'#ef9a9a', c3:'#b71c1c'},  // 붉은 충격
+};
 AN.bow=p=>({r:0,f:0,pr:0,pf:p<.35?-10*(p/.35):-10+(p-.35)/.65*10+34*sn((p-.35)/.65*PI)});AN.zweihander=p=>({...AN.claymore(p),f:sn(p*PI)*10,pr:-sn(p*PI)*.2});AN.nodachi=p=>({r:-1.6+eo(p)*3.4,f:sn(p*PI)*8,pr:sn(p*PI)*.2,pf:0});
 AN.kusarigama=p=>({r:-1.2+p*2.4,f:0,pr:p*6*PI,pf:0});AN.nunchaku=p=>({r:p*4*PI,f:0,pr:sn(p*4*PI)*1.2,pf:0});AN.chakram=p=>({r:0,f:sn(p*PI)*60,s:p*10,pr:0,pf:0});
 AN.whip=p=>({r:-1.5+p*3,f:0,pr:sn(p*3*PI)*.7,pf:0});AN.bat=p=>({r:-1.6+ease(p)*3,f:sn(p*PI)*4,pr:0,pf:0});AN.javelin=p=>({r:0,f:sn(p*PI)*60,pr:0,pf:0});AN.lance=p=>({r:0,f:sn(p*PI)*38,pr:0,pf:sn(p*PI)*8});
@@ -263,7 +272,16 @@ function animKey(id){const v=skOf(id);return v>0?WS[id][v-1][6]:null}
 function skFx(id){const v=skOf(id);return v>0?WS[id][v-1][8]:null}
 function anim(id){const k=animKey(id);return k&&AN2[k]?AN2[k]:AN[id]}
 AN.excal=p=>({...AN.bastard(p),f:sn(p*PI)*14});AN.gungnir=p=>({...AN.spear(p),f:sn(p*PI)*34,pr:sn(p*2*PI)*.1});AN.mjolnir=p=>({...AN.hammer(p),pf:p>.8?5:0});
-AN.kukri=p=>({r:-1.2+p*2.4,f:sn(p*PI)*4,pr:sn(p*2*PI)*.4,pf:0});AN.flail=p=>({r:-1.4+p*2.8,f:0,pr:sn(p*2*PI)*1.2,pf:0});AN.guandao=p=>({r:-1.6+p*3.2,f:0,pr:sn(p*PI)*.3,pf:sn(p*PI)*4});Object.assign(ART,{tnt:['<rect x="13" y="22" width="12" height="30" rx="4" fill="#d32f2f" stroke="#7f0000" stroke-width="2"/><rect x="26" y="16" width="12" height="36" rx="4" fill="#e53935" stroke="#7f0000" stroke-width="2"/><rect x="39" y="22" width="12" height="30" rx="4" fill="#d32f2f" stroke="#7f0000" stroke-width="2"/><path d="M13 30 H51 M13 44 H51" stroke="#263238" stroke-width="4"/><text x="32" y="39" text-anchor="middle" font-size="8" font-weight="bold" fill="white">TNT</text>','<path d="M32 19 Q28 14 32 10" fill="none" stroke="#8d6e63" stroke-width="3"/><path d="M32 11 Q25 6 32 0 Q34 6 39 3 Q41 10 32 11Z" fill="#ff9800" stroke="#e65100"/><path d="M33 9 Q30 5 33 3 Q36 7 33 9Z" fill="#ffeb3b"/>',32,19]});AN.tnt=p=>({r:.1*Math.sin(p*Math.PI),f:Math.sin(p*Math.PI)*8,pr:Math.sin(p*4*Math.PI)*.18,pf:Math.sin(p*2*Math.PI)*2});
+AN.kukri=p=>({r:-1.2+p*2.4,f:sn(p*PI)*4,pr:sn(p*2*PI)*.4,pf:0});AN.flail=p=>({r:-1.4+p*2.8,f:0,pr:sn(p*2*PI)*1.2,pf:0});AN.guandao=p=>({r:-1.6+p*3.2,f:0,pr:sn(p*PI)*.3,pf:sn(p*PI)*4});// 기존 tnt 정의를 찾아서 이걸로 교체
+Object.assign(ART,{
+ tnt:['<circle cx="32" cy="38" r="18" fill="#212121" stroke="#000" stroke-width="2"/><circle cx="26" cy="32" r="5" fill="#ffffff18"/><path d="M14 30 Q20 24 26 30" stroke="#ffffff10" stroke-width="3" fill="none"/>','<rect x="30" y="14" width="4" height="10" rx="2" fill="#8d6e63"/><path d="M32 14 Q26 8 32 2 Q34 6 38 4 Q40 10 32 14Z" fill="#ff9800" stroke="#e65100"/><path d="M32 12 Q29 8 32 5 Q35 9 32 12Z" fill="#ffeb3b"/><circle cx="36" cy="2" r="1.5" fill="#ffeb3b"/>',32,24]
+});// 기존 AN.tnt 를 찾아서 이걸로 교체
+AN.tnt = p => ({
+  r: -.3 + Math.sin(p*Math.PI)*.6,        // 뒤로 살짝 젖혔다가 앞으로 휘두름
+  f: Math.sin(p*Math.PI)*22,              // 앞으로 크게 튀어나감 (던지는 느낌)
+  pr: Math.sin(p*3*Math.PI)*.3,           // 불꽃이 빠르게 흔들림
+  pf: Math.sin(p*2*Math.PI)*3             // 불꽃이 위아래로 살짝
+});
 
 // ---------- 데이터 ----------
 const WP=[
@@ -311,8 +329,59 @@ for(let t=0;t<4;t++){const L=WP.filter(w=>w.t==t),mn=Math.min(...L.map(w=>w.cost
 WP.filter(w=>w.t==4).forEach(w=>w.cost=Math.max(400,w.cost));
 const GM={rapier:['crit','25% 확률로 치명타 (피해 x2)'],spear:['boss','보스에게 피해 +60%'],axe:['exec','체력 20% 미만 적 즉시 처형'],hammer:['knock','맞은 적을 뒤로 밀어냄']};
 for(const k in GM){WM[k].g=GM[k][0];WM[k].gd=GM[k][1]}
-['excal','gungnir','mjolnir','kukri','flail','guandao','whip','bat','javelin','lance','ballista','dslayer','bow','zweihander','nodachi','kusarigama','nunchaku','chakram','chaos'].forEach(id=>WS[id]=[]);
+['excal','gungnir','mjolnir','kukri','flail','guandao','whip','bat','javelin','lance','ballista','dslayer','bow','zweihander','nodachi','kusarigama','nunchaku','chakram','chaos','tnt'].forEach(id=>WS[id]=[]);
 const GEN=[['황금',500,'#ffd54f','#ff8f00','#fff59d'],['심해',500,'#4dd0e1','#006064','#e0f7fa'],['루비',650,'#ef5350','#b71c1c','#ffcdd2'],['흑요석',800,'#455a64','#10151a','#b388ff']];
+WS.tnt.push(
+  ['흑철',400,'#78909c','#263238',
+    '<circle cx="32" cy="38" r="18" fill="#37474f" stroke="#000" stroke-width="2"/>',
+    '<path d="M32 14 Q26 8 32 2 Q34 6 38 4 Q40 10 32 14Z" fill="#4fc3f7" stroke="#0277bd"/><circle cx="32" cy="38" r="6" fill="none" stroke="#4fc3f7" stroke-width="2"/>',
+    null, null, 'lightning'],
+  ['화염구',600,'#ff7043','#bf360c',
+    '<circle cx="32" cy="38" r="18" fill="#bf360c" stroke="#7f0000" stroke-width="2"/><circle cx="32" cy="38" r="10" fill="#ff5722" opacity="0.6"/>',
+    '<path d="M32 14 Q24 6 32 0 Q36 6 40 3 Q42 10 32 14Z" fill="#ffeb3b" stroke="#ff9800"/><circle cx="36" cy="2" r="2" fill="#fff59d"/>',
+    null, null, 'fire'],
+  ['독구',500,'#a5d6a7','#1b5e20',
+    '<circle cx="32" cy="38" r="18" fill="#1b5e20" stroke="#000" stroke-width="2"/><circle cx="32" cy="38" r="10" fill="#4caf50" opacity="0.5"/><path d="M22 30 l3 6 l3 -6 l3 6 l3 -6 l3 6 l3 -6" stroke="#76ff03" stroke-width="2" fill="none"/>',
+    '<path d="M32 14 Q26 8 32 2 Q34 6 38 4 Q40 10 32 14Z" fill="#76ff03" stroke="#33691e"/>',
+    null, null, 'poison'],
+  ['황금 폭탄',800,'#ffd54f','#ff8f00',
+    '<circle cx="32" cy="38" r="18" fill="#ffb300" stroke="#ff6f00" stroke-width="2"/><circle cx="26" cy="32" r="5" fill="#ffffff30"/><circle cx="32" cy="38" r="22" fill="none" stroke="#ffd54f" stroke-width="1.5" opacity="0.5"/>',
+    '<path d="M32 14 Q26 8 32 2 Q34 6 38 4 Q40 10 32 14Z" fill="#fff59d" stroke="#ff8f00"/><circle cx="32" cy="38" r="4" fill="#fff59d"/>',
+    null, null, 'gold'],
+  ['수류탄',700,'#8d6e63','#3e2723',
+    '<ellipse cx="32" cy="38" rx="16" ry="19" fill="#4e342e" stroke="#212121" stroke-width="2"/><path d="M20 24 Q32 18 44 24 M20 34 Q32 28 44 34 M20 44 Q32 38 44 44 M20 54 Q32 48 44 54" stroke="#3e2723" stroke-width="1.5" fill="none"/><rect x="28" y="16" width="8" height="6" rx="1" fill="#616161"/>',
+    '<path d="M32 16 V8" stroke="#8d6e63" stroke-width="2"/><circle cx="32" cy="6" r="3" fill="#ffb300" stroke="#e65100"/><circle cx="32" cy="6" r="1.5" fill="#ffeb3b"/>',
+    null, null, 'multi'],
+  ['TNT 블록', 550, '#ff9800', '#b71c1c',
+  // 몸체: 빨간 블록 + 흰 띠 + 검은 TNT 글씨
+  '<rect x="12" y="18" width="40" height="38" fill="#c62828" stroke="#4a0000" stroke-width="2"/>' +
+  // 픽셀 질감 (모서리 하이라이트/그림자)
+  '<rect x="14" y="20" width="8" height="5" fill="#e53935"/>' +
+  '<rect x="42" y="20" width="8" height="5" fill="#8e0000"/>' +
+  '<rect x="14" y="48" width="8" height="6" fill="#8e0000"/>' +
+  '<rect x="42" y="48" width="8" height="6" fill="#e53935"/>' +
+  // 흰 띠
+  '<rect x="12" y="30" width="40" height="14" fill="#f5f5f5"/>' +
+  '<rect x="12" y="30" width="40" height="1" fill="#9e9e9e"/>' +
+  '<rect x="12" y="43" width="40" height="1" fill="#9e9e9e"/>' +
+  // 픽셀 TNT 글씨
+  '<g fill="#1a237e">' +
+    // T
+    '<rect x="15" y="33" width="9" height="2"/>' +
+    '<rect x="18" y="33" width="3" height="8"/>' +
+    // N
+    '<rect x="27" y="33" width="2" height="8"/>' +
+    '<rect x="35" y="33" width="2" height="8"/>' +
+    '<rect x="29" y="34" width="2" height="2"/>' +
+    '<rect x="31" y="36" width="2" height="2"/>' +
+    '<rect x="33" y="38" width="2" height="2"/>' +
+    // T
+    '<rect x="40" y="33" width="9" height="2"/>' +
+    '<rect x="43" y="33" width="3" height="8"/>' +
+  '</g>',
+  '', // ← 부품(심지/불꽃) 없음
+  null, null, null)
+);
 for(const id in WS)GEN.forEach(g=>WS[id].push([g[0],g[1],g[2],g[3],`<circle cx="${ART[id][2]}" cy="${ART[id][3]-6}" r="3.2" fill="${g[4]}" stroke="${g[3]}"/>`,`<rect x="28" y="54" width="8" height="2.5" rx="1" fill="${g[4]}"/><rect x="28" y="57" width="8" height="2" rx="1" fill="${g[3]}"/>`]));
 const MORE={
  dagger:[['카람빗',700,'#ffcc80','#e65100','','<circle cx="32" cy="52" r="8" fill="none" stroke="#ffb300" stroke-width="3"/>','carambit','<path d="M31 44 Q10 34 34 6 Q22 28 37 44Z" fill="#cfd8dc" stroke="#78909c"/><path d="M34 8 Q26 24 33 40" stroke="#e65100" stroke-width="1.5" fill="none"/>']],
@@ -550,6 +619,17 @@ function update(dt){
    if(tg.length){
     let ww=w,dm=s.dmg;if(w.pool){const pid=w.pool[Math.random()*w.pool.length|0];t.cur=pid;ww=WM[pid];dm=ww.dmg*Math.pow(1.45,t.lv-1)*(w.pm||.9)*(G.pd||1)}
     snd('swing',t.cur||t.id);snd('hit');t.idle=0;const fk=skFx(w.pool?t.id:(t.cur||t.id));if(ww.wv)G.fx.push({type:'wave',x:t.x,y:t.y,a:t.aim,r:s.range,t:.65,m:.65});if(fk=='ding'||fk=='chain')snd(fk);t.cd=s.cd;t.sw=1;t.aim=Math.atan2(tg[0].y-t.y,tg[0].x-t.x);
+     const bwid = t.cur || t.id;
+      if(BOOM_MAP[bwid]){
+        const b = BOOM_MAP[bwid];
+        G.fx.push({
+          type:'boom',
+          x: t.x + Math.cos(t.aim)*30,
+          y: t.y + Math.sin(t.aim)*30,
+          r: b.r, c1: b.c1, c2: b.c2, c3: b.c3,
+          t: .5, m: .5
+        });
+      }
     G.fx.push({type:'arc',x:t.x,y:t.y,a:t.aim,r:THRUST.includes(t.cur||t.id)?s.range*.75:Math.min(s.range,75)+10,t:.25,m:.25,th:THRUST.includes(t.cur||t.id)});
     const gm=ww.g;for(const e of tg.slice(0,ww.hits+(gm=='pierce'?1:0))){let d2=dm;if(gm=='crit'&&Math.random()<.25)d2*=2;if(gm=='dbl'&&Math.random()<.3)d2*=2;if(gm&&gm.includes('boss')&&e.k.r>=30)d2*=1.6;if(gm&&gm.includes('bleed')){e.bl=4;e.bd=dm*.18}if(e.k.r>=30)d2*=(G.bd||1);d2*=1-(e.k.df||0)/100;if(gm=='exec'&&e.hp<e.mx*.2)d2=e.hp+1;e.hp-=d2;if(gm=='slow')e.slow=1;if(gm=='knock')e.d=Math.max(0,e.d-30);e.hit=.12;e.by=t;G.fx.push({type:'dmg',x:e.x+(Math.random()-.5)*10,y:e.y-e.k.r,v:Math.round(d2),c:d2>dm*1.4,t:.7,m:.7});G.fx.push({type:'spark',x:e.x,y:e.y,t:.3,m:.3});if(fk&&PF[fk])G.fx.push({type:'p',k:fk,x:e.x,y:e.y,t:.55,m:.55,s:rs()})}
    }
@@ -613,6 +693,22 @@ function draw(){
    if(f.th){cx.moveTo(f.x,f.y);cx.lineTo(f.x+Math.cos(f.a)*f.r*1.3,f.y+Math.sin(f.a)*f.r*1.3)}else cx.arc(f.x,f.y,f.r,f.a-1.1,f.a+1.1);cx.stroke()}
   else if(f.type=='spark'){cx.strokeStyle=`rgba(255,230,120,${p})`;cx.lineWidth=2;for(let i=0;i<6;i++){const a=i*1.05,r1=4+(1-p)*8,r2=r1+7;cx.beginPath();cx.moveTo(f.x+Math.cos(a)*r1,f.y+Math.sin(a)*r1);cx.lineTo(f.x+Math.cos(a)*r2,f.y+Math.sin(a)*r2);cx.stroke()}}
   else if(f.type=='p')pfx(f,p);else if(f.type=='wave'){const q=1-p;cx.save();cx.translate(f.x,f.y);cx.rotate(f.a);for(let i=0;i<3;i++){const d=f.r*(.25+q*.7)-i*14;if(d<8)continue;cx.strokeStyle=`rgba(80,200,255,${p*(1-i*.25)})`;cx.lineWidth=4-i;cx.beginPath();for(let j=-9;j<=9;j++){const px=d+Math.sin(j*.9+q*10)*5,py=j*(6+q*5);j==-9?cx.moveTo(px,py):cx.lineTo(px,py)}cx.stroke()}cx.restore()}else if(f.type=='dmg'){cx.font=(f.c?'bold 16px':'bold 12px')+' sans-serif';cx.textAlign='center';cx.fillStyle=f.c?`rgba(255,80,60,${p})`:`rgba(255,255,255,${p})`;cx.strokeStyle=`rgba(0,0,0,${p})`;cx.lineWidth=3;cx.strokeText(f.v,f.x,f.y-(1-p)*20);cx.fillText(f.v,f.x,f.y-(1-p)*20)}
+  else if(f.type=='boom'){
+    const q=1-p, R=f.r*(0.3+q*0.9);
+    cx.save();
+    cx.globalAlpha=p;
+    const g=cx.createRadialGradient(f.x,f.y,0,f.x,f.y,R);
+    g.addColorStop(0,   f.c1 || '#fff59d');
+    g.addColorStop(0.4, f.c2 || '#ff9800');
+    g.addColorStop(0.8, f.c3 || '#e53935');
+    g.addColorStop(1,   'rgba(0,0,0,0)');
+    cx.fillStyle=g;
+    cx.beginPath();cx.arc(f.x,f.y,R,0,7);cx.fill();
+    cx.strokeStyle='rgba(255,255,255,'+(p*0.6)+')';
+    cx.lineWidth=3*p+1;
+    cx.beginPath();cx.arc(f.x,f.y,R*0.9,0,7);cx.stroke();
+    cx.restore();
+  } 
   else{cx.font='bold 14px sans-serif';cx.fillStyle=`rgba(255,200,60,${p})`;cx.fillText('+'+f.v,f.x,f.y-(1-p)*24)}
  }
 }
