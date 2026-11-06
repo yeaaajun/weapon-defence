@@ -840,28 +840,47 @@ mkBr('C',[['사거리 훈련',150,80,l=>`사거리 +${l*4}%`,(g,l)=>{g.pr*=1+.04
 const XN=[['x1','화력 집중',1150,580,['a3','b2'],l=>`피해 +${l*8}%`,(g,l)=>{g.pd*=1+.08*l}],['x2','보급선',900,1010,['b3','c2'],l=>`시작 골드 +${l*40} · 체력 +${l*5}%`,(g,l)=>{g.gold+=40*l;g.lives*=1+.05*l}],['x3','철벽 포진',650,580,['c3','a2'],l=>`사거리 +${l*5}% · 공속 +${l*4}%`,(g,l)=>{g.pr*=1+.05*l;g.ps*=1-.04*l}]];
 XN.forEach(x=>{TN[x[0]]={id:x[0],k:'x',n:x[1],x:x[2],y:x[3],par:x[4],mx:3,c0:350,c1:250,ds:x[5],ef:x[6]}});
 function treeR(){
- let ln='',nd='';const pos=id=>id=='root'?[900,840]:[TN[id].x,TN[id].y];
- for(const id in TN){const n=TN[id];for(const p of n.par){const a=pos(p),on=(p=='root'||pst(TN[p]))&&pst(n);ln+=`<line x1="${a[0]}" y1="${a[1]}" x2="${n.x}" y2="${n.y}" stroke="${on?'#76ff03':'#3b4256'}" stroke-width="${on?4:2}" ${on?'':'stroke-dasharray="6 6"'}/>`}
-  const op=opn(n),l=tlv(id),c=tmCost(n);
-  const isSmall=n.k==='s';
-  const sz=isSmall?'width:64px;height:64px;font-size:10px;padding:3px;':'';
-  const pos2=`left:${n.x}px;top:${n.y}px;${sz}`;
-  if(!op){
-    if(n.k==='w') nd+=`<div class="tn rw lock" data-tnid="${id}" style="${pos2}"><b style="font-size:22px">?</b><small>🔒</small></div>`;
-    else nd+=`<div class="tn lock" data-tnid="${id}" style="${pos2}"><b style="font-size:18px">???</b></div>`;
-  } else if(n.k==='w'){
-    const got=S.owned.includes(n.wid);
-    nd+=`<div class="tn rw ${got?'max':''}" data-tnid="${id}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')">${svg(n.wid,skOf(n.wid))}<b>${WM[n.wid].n}</b><small>${got?'✅ 획득':'🪙'+c}</small></div>`;
-  } else if(isSmall){
-    nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" data-tnid="${id}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b style="font-size:11px">${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
-  } else {
-    nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" data-tnid="${id}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b>${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${n.ds(l||1)}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
+  let ln='',nd='';const pos=id=>id=='root'?[900,840]:[TN[id].x,TN[id].y];
+  for(const id in TN){
+    const n=TN[id];
+    for(const p of n.par){
+      const a=pos(p),on=(p=='root'||pst(TN[p]))&&pst(n);
+      ln+=`<line x1="${a[0]}" y1="${a[1]}" x2="${n.x}" y2="${n.y}" stroke="${on?'#76ff03':'#3b4256'}" stroke-width="${on?4:2}" ${on?'':'stroke-dasharray="6 6"'}/>`
+    }
+    const op=opn(n),l=tlv(id),c=tmCost(n);
+    const isSmall=n.k==='s';
+    const sz=isSmall?'width:64px;height:64px;font-size:10px;padding:3px;':'';
+    const pos2=`left:${n.x}px;top:${n.y}px;${sz}`;
+    if(!op){
+      if(n.k==='w') nd+=`<div class="tn rw lock" data-tnid="${id}" style="${pos2}"><b style="font-size:22px">?</b><small>🔒</small></div>`;
+      else nd+=`<div class="tn lock" data-tnid="${id}" style="${pos2}"><b style="font-size:18px">???</b></div>`;
+    } else if(n.k==='w'){
+      const got=S.owned.includes(n.wid);
+      nd+=`<div class="tn rw ${got?'max':''}" data-tnid="${id}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')">${svg(n.wid,skOf(n.wid))}<b>${WM[n.wid].n}</b><small>${got?'✅ 획득':'🪙'+c}</small></div>`;
+    } else if(isSmall){
+      nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" data-tnid="${id}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b style="font-size:11px">${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
+    } else {
+      nd+=`<div class="tn ${l>=n.mx?'max':l?'on':''}" data-tnid="${id}" style="${pos2}" onclick="if(!PM)treeBuy('${id}')"><b>${n.n}</b><small>Lv.${l}/${n.mx}</small><small>${n.ds(l||1)}</small><small>${l>=n.mx?'MAX':'🪙'+c}</small></div>`;
+    }
   }
- nd+=`<div class="tn root" style="left:900px;top:840px;width:96px;height:96px;font-size:40px;flex-direction:column">🌳<small style="font-size:10px">${S.tspent}</small></div>`;
- $('tr').innerHTML=`<div class="sub" style="margin-bottom:8px">영구 강화입니다. 화면을 드래그해서 움직이세요. 공격(위), 경제(오른쪽), 사거리·방어(왼쪽) 세 방향으로 가지가 뻗고, 두 갈래가 합쳐지는 노드는 양쪽을 모두 올려야 열립니다. 초기화(🪙500)하면 투자 비용이 전부 🌳트리머니로 바뀌고, 트리머니는 이 트리에서만 쓸 수 있습니다.<br>보유: 🪙${S.coins} · 🌳 ${S.tm} · 투자 합계 ${S.tspent} <button class="alt" ${S.coins<500||!S.tspent?'disabled':''} onclick="treeReset()">초기화 🪙500</button></div><div id="tpan" style="overflow:auto;height:68vh;min-height:420px;border:2px solid var(--line);border-radius:12px;cursor:grab" onpointerdown="tpd(event)" onpointermove="tpm(event)" onpointerup="tpu()" onpointerleave="tpu()"><div class="tmap" style="width:1800px;height:1150px;border:none;border-radius:0"><svg class="ln" viewBox="0 0 1800 1150" width="1800" height="1150">${ln}</svg>${nd}</div></div>`;
- const p2=document.getElementById('tpan');
- if(p2){if(TS.l==null||TS.t==null){p2.scrollLeft=900-p2.clientWidth/2;p2.scrollTop=840-p2.clientHeight/2}TS.l=p2.scrollLeft;TS.t=p2.scrollTop}
- syncC()}
+  nd+=`<div class="tn root" style="left:900px;top:840px;width:96px;height:96px;font-size:40px;flex-direction:column">🌳<small style="font-size:10px">${S.tspent}</small></div>`;
+  
+  $('tr').innerHTML=`<div class="sub" style="margin-bottom:8px">영구 강화입니다. 화면을 드래그해서 움직이세요. 공격(위), 경제(오른쪽), 사거리·방어(왼쪽) 세 방향으로 가지가 뻗고, 두 갈래가 합쳐지는 노드는 양쪽을 모두 올려야 열립니다. 초기화(🪙500)하면 투자 비용이 전부 🌳트리머니로 바뀌고, 트리머니는 이 트리에서만 쓸 수 있습니다.<br>보유: 🪙${S.coins} · 🌳 ${S.tm} · 투자 합계 ${S.tspent} <button class="alt" ${S.coins<500||!S.tspent?'disabled':''} onclick="treeReset()">초기화 🪙500</button></div><div id="tpan" style="overflow:auto;height:68vh;min-height:420px;border:2px solid var(--line);border-radius:12px;cursor:grab" onpointerdown="tpd(event)" onpointermove="tpm(event)" onpointerup="tpu()" onpointerleave="tpu()"><div class="tmap" style="width:1800px;height:1150px;border:none;border-radius:0"><svg class="ln" viewBox="0 0 1800 1150" width="1800" height="1150">${ln}</svg>${nd}</div></div>`;
+  
+  const p2=document.getElementById('tpan');
+  if(p2){
+    if(TS.l==null||TS.t==null){
+      p2.scrollLeft=900-p2.clientWidth/2;
+      p2.scrollTop=840-p2.clientHeight/2;
+    } else {
+      p2.scrollLeft=TS.l;
+      p2.scrollTop=TS.t;
+    }
+    TS.l=p2.scrollLeft;
+    TS.t=p2.scrollTop;
+  }
+  syncC();
+}
 
 // ============================================================
 // 12) 인게임
