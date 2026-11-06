@@ -305,7 +305,7 @@ const WP=[
 ];
 const WM=Object.fromEntries(WP.map(w=>[w.id,w]));
 const TIER=['일반','희귀','영웅','전설','특별'],TC=['#9aa1b5','#4caf7a','#4d8bff','#ffc83d','#e040fb'];
-const TI={dagger:0,katana:0,rapier:0,spear:0,sword2:1,scimitar:1,mace:1,trident:1,axe:1,scythe:2,halberd:2,hammer:2,bastard:2,claymore:3,multi:3,excal:4,gungnir:4,mjolnir:4,kukri:0,flail:1,guandao:2,whip:0,bat:0,javelin:0,lance:1,ballista:3,dslayer:3,bow:2,zweihander:3,nodachi:3,kusarigama:3,nunchaku:4,chakram:4,chaos:4};
+const TI={dagger:0,katana:0,rapier:0,spear:0,sword2:1,scimitar:1,mace:1,trident:1,axe:1,scythe:2,halberd:2,hammer:2,bastard:2,claymore:3,multi:3,excal:4,gungnir:4,mjolnir:4,kukri:0,flail:1,guandao:2,whip:0,bat:0,javelin:0,lance:1,ballista:3,dslayer:3,bow:2,zweihander:3,nodachi:3,kusarigama:3,nunchaku:4,chakram:4,chaos:4,tnt:3};
 WP.forEach(w=>w.t=TI[w.id]);const BAND=[[50,100],[120,200],[220,300],[320,380]];
 for(let t=0;t<4;t++){const L=WP.filter(w=>w.t==t),mn=Math.min(...L.map(w=>w.cost)),mx=Math.max(...L.map(w=>w.cost));L.forEach(w=>w.cost=Math.round((BAND[t][0]+(mx>mn?(w.cost-mn)/(mx-mn):0)*(BAND[t][1]-BAND[t][0]))/5)*5)}
 WP.filter(w=>w.t==4).forEach(w=>w.cost=Math.max(400,w.cost));
@@ -818,7 +818,7 @@ const NW=[
  {id:'glaive',n:'글레이브',t:5,cost:540,dmg:105,range:165,cd:.8,hits:99,d:'긴 곡도 달린 장병기 (낫 진화)'},
  {id:'zanbato',n:'참마도',t:6,cost:420,dmg:230,range:115,cd:1.2,hits:3,d:'[공격 트리 보상] 거대한 일본 대도'},
  {id:'katar',n:'카타르',t:6,cost:260,dmg:42,range:80,cd:.3,hits:1,d:'[경제 트리 보상] 인도의 찌르기 단검'},
- {id:'repeater',n:'연노',t:6,cost:360,dmg:48,range:290,cd:.18,hits:1,d:'[사거리 트리 보상] 연발 쇠뇌 – 매우 빠른 연사'},
+ {id:'repeater',n:'연노',t:6,cost:360,dmg:48,range:290,cd:.22,hits:1,d:'[사거리 트리 보상] 연발 쇠뇌 – 매우 빠른 연사'},
  {id:'chainsaw',n:'전기톱',t:7,cost:900,dmg:22,range:75,cd:.1,hits:1,price:3000,d:'미친 듯이 갈아내는 연속 베기'},
  {id:'stunbaton',n:'전기충격봉',t:7,cost:850,dmg:160,range:95,cd:.9,hits:3,g:'slow',gd:'맞은 적 1초간 둔화',price:3200,d:'전류로 3명 제압'},
  {id:'pistol',n:'권총',t:7,cost:1100,dmg:95,range:230,cd:.42,hits:1,price:4500,d:'정확한 연속 사격'},
