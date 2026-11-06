@@ -245,6 +245,9 @@ Object.assign(ART,{
  tnt:['<circle cx="32" cy="38" r="18" fill="#212121" stroke="#000" stroke-width="2"/><circle cx="26" cy="32" r="5" fill="#ffffff18"/><path d="M14 30 Q20 24 26 30" stroke="#ffffff10" stroke-width="3" fill="none"/>','<rect x="30" y="14" width="4" height="10" rx="2" fill="#8d6e63"/><path d="M32 14 Q26 8 32 2 Q34 6 38 4 Q40 10 32 14Z" fill="#ff9800" stroke="#e65100"/><path d="M32 12 Q29 8 32 5 Q35 9 32 12Z" fill="#ffeb3b"/><circle cx="36" cy="2" r="1.5" fill="#ffeb3b"/>',32,24],
  pencil:['<rect x="29" y="36" width="6" height="20" fill="#ffb300"/><rect x="28" y="54" width="8" height="4" fill="#d32f2f"/>',`<path d="M29 36 L32 12 L35 36Z" fill="#ffeb3b" stroke="#f9a825"/><path d="M32 12 L32 2 L29 20Z" fill="#ffcc80"/><rect x="30" y="2" width="4" height="4" fill="#f48fb1"/>`,32,36],
  book:['<rect x="26" y="42" width="12" height="16" fill="#8d6e63"/>',`<rect x="18" y="4" width="28" height="38" rx="3" fill="#eceff1" stroke="#78909c"/><rect x="22" y="10" width="20" height="2" fill="#90a4ae"/><rect x="22" y="16" width="20" height="2" fill="#90a4ae"/><rect x="22" y="22" width="14" height="2" fill="#90a4ae"/><circle cx="32" cy="34" r="4" fill="#ff1744"/>`,32,42],
+ ar:['<rect x="28" y="42" width="8" height="14" rx="1" fill="#6d4c41"/><rect x="26" y="30" width="12" height="14" rx="2" fill="#455a64"/><rect x="24" y="34" width="4" height="10" rx="1" fill="#37474f"/><rect x="28" y="46" width="8" height="4" rx="1" fill="#263238"/><circle cx="32" cy="38" r="1.5" fill="#90a4ae"/>',`<rect x="30" y="8" width="4" height="24" fill="#263238"/><rect x="28" y="4" width="8" height="6" rx="1" fill="#455a64"/><rect x="31" y="1" width="2" height="4" fill="#90a4ae"/><rect x="24" y="30" width="16" height="3" rx="1" fill="#546e7a"/>`,32,40],
+laev:['<rect x="29" y="40" width="6" height="16" rx="2" fill="#4a148c"/><circle cx="32" cy="38" r="3" fill="#ff1744"/><path d="M26 44 h12" stroke="#ffd54f" stroke-width="2"/>',`<path d="M32 0 Q38 10 35 22 Q41 30 34 40 L30 40 Q36 30 29 22 Q36 10 32 0Z" fill="#e040fb" stroke="#4a148c" stroke-width="1.5"/><path d="M32 6 V38" stroke="#fff" stroke-width="1" opacity="0.6"/><circle cx="32" cy="12" r="1.5" fill="#ffeb3b"/><circle cx="32" cy="22" r="1.5" fill="#ffeb3b"/><circle cx="32" cy="32" r="1.5" fill="#ffeb3b"/>`,32,40]
+
 });
 ART.poseidon=[ART.trident[0].replace('#8d6e63','#00acc1'),ART.trident[1].replace(/#cfd8dc/g,'#80deea').replace(/#78909c/g,'#006064'),32,30];
 ART.gaebolg=[ART.spear[0].replace('#8d6e63','#b71c1c'),`<path d="M32 0 L39 18 L32 14 L25 18Z" ${BL}/><path d="M32 14 L38 26 L32 23 L26 26Z" ${BL}/>`,32,18];
@@ -324,7 +327,9 @@ const WP=[
  {id:'banana',n:'바나나 검',t:8,cost:120,dmg:55,range:95,cd:.5,hits:2,d:'[만우절 한정] 미끄러운 공격'},
  {id:'squeaky',n:'뿅망치',t:8,cost:160,dmg:120,range:80,cd:1.1,hits:99,d:'[만우절 한정] 뿅뿅 소리 나는 망치'},
  {id:'pencil',n:'연필',t:8,cost:200,dmg:90,range:100,cd:1,hits:3,d:'[수능 한정] 3명의 적에게 낙서하는 연필'},
- {id:'book',n:'책',t:8,cost:300,dmg:100,range:150,cd:1,hits:5,d:'[수능 한정] 5명의 적을 때리는 책'}
+ {id:'book',n:'책',t:8,cost:300,dmg:100,range:150,cd:1,hits:5,d:'[수능 한정] 5명의 적을 때리는 책'},
+ {id:'ar',n:'돌격소총',t:7,cost:1000,dmg:20,range:170,cd:0.12,hits:1,price:6000,d:'빠르게 적을 녹이는 총'},
+ {id:'laev',n:'레바테인',t:4,cost:600,dmg:100,range:150,cd:0.7,hits:2,price:null,d:'보스에겐 강하지만 일반 적에겐 약한 불의 검',g:'laev+burn',gd:'일반 적에게 데미지 절반, 보스에게 데미지 3배 · 화상'}
 ];
 WP.forEach(w=>{if(w.price===undefined)w.price=null;if(w.t===undefined)w.t=0});
 const WM=Object.fromEntries(WP.map(w=>[w.id,w]));
@@ -433,7 +438,21 @@ for(const id in MORE)if(WS[id])WS[id].push(...MORE[id]);
 WS.dagger.push(['신의 단검',0,'#fffde7','#ffd54f','<ellipse cx="32" cy="10" rx="9" ry="3" fill="none" stroke="#fff176" stroke-width="2"/>','<circle cx="32" cy="46" r="4" fill="#fff176"/>',null,null,'gold','god']);
 WS.rapier.push(['염소',0,'#ffffff','#8d6e63','','<path d="M16 47 Q6 40 10 32 M48 47 Q58 40 54 32" stroke="#d7ccc8" stroke-width="3" fill="none"/><circle cx="26" cy="44" r="1.5" fill="#000"/><circle cx="38" cy="44" r="1.5" fill="#000"/>',null,null,'gold','goat']);
 WS.nunchaku.push(['잔디깎이',0,'#a5d6a7','#1b5e20','<path d="M24 14 l3 -5 l2 5 l3 -6 l2 6 l3 -5 l2 5" stroke="#43a047" stroke-width="2" fill="none"/>','<circle cx="22" cy="58" r="4" fill="#424242"/><circle cx="42" cy="58" r="4" fill="#424242"/>',null,null,'poison','mow']);
-WS.javelin.push(['대파',0,'#e8f5e9','#2e7d32','','',null,'<path d="M32 0 Q24 6 30 22 L34 22 Q40 6 32 0Z" fill="#a5d6a7" stroke="#2e7d32"/><path d="M32 2 Q28 10 31 20" stroke="#fff" stroke-width="1.5" fill="none"/>','petal','leek']);
+// 투창의 '대파' 스킨 (진짜 파처럼)
+WS.javelin.push([
+  '대파',
+  0,
+  '#e8f5e9',
+  '#2e7d32',
+  // [4] 날 부분: 파의 잎사귀 (초록색 잎이 여러 갈래로 뻗은 모양)
+  '<path d="M32 18 Q28 8 24 0 L28 2 L30 8 L32 0 L34 8 L36 2 L40 0 Q36 8 32 18Z" fill="#66bb6a" stroke="#2e7d32" stroke-width="1"/>' +
+  '<path d="M32 18 Q32 10 32 2" stroke="#a5d6a7" stroke-width="1.5" fill="none"/>',
+  // [5] 몸체 부분: 파의 흰 뿌리 (아래로 갈수록 하얗고, 뿌리털이 있음)
+  '<rect x="28" y="18" width="8" height="24" fill="#a5d6a7" stroke="#2e7d32" stroke-width="1.5"/>' + // 초록 몸통
+  '<rect x="28" y="34" width="8" height="10" fill="#ffffff" stroke="#c8e6c9" stroke-width="1"/>' + // 흰 뿌리
+  '<path d="M28 44 Q28 48 25 50 M32 44 Q32 50 32 52 M36 44 Q36 48 39 50" stroke="#e0e0e0" stroke-width="1.5" fill="none"/>', // 뿌리털
+  null, null, 'poison', 'leek'
+]);
 WS.chaos.push(['카오스',900,'#ff5252','#4a0000','','<circle cx="32" cy="46" r="6" fill="#ff1744"/>']);
 WS.chaos.push(['코스모스',900,'#80d8ff','#01579b','','<circle cx="32" cy="46" r="6" fill="#40c4ff"/>']);
 WS.scythe.push(['호박귀신',0,'#ff9800','#e65100','<circle cx="46" cy="16" r="3" fill="#212121"/>','<circle cx="32" cy="12" r="4" fill="#ff9800"/>',null,null,'fire','ev_halloween']);
@@ -443,7 +462,9 @@ WS.dagger.push(['고무 칼',0,'#ffcc80','#e65100','','<circle cx="32" cy="46" r
 WS.repeater.push(['흑철',400,'#90a4ae','#263238','<circle cx="32" cy="20" r="2" fill="#40c4ff"/>','<rect x="24" y="44" width="16" height="6" rx="2" fill="#212121"/>']);
 WS.repeater.push(['황금 연노',800,'#ffd54f','#ff8f00','<path d="M32 4 l2 4 h-4z" fill="#fff"/>','<rect x="24" y="44" width="16" height="6" rx="2" fill="#ff8f00"/>']);
 WS.repeater.push(['용린 연노',1200,'#80cbc4','#004d40','<path d="M28 12 h8 M28 18 h8" stroke="#00e676"/>','']);
-
+WS.ar = [];
+WS.ar.push(['택티컬', 0, '#556b2f', '#2e4a1f', '<circle cx="32" cy="20" r="1.5" fill="#212121"/>', '<rect x="26" y="32" width="12" height="4" fill="#2e4a1f"/>', null, null, 'sand', 'ev_military']);
+WS.ar.push(['데저트', 0, '#d2b48c', '#8b7355', '<circle cx="32" cy="20" r="1.5" fill="#212121"/>', '<rect x="26" y="32" width="12" height="4" fill="#8b7355"/>', null, null, 'sand', 'ev_military']);
 const FXMAP={'용암':'fire','화염':'fire','화염구':'fire','불창':'fire','라그나로크':'fire','태양':'fire','마검':'purple','아발론':'purple','사신':'purple','흑요석':'purple','그림자':'purple','독니':'poison','월영':'trail','월식':'trail','월광':'trail','초승달':'trail','천둥':'lightning','번개':'lightning','토르':'lightning','해왕':'water','심해':'bubble','사막':'sand','구르카':'multi','공성':'multi','피의 도끼':'red','루비':'red','황금':'gold','귀족':'gold','왕의 검':'gold','황금왕':'gold','황금용':'gold','성검':'gold','사이버':'binary','벚꽃':'petal','쇠사슬':'chain','금속배트':'ding','클로 해머':'nail'};
 const AMAP={'귀족':'flurry','사신':'whirl','천둥':'slam','번개':'flurry'};
 for(const id in WS)WS[id].forEach(k=>{if(FXMAP[k[0]]&&!k[8])k[8]=FXMAP[k[0]];if(AMAP[k[0]]&&!k[6])k[6]=AMAP[k[0]]});
@@ -506,6 +527,9 @@ AN.guandao=p=>({r:-1.6+p*3.2,f:0,pr:sn(p*PI)*.3,pf:sn(p*PI)*4});
 AN.aegis=AN.spear;AN.tyrfing=AN.bastard;
 AN.pencil = p => ({r:-1.2+p*2.4, f:sn(p*PI)*5, pr:0, pf:0}); // 휘두르면서 찌르기
 AN.book = AN.hammer; // 묵직하게 내려찍기 (기존 망치 모션 재활용)
+AN.ar = p => ({r: 0, f: -Math.sin(p * PI) * 7, pr: 0,  pf: 0});
+// 레바테인: 양손검처럼 묵직하게 휘두르되, 봉인이 풀리면 빠르게 내려찍는 모션
+AN.laev = p => ({r: -2.2 + (p < .5 ? 2*p*p : 1 - 2*(1-p)*(1-p)) * 3.1,f: Math.sin(p * Math.PI) * 12,pr: -Math.sin(p * Math.PI) * .4,pf: 0});
 const AN2={carambit:p=>({r:p*6*PI,f:0,pr:sn(p*6*PI)*.3,pf:0}),throw:p=>({r:0,f:sn(p*PI)*80,pr:0,pf:0}),iai:p=>({r:-2+eo(p)*4,f:sn(p*PI)*6,pr:0,pf:0}),spinthrow:p=>({r:0,f:sn(p*PI)*90,s:p*8*PI,pr:0,pf:0}),flurry:p=>({r:0,f:Math.abs(sn(p*3*PI))*28,pr:0,pf:0}),whirl:p=>({r:p*4*PI,f:0,pr:sn(p*2*PI)*.5,pf:0}),slam:p=>({r:p<.6?-2.4*(p/.6):-2.4+2.8*Math.pow((p-.6)/.4,2),f:0,pr:0,pf:p>.85?4:0})};
 function animKey(id){const v=skOf(id);return v>0&&WS[id][v-1]?WS[id][v-1][6]:null}
 function skFx(id){const v=skOf(id);return v>0&&WS[id][v-1]?WS[id][v-1][8]:null}
@@ -721,7 +745,7 @@ const EVENTS=[
  {id:'halloween',n:'🎃 할로윈',test:d=>d.getMonth()==9,range:'10월 한 달',w:'pumpkin',ws:['pumpkin','stake','broom'],skins:[['scythe','호박귀신']]},
  {id:'xmas',n:'🎄 크리스마스',test:d=>d.getMonth()==11&&d.getDate()>=15,range:'12월 15일~31일',w:'candycane',ws:['candycane','icicle','bells'],skins:[['rapier','눈꽃']]},
  {id:'aprilfool',n:'🐔 만우절',test:d=>d.getMonth()==3&&d.getDate()==1,range:'4월 1일 하루',w:'chicken',ws:['chicken','banana','squeaky'],skins:[['dagger','고무 칼']]},
- {id:'csat',n:'📖 대학수학능력시험(수능)',test:d=>d.getMonth()==10&&d.getDate()>=14 && d.getDate()<=20,w:'pencil',ws:['pencil','book'],skins:[['javelin','연필'],['book','시험지'],['pencil','컴퓨터싸인펜']]}
+ {id:'csat',n:'📖 대학수학능력시험(수능)',test:d=>d.getMonth()==10&&d.getDate()>=14 && d.getDate()<=20,range:'11월 14일~20일',w:'pencil',ws:['pencil','book'],skins:[['javelin','연필'],['book','시험지'],['pencil','컴퓨터싸인펜']]}
 ];
 function evActive(id){const d=new Date();return EVENTS.some(e=>e.ws.includes(id)&&e.test(d))}
 function evtR(){const d=new Date();$('sc').innerHTML='<div class="sub" style="margin-bottom:8px">기간 한정 이벤트! 진행 중일 때만 무기가 보이고, 한 번에 모두 받습니다. 받은 무기와 스킨은 영구 보유됩니다.</div>'+EVENTS.map((e,i)=>{const on=e.test(d),got=S.ach['ev_'+e.id],allHave=e.ws.every(w=>S.owned.includes(w));return `<div class="srow">${(on||got)?e.ws.map(w=>svg(w,0)).join(''):'<b style="font-size:30px">🔒</b>'}<div style="flex:1;min-width:160px"><b style="width:auto">${e.n}</b> <span class="sub">${e.range}</span><br><span class="sub">${(on||got)?e.ws.map(w=>WM[w].n).join(', ')+' + 스킨 '+e.skins.map(s=>s[1]).join(', '):'??? (진행 중일 때 공개)'}</span></div><button ${on&&!allHave?'':'disabled'} onclick="evClaim(${i})">${got&&allHave?'획득 완료':on?'모두 받기 🎁':'기간 아님'}</button></div>`}).join('')}
@@ -1032,7 +1056,7 @@ function update(dt){
   if(!G.q.length&&!G.en.length){G.active=false;G.gold+=30+G.wave*8;dq('wave',1);if(G.wave>=G.max){end(true);return}if(G.inf&&G.wave%10==0)perk();hud();side()}
  }
  if(G.auto&&!G.active&&!G.over){G.at+=dt;if(G.at>2){G.at=0;startWave()}}
- for(const e of G.en){e.slow=Math.max(0,(e.slow||0)-dt);if(e.bl>0){e.bl-=dt;e.hp-=(e.bd||0)*dt}e.d+=e.k.sp*dt*(G.es||1)*(e.slow>0?.5:1);e.hit=Math.max(0,e.hit-dt);[e.x,e.y]=posAt(e.d);if(e.d>=G.tot){e.dead=1;snd('leak');G.lives-=Math.ceil(e.hp);if(G.lives<=0){G.lives=0;hud();end(false);return}}}
+ for(const e of G.en){e.slow=Math.max(0,(e.slow||0)-dt);if(e.bl>0){e.bl-=dt;e.hp-=(e.bd||0)*dt}if(e.burn > 0){ e.burn -= dt; e.hp -= (e.bdmg || 0) * dt; }e.d+=e.k.sp*dt*(G.es||1)*(e.slow>0?.5:1);e.hit=Math.max(0,e.hit-dt);[e.x,e.y]=posAt(e.d);if(e.d>=G.tot){e.dead=1;snd('leak');G.lives-=Math.ceil(e.hp);if(G.lives<=0){G.lives=0;hud();end(false);return}}}
  G.en=G.en.filter(e=>e.hp>0?!e.dead:killed(e));
  for(const t of G.tw){
   const s=wpStat(t);t.cd-=dt;t.sw=Math.max(0,t.sw-dt/(animKey(t.cur||t.id)=='carambit'?.3:.45));
@@ -1045,7 +1069,10 @@ function update(dt){
     const bwid=t.cur||t.id;
     if(BOOM_MAP[bwid]){const b=BOOM_MAP[bwid];G.fx.push({type:'boom',x:t.x+Math.cos(t.aim)*30,y:t.y+Math.sin(t.aim)*30,r:b.r,c1:b.c1,c2:b.c2,c3:b.c3,t:.5,m:.5})}
     G.fx.push({type:'arc',x:t.x,y:t.y,a:t.aim,r:THRUST.includes(t.cur||t.id)?s.range*.75:Math.min(s.range,75)+10,t:.25,m:.25,th:THRUST.includes(t.cur||t.id)});
-    const gm=ww.g;for(const e of tg.slice(0,ww.hits+(gm=='pierce'?1:0))){let d2=dm;if(gm=='crit'&&Math.random()<.25)d2*=2;if(gm=='dbl'&&Math.random()<.3)d2*=2;if(gm&&gm.includes('boss')&&e.k.r>=30)d2*=1.6;if(gm&&gm.includes('bleed')){e.bl=4;e.bd=dm*.18}if(e.k.r>=30)d2*=(G.bd||1);d2*=1-(e.k.df||0)/100;if(gm=='exec'&&e.hp<e.mx*.2)d2=e.hp+1;e.hp-=d2;if(gm=='slow')e.slow=1;if(gm=='knock')e.d=Math.max(0,e.d-30);e.hit=.12;e.by=t;G.fx.push({type:'dmg',x:e.x+(Math.random()-.5)*10,y:e.y-e.k.r,v:Math.round(d2),c:d2>dm*1.4,t:.7,m:.7});G.fx.push({type:'spark',x:e.x,y:e.y,t:.3,m:.3});if(fk&&PF[fk])G.fx.push({type:'p',k:fk,x:e.x,y:e.y,t:.55,m:.55,s:rs()})}
+    const gm=ww.g;for(const e of tg.slice(0,ww.hits+(gm=='pierce'?1:0))){let d2=dm;if(gm=='crit'&&Math.random()<.25)d2*=2;if(gm=='dbl'&&Math.random()<.3)d2*=2;if(gm&&gm.includes('boss')&&e.k.r>=30)d2*=1.6;if(gm&&gm.includes('bleed')){e.bl=4;e.bd=dm*.18}if(gm && gm.includes('burn')){ e.burn = 5; e.bdmg = dm * 0.1; }if(gm && gm.includes('laev')){
+    if(e.k.r >= 30) d2 *= 3;  // 보스 3배
+    else d2 *= 0.5;            // 일반 적 절반
+  }if(e.k.r>=30)d2*=(G.bd||1);d2*=1-(e.k.df||0)/100;if(gm=='exec'&&e.hp<e.mx*.2)d2=e.hp+1;e.hp-=d2;if(gm=='slow')e.slow=1;if(gm=='knock')e.d=Math.max(0,e.d-30);e.hit=.12;e.by=t;G.fx.push({type:'dmg',x:e.x+(Math.random()-.5)*10,y:e.y-e.k.r,v:Math.round(d2),c:d2>dm*1.4,t:.7,m:.7});G.fx.push({type:'spark',x:e.x,y:e.y,t:.3,m:.3});if(fk&&PF[fk])G.fx.push({type:'p',k:fk,x:e.x,y:e.y,t:.55,m:.55,s:rs()})}
    }
   }
  }
@@ -1098,6 +1125,14 @@ function draw(){
   cx.globalAlpha=e.hit>0?.55:1;cx.fillText(e.k.e,e.x,e.y);cx.globalAlpha=1;
   const w=e.k.r*2;cx.fillStyle='#000a';cx.fillRect(e.x-w/2,e.y-e.k.r-9,w,4);cx.fillStyle='#e0533d';cx.fillRect(e.x-w/2,e.y-e.k.r-9,w*Math.max(0,e.hp/e.mx),4);
  }
+
+    // ★ 여기에 추가하세요 ★
+  for(const e of G.en)if(e.burn>0){
+    cx.fillStyle='#ff9800';
+    cx.beginPath();
+    cx.arc(e.x-4+Math.sin(performance.now()/100+e.x)*4, e.y-10, 3, 0, 7);
+    cx.fill();
+  }
  for(const f of G.fx){const p=f.t/f.m;
   if(f.type=='arc'){cx.strokeStyle=`rgba(255,255,255,${p})`;cx.lineWidth=5*p+1;cx.beginPath();
    if(f.th){cx.moveTo(f.x,f.y);cx.lineTo(f.x+Math.cos(f.a)*f.r*1.3,f.y+Math.sin(f.a)*f.r*1.3)}else cx.arc(f.x,f.y,f.r,f.a-1.1,f.a+1.1);cx.stroke()}
