@@ -1091,8 +1091,8 @@ Object.assign(WM.repeater,{dmg:38,range:260,cd:.24});
 
 // [3] 신규 무기 (트리 D 보상 2종, 임파서블 보상 1종, 이벤트 5종)
 Object.assign(ART,{
- ruyi:['<rect x="30" y="30" width="5" height="30" fill="#b71c1c"/>','<rect x="30" y="0" width="5" height="34" fill="#ffd54f" stroke="#ff8f00"/><rect x="28" y="0" width="9" height="5" fill="#ff8f00"/>',32.5,32],
- kanabo:['<rect x="30" y="30" width="5" height="30" fill="#6d4c41"/>','<path d="M26 0 H39 L42 30 H23Z" fill="#455a64" stroke="#263238"/><path d="M28 6 l-4 2 M37 6 l4 2 M27 16 l-4 2 M38 16 l4 2" stroke="#90a4ae" stroke-width="3"/>',32.5,30],
+ quarterstaff:['<rect x="30" y="30" width="5" height="30" fill="#8d6e63"/>','<rect x="30" y="0" width="5" height="34" fill="#a1887f" stroke="#5d4037"/><rect x="28" y="0" width="9" height="4" fill="#78909c"/><rect x="28" y="30" width="9" height="4" fill="#78909c"/>',32.5,32],
+ bardiche:['<rect x="30" y="26" width="4" height="34" fill="#6d4c41"/>','<path d="M33 0 Q62 4 58 40 L56 36 Q46 20 33 24Z" fill="#cfd8dc" stroke="#78909c"/><rect x="29" y="22" width="8" height="5" fill="#546e7a"/>',32,28],
  oblivion:['<path d="M10 38 L32 42 L54 38 L54 43 L32 47 L10 43Z" fill="#4a148c" stroke="#ce93d8"/><rect x="29" y="46" width="6" height="13" fill="#1a0a1f"/><circle cx="32" cy="61" r="3" fill="#e040fb"/>','<path d="M32 0 L44 12 L42 40 L22 40 L20 12Z" fill="#311b92" stroke="#b388ff"/><path d="M32 6 V38 M26 18 L32 26 L38 18" stroke="#e040fb" stroke-width="2" fill="none"/>',32,40],
  ricemallet:[SH,'<rect x="14" y="4" width="36" height="20" rx="8" fill="#a1887f" stroke="#5d4037"/>',33,14],
  cupid:['<path d="M10 40 Q32 4 54 40" stroke="#e91e63" stroke-width="4" fill="none"/><rect x="29" y="44" width="6" height="14" fill="#4e342e"/>','<rect x="31" y="6" width="2" height="38" fill="#8d6e63"/><path d="M32 0 L37 10 L27 10Z" fill="#e91e63"/>',32,44],
@@ -1100,16 +1100,16 @@ Object.assign(ART,{
  watergun:['<rect x="28" y="38" width="8" height="22" rx="3" fill="#ff7043"/>','<rect x="24" y="10" width="16" height="30" rx="5" fill="#29b6f6" stroke="#0277bd"/><rect x="30" y="0" width="4" height="12" fill="#0277bd"/>',32,40],
  pestle:['<rect x="30" y="22" width="5" height="38" fill="#a1887f"/>','<rect x="18" y="2" width="29" height="22" rx="6" fill="#ffe082" stroke="#f9a825"/><circle cx="32" cy="13" r="5" fill="#fff59d"/>',32.5,24]
 });
-[{id:'ruyi',n:'여의봉',t:6,cost:520,dmg:210,range:175,cd:1,hits:4,d:'[트리 D 보상] 길어지는 신화의 봉'},
- {id:'kanabo',n:'도깨비 방망이',t:6,cost:560,dmg:340,range:100,cd:1.3,hits:99,d:'[트리 D 보상] 범위 내 전체 강타'},
+[{id:'quarterstaff',n:'쿼터스태프',t:6,cost:520,dmg:210,range:175,cd:1,hits:4,d:'[트리 D 보상] 긴 나무 봉, 긴 사거리'},
+ {id:'bardiche',n:'바르디슈',t:6,cost:560,dmg:340,range:110,cd:1.3,hits:99,d:'[트리 D 보상] 초승달 도끼날의 장병기, 범위 강타'},
  {id:'oblivion',n:'종언의 대검',t:4,cost:800,dmg:1100,range:150,cd:1.5,hits:6,g:'boss+bleed',gd:'보스 피해 +60% · 맞은 적 출혈(4초간 지속 피해)',d:'[임파서블 보상] 모든 것을 끝내는 6연 참격'},
  {id:'ricemallet',n:'떡메',t:8,cost:200,dmg:110,range:80,cd:1.1,hits:99,d:'[새해 한정] 쿵떡쿵떡 범위 강타'},
  {id:'cupid',n:'큐피드 활',t:8,cost:210,dmg:80,range:230,cd:.8,hits:2,d:'[밸런타인 한정] 하트 화살'},
  {id:'fan',n:'벚꽃 철선',t:8,cost:190,dmg:55,range:100,cd:.45,hits:3,d:'[벚꽃 한정] 꽃잎을 흩날리는 부채'},
  {id:'watergun',n:'초강력 물총',t:8,cost:170,dmg:40,range:170,cd:.3,hits:1,d:'[한여름 한정] 시원한 연사'},
  {id:'pestle',n:'달토끼 절굿공이',t:8,cost:220,dmg:130,range:85,cd:1.1,hits:2,d:'[한가위 한정] 보름달 같은 한 방'}].forEach(addW);
-AN.ruyi=AN.spear;AN.kanabo=AN.hammer;AN.oblivion=AN.dslayer;AN.ricemallet=AN.hammer;AN.cupid=AN.bow;AN.fan=AN.whip;AN.watergun=AN.javelin;AN.pestle=AN.mace;
-THRUST.push('ruyi','cupid','watergun');
+AN.quarterstaff=AN.halberd;AN.bardiche=AN.axe;AN.oblivion=AN.dslayer;AN.ricemallet=AN.hammer;AN.cupid=AN.bow;AN.fan=AN.whip;AN.watergun=AN.javelin;AN.pestle=AN.mace;
+THRUST.push('quarterstaff','cupid','watergun');
 
 // [4] 신규 스킨 (뒤에 추가되므로 기존 스킨 번호는 그대로)
 const NS={sword2:['빙결',300,'#e1f5fe','#0277bd','<path d="M32 6 V42" stroke="#fff"/>','',null,null,'bubble'],
@@ -1138,7 +1138,7 @@ EVS.forEach(e=>{const s=EVSK[e.id];s[1][9]='ev_'+e.id;WS[s[0]].push(s[1]);e.ws=[
 
 // [6] 업그레이드 트리 4번째 갈래 (아래쪽) – 영역이 늘어나도록 높이 확장
 ORG.D=(u,v)=>[900-v,840+u];
-mkBr('D',[['보석 채굴',150,100,l=>`특별/임파서블 클리어 시 젬 +${l}`,(g,l)=>{g.gb=l}],['정밀 타격',150,100,l=>`피해 +${l*4}%`,(g,l)=>{g.pd*=1+.04*l}],['전술 지휘',150,100,l=>`공격 속도 +${l*3}%`,(g,l)=>{g.ps*=1-.03*l}],['용병 계약',400,250,l=>`시작 골드 +${l*25} · 피해 +${l*3}%`,(g,l)=>{g.gold+=25*l;g.pd*=1+.03*l}],['비전의 극의',600,300,l=>`피해 +${l*7}%`,(g,l)=>{g.pd*=1+.07*l}]],['ruyi','kanabo'],[900,1800,'여의봉 연마','여의봉 속사','도깨비방망이 연마','도깨비방망이 속사']);
+mkBr('D',[['보석 채굴',150,100,l=>`특별/임파서블 클리어 시 젬 +${l}`,(g,l)=>{g.gb=l}],['정밀 타격',150,100,l=>`피해 +${l*4}%`,(g,l)=>{g.pd*=1+.04*l}],['전술 지휘',150,100,l=>`공격 속도 +${l*3}%`,(g,l)=>{g.ps*=1-.03*l}],['용병 계약',400,250,l=>`시작 골드 +${l*25} · 피해 +${l*3}%`,(g,l)=>{g.gold+=25*l;g.pd*=1+.03*l}],['비전의 극의',600,300,l=>`피해 +${l*7}%`,(g,l)=>{g.pd*=1+.07*l}]],['quarterstaff','bardiche'],[900,1800,'쿼터스태프 연마','쿼터스태프 속사','바르디슈 연마','바르디슈 속사']);
 const _tr=treeR;
 treeR=function(){_tr();const m=$('tr').querySelector('.tmap');if(m){m.style.height='1700px';const s=m.querySelector('svg.ln');s.setAttribute('viewBox','0 0 1800 1700');s.setAttribute('height','1700')}};
 
@@ -1220,14 +1220,14 @@ const UPD=[{v:LOGV,items:[
  '🎨 신규 스킨 12종 추가 (빙결·야차·지옥불·용암·낙뢰·은하·황혼·독가시·산호·월하·암살자·성기사)',
  '🎉 이벤트 5종 추가: 새해 · 밸런타인 · 벚꽃 · 한여름 · 한가위 (이벤트별 한정 무기 1종 + 한정 스킨 1종)',
  '🔤 이모지 표시를 통일했습니다 (인터넷 연결 시 Noto Color Emoji 사용)',
- '🌳 업그레이드 트리에 4번째 갈래 추가 (아래쪽 · 보석 채굴/정밀 타격/전술 지휘 등, 전용 무기 여의봉 · 도깨비 방망이)',
+ '🌳 업그레이드 트리에 4번째 갈래 추가 (아래쪽 · 보석 채굴/정밀 타격/전술 지휘 등, 전용 무기 쿼터스태프 · 바르디슈)',
  '💎 젬 사용처 추가: 젬 상점(코인 교환, 랜덤 스킨, 트리 무료 초기화, 시작 골드/체력 영구 강화) + 전투 중 수리/보급',
  '📋 메인 화면에 업데이트 로그 · 젬 상점 메뉴 추가']}];
 function showLog(){S.seenLog=LOGV;save();const b=$('logb');if(b)b.querySelector('b').textContent='업데이트 로그';
  $('stb').innerHTML='<div style="max-height:70vh;overflow-y:auto;min-width:min(86vw,420px)"><h2 style="margin-top:0">📋 업데이트 로그</h2>'+UPD.map(u=>`<b style="color:var(--gold)">${u.v}</b><div style="line-height:1.8;font-size:13px;margin:6px 0 14px">${u.items.join('<br>')}</div>`).join('')+'</div><button class="alt" style="margin-top:8px;width:100%" onclick="$(\'st\').style.display=\'none\'">닫기</button>';
  $('st').style.display='flex'}
 $('home').insertAdjacentHTML('beforeend',`<button class="hb" onclick="gemR()"><span class="hi">💎</span><span><b>젬 상점</b><small>젬으로 스킨·영구 강화·교환</small></span></button><button class="hb" id="logb" onclick="showLog()"><span class="hi">📋</span><span><b>업데이트 로그${S.seenLog==LOGV?'':' 🆕'}</b><small>최근 변경 사항 확인</small></span></button>`);
-TRD.push(['임파서블','Impossible'],['젬 상점','Gem Shop'],['업데이트 로그','Update Log'],['종언의 대검','Blade of Finality'],['여의봉','Ruyi Bong'],['도깨비 방망이','Dokkaebi Club'],['떡메','Rice Mallet'],['큐피드 활','Cupid’s Bow'],['벚꽃 철선','Sakura Fan'],['초강력 물총','Super Soaker'],['달토끼 절굿공이','Moon Rabbit Pestle'],['심연 기사','Abyss Knight'],['심연의 눈','Eye of the Abyss'],['최근 변경 사항 확인','See recent changes'],['젬으로 스킨·영구 강화·교환','Skins, upgrades & more']);
+TRD.push(['임파서블','Impossible'],['젬 상점','Gem Shop'],['업데이트 로그','Update Log'],['종언의 대검','Blade of Finality'],['쿼터스태프','Quarterstaff'],['바르디슈','Bardiche'],['떡메','Rice Mallet'],['큐피드 활','Cupid’s Bow'],['벚꽃 철선','Sakura Fan'],['초강력 물총','Super Soaker'],['달토끼 절굿공이','Moon Rabbit Pestle'],['심연 기사','Abyss Knight'],['심연의 눈','Eye of the Abyss'],['최근 변경 사항 확인','See recent changes'],['젬으로 스킨·영구 강화·교환','Skins, upgrades & more']);
 langInit();
 
 // 연노 스킨 추가
