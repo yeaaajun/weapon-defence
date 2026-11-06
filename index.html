@@ -1183,7 +1183,7 @@ function gemR(){const g=S.gems||0,u=S.gup=S.gup||{g:0,l:0},
  +row('트리 무료 초기화','투자 비용이 🌳트리머니로 전환 (코인 불필요)',3,'gemBuy(2)',S.tspent?1:0)
  +row('시작 골드 강화 Lv.'+u.g+'/5','전투 시작 골드 +50씩',6+u.g*4,'gemBuy(3)',u.g<5?1:0)
  +row('성벽 강화 Lv.'+u.l+'/5','전투 시작 체력 +4%씩',8+u.l*4,'gemBuy(4)',u.l<5?1:0)
- +'<div class="sub">전투 중에는 상단 💎 버튼으로 수리(💎2 · 라이프 +15% · 3회)와 보급(💎1 · 골드 +250 · 5회)도 쓸 수 있어요.</div></div><button class="alt" style="margin-top:8px;width:100%" onclick="$(\'st\').style.display=\'none\'">닫기</button>`;
+ +'<div class="sub">전투 중에는 상단 💎 버튼으로 수리(💎2 · 라이프 +15% · 3회)와 보급(💎1 · 골드 +250 · 5회)도 쓸 수 있어요.</div></div><button class="alt" style="margin-top:8px;width:100%" onclick="$(\'st\').style.display=\'none\'">닫기</button>';
  $('st').style.display='flex'}
 function gemBuy(i){const u=S.gup=S.gup||{g:0,l:0},c=[1,5,3,6+u.g*4,8+u.l*4][i];if((S.gems||0)<c)return;
  if(i==0)S.coins+=400;
