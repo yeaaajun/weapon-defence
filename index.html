@@ -270,7 +270,47 @@ bayonet:['<rect x="28" y="42" width="8" height="14" rx="1" fill="#6d4c41"/><rect
    // [1] 날 부분: 거대한 범종 (금색 + 당좌 + 종뉴)
    `<path d="M32 0 L36 6 L36 10 Q52 14 52 36 L52 44 L12 44 L12 36 Q12 14 28 10 L28 6 Z" fill="#ffd54f" stroke="#f57f17" stroke-width="2"/><path d="M20 20 Q32 16 44 20" stroke="#f9a825" stroke-width="1.5" fill="none"/><path d="M16 30 Q32 26 48 30" stroke="#f9a825" stroke-width="1.5" fill="none"/><circle cx="24" cy="24" r="2" fill="#f57f17"/><circle cx="40" cy="24" r="2" fill="#f57f17"/><circle cx="32" cy="36" r="2.5" fill="#f57f17"/><rect x="14" y="44" width="36" height="4" rx="2" fill="#f57f17"/>`,
    32,44
- ]
+ ],
+  slingshot:[
+    // [0] Y자 나무 손잡이
+    '<path d="M32 60 L32 36 M32 36 L24 20 M32 36 L40 20" stroke="#8d6e63" stroke-width="4" fill="none" stroke-linecap="round"/>',
+    // [1] 고무줄 + 돌
+    `<path d="M24 20 Q32 28 40 20" stroke="#e53935" stroke-width="2" fill="none"/>
+     <circle cx="32" cy="26" r="5" fill="#9e9e9e" stroke="#616161" stroke-width="1.5"/>`,
+    32, 50
+  ],
+  // 돌팔매
+  sling:[
+    '<path d="M30 60 Q20 40 32 30 Q44 40 34 60" stroke="#6d4c41" stroke-width="3" fill="none"/>',
+    `<circle cx="32" cy="16" r="7" fill="#9e9e9e" stroke="#616161" stroke-width="1.5"/>
+     <path d="M20 10 Q14 4 8 10" stroke="#cfd8dc" stroke-width="2" fill="none"/>
+     <path d="M44 10 Q50 4 56 10" stroke="#cfd8dc" stroke-width="2" fill="none"/>`,
+    32, 50
+  ],
+  // 석궁
+  crossbow:[
+    '<rect x="28" y="30" width="8" height="26" rx="2" fill="#5d4037"/><path d="M24 34 H40 V38 H24Z" fill="#424242"/>',
+    `<path d="M10 20 Q32 4 54 20" stroke="#8d6e63" stroke-width="4" fill="none"/>
+     <path d="M10 20 L32 28 L54 20" stroke="#cfd8dc" stroke-width="1.5" fill="none"/>
+     <rect x="30" y="8" width="4" height="28" fill="#6d4c41"/>
+     <path d="M32 4 L36 12 H28Z" fill="#eceff1" stroke="#78909c"/>`,
+    32, 34
+  ],
+  // 발리송
+  butterfly:[
+    '<rect x="22" y="30" width="4" height="26" rx="2" fill="#616161"/><rect x="38" y="30" width="4" height="26" rx="2" fill="#616161"/><circle cx="32" cy="32" r="3" fill="#424242"/>',
+    `<path d="M32 30 L36 18 L34 2 L30 2 L28 18Z" fill="#cfd8dc" stroke="#78909c"/>
+     <path d="M32 6 V26" stroke="#90a4ae"/>`,
+    32, 30
+  ],
+  // 물총
+  watergun:[
+    '<rect x="28" y="40" width="8" height="16" rx="2" fill="#42a5f5"/><rect x="26" y="44" width="12" height="4" rx="1" fill="#1e88e5"/>',
+    `<rect x="24" y="28" width="16" height="12" rx="2" fill="#1e88e5" stroke="#0d47a1"/>
+     <circle cx="32" cy="34" r="3" fill="#90caf9"/>
+     <path d="M32 28 L32 10" stroke="#4fc3f7" stroke-width="3" stroke-dasharray="2 3"/>`,
+    32, 40
+  ]
 });
 ART.poseidon=[ART.trident[0].replace('#8d6e63','#00acc1'),ART.trident[1].replace(/#cfd8dc/g,'#80deea').replace(/#78909c/g,'#006064'),32,30];
 ART.gaebolg=[ART.spear[0].replace('#8d6e63','#b71c1c'),`<path d="M32 0 L39 18 L32 14 L25 18Z" ${BL}/><path d="M32 14 L38 26 L32 23 L26 26Z" ${BL}/>`,32,18];
@@ -358,7 +398,12 @@ const WP=[
  {id:'bayonet',n:'총검',t:8,cost:350,dmg:120,range:140,cd:0.8,hits:2,price:null,g:'bayonet',gd:'사거리 내 적이 가까우면 찌르기(출혈), 멀면 사격',d:'[국군의 날 한정] 총알이 떨어져도 싸울 수 있는 군인의 마지막 자존심'},
  {id:'firework',n:'폭죽',t:8,cost:800,dmg:300,range:500,cd:1.5,hits:5,price:null,g:'burn',gd:'화상',d:'[연말 한정] 멀리 쏘는 터지는 폭죽'},
  {id:'calendar',n:'달력',t:8,cost:100,dmg:50,range:100,cd:.7,hits:3,price:null,d:'[연말 한정] 날짜를 볼수 있는 달력'},
- {id:'newyearbell',n:'제야의 종',t:8,cost:800,dmg:1500,range:500,hits:99,cd:8,price:null,d:'[연말 한정] 큰 소리로 적들을 공격하는 종'}
+ {id:'newyearbell',n:'제야의 종',t:8,cost:800,dmg:1500,range:500,hits:99,cd:8,price:null,d:'[연말 한정] 큰 소리로 적들을 공격하는 종'},
+ {id:'slingshot',n:'새총',t:2,cost:100,dmg:70,range:150,hits:2,cd:1,price:700,d:'탄환이 팅겨 두 적을 공격하는 새총'},
+ {id:'sling',n:'돌팔매',t:1,cost:70,dmg:20,range:150,hits:1,cd:0.5,price:500,d:'빙글빙글 돌려 빠르게 돌을 던지는 무기'},
+ {id:'crossbow',n:'석궁',t:3,cost:200,dmg:160,range:200,hits:1,cd:1.2,price:900,d:'긴 사거리로 멀리 있는 적을 공격한다'},
+ {id:'butterfly',n:'발리송',t:3,cost:170,dmg:70,range:100,hits:1,cd:0.5,price:700,d:'빠르게 적을 찌르는 무기'},
+ {id:'watergun',n:'물총',t:2,cost:100,dmg:7,range:150,hits:3,cd:0.1,price:800,d:'빠르게 3명의 적을 적시는 무기'}
 ];
 WP.forEach(w=>{if(w.price===undefined)w.price=null;if(w.t===undefined)w.t=0});
 const WM=Object.fromEntries(WP.map(w=>[w.id,w]));
@@ -586,6 +631,27 @@ AN.newyearbell = p => ({
   pr: Math.sin(p*PI*3)*0.2,          // 부품(줄) 흔들림
   pf: Math.sin(p*PI*4)*4             // 종뉴(추)가 흔들림
 });
+// 새총: 고무줄 당겼다 발사
+AN.slingshot = p => ({
+  r: 0,
+  f: -Math.sin(p*PI) * 8,
+  pr: 0,
+  pf: Math.sin(p*PI) * 5
+});
+// 새총: 고무줄 당겼다 발사
+AN.slingshot = p => ({r:0, f:-Math.sin(p*PI)*8, pr:0, pf:Math.sin(p*PI)*5});
+
+// 돌팔매: 빙글빙글 회전
+AN.sling = p => ({r:p*2*PI, f:Math.sin(p*PI)*15, pr:p*4*PI, pf:0});
+
+// 석궁: 시위 당겼다 화살 발사 (반동)
+AN.crossbow = p => ({r:0, f:-Math.sin(p*PI)*10, pr:0, pf:Math.sin(p*PI)*6});
+
+// 발리송: 빙글빙글 회전 (칼날)
+AN.butterfly = p => ({r:p*3*PI, f:Math.sin(p*PI)*8, pr:p*6*PI, pf:0});
+
+// 물총: 물줄기 (미세한 반동)
+AN.watergun = p => ({r:0, f:-Math.sin(p*PI)*3, pr:0, pf:Math.sin(p*PI)*2});
 // 레바테인: 양손검처럼 묵직하게 휘두르되, 봉인이 풀리면 빠르게 내려찍는 모션
 AN.laev = p => ({r: -2.2 + (p < .5 ? 2*p*p : 1 - 2*(1-p)*(1-p)) * 3.1,f: Math.sin(p * Math.PI) * 12,pr: -Math.sin(p * Math.PI) * .4,pf: 0});
 const AN2={carambit:p=>({r:p*6*PI,f:0,pr:sn(p*6*PI)*.3,pf:0}),throw:p=>({r:0,f:sn(p*PI)*80,pr:0,pf:0}),iai:p=>({r:-2+eo(p)*4,f:sn(p*PI)*6,pr:0,pf:0}),spinthrow:p=>({r:0,f:sn(p*PI)*90,s:p*8*PI,pr:0,pf:0}),flurry:p=>({r:0,f:Math.abs(sn(p*3*PI))*28,pr:0,pf:0}),whirl:p=>({r:p*4*PI,f:0,pr:sn(p*2*PI)*.5,pf:0}),slam:p=>({r:p<.6?-2.4*(p/.6):-2.4+2.8*Math.pow((p-.6)/.4,2),f:0,pr:0,pf:p>.85?4:0})};
