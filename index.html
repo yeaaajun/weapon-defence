@@ -77,6 +77,48 @@ button,.card,.chip,.slot{touch-action:manipulation;-webkit-tap-highlight-color:t
 .tn.root{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;border-color:#76ff03}
 #ac,.gr{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}#ac .srow{margin:0;flex-direction:column;align-items:flex-start}#ac .srow>b{width:auto}
 @media(max-width:720px){button{padding:10px 12px}.wrap{padding:8px}.card{flex:1 1 100px;min-width:90px}#hud{gap:8px;font-size:14px}#hud button{padding:8px 10px;font-size:13px}#side{font-size:12px}.ttl{font-size:32px}.hero{width:180px}#bar .slot{flex:1 1 70px}h1{font-size:22px}}
+/* ===== 시즌 보상 가로 스크롤 ===== */
+#sn .srewards{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:8px 4px 14px;
+  scroll-snap-type:x proximity;
+  -webkit-overflow-scrolling:touch;
+}
+#sn .srewards::-webkit-scrollbar{height:8px}
+#sn .srewards::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+#sn .srewards::-webkit-scrollbar-track{background:transparent}
+#sn .sreward{
+  flex:0 0 120px;
+  scroll-snap-align:start;
+  background:var(--card);
+  border:2px solid var(--line);
+  border-radius:12px;
+  padding:12px 8px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  min-height:150px;
+  justify-content:space-between;
+  transition:border-color .15s,transform .15s;
+}
+#sn .sreward.can{
+  border-color:var(--gold);
+  box-shadow:0 0 10px #ffc83d55;
+}
+#sn .sreward.claimed{opacity:.45}
+#sn .sreward .icon{font-size:40px;line-height:1}
+#sn .sreward .lv{font-size:11px;color:var(--mut);font-weight:700}
+#sn .sreward .rname{font-size:13px;font-weight:700}
+#sn .sreward button{width:100%;padding:6px 4px;font-size:12px}
+@media(max-width:720px){
+  #sn .sreward{flex:0 0 100px;min-height:130px;padding:10px 6px}
+  #sn .sreward .icon{font-size:32px}
+}
 .hide{display:none!important}
 </style>
 </head>
@@ -96,11 +138,13 @@ button,.card,.chip,.slot{touch-action:manipulation;-webkit-tap-highlight-color:t
   <button class="hb" onclick="show('ach')"><span class="hi">🏆</span><span><b>업적</b><small>달성하고 코인 보상 받기</small></span></button>
   <button class="hb" onclick="show('tree')"><span class="hi">🌳</span><span><b>업그레이드 트리</b><small>영구 강화와 전용 무기</small></span></button>
   <button class="hb" onclick="show('quest')"><span class="hi">📜</span><span><b>일일 퀘스트</b><small>매일 새로 생기는 목표와 보상</small></span></button>
+  <button class="hb" onclick="show('season')"><span class="hi">📅</span><span><b>시즌</b><small>시즌 레벨 올리고 보상 받기</small></span></button>
 </div>
 
 <div id="ach" class="hide"><div class="top"><button class="alt" onclick="show('home')">← 뒤로</button><h1>🏆 업적</h1></div><div id="ac"></div></div>
 <div id="tree" class="hide"><div class="top"><button class="alt" onclick="show('home')">← 뒤로</button><h1>🌳 업그레이드 트리</h1><span class="sp"></span><span class="coin">🪙 <span class="cc"></span></span></div><div id="tr"></div></div>
 <div id="quest" class="hide"><div class="top"><button class="alt" onclick="show('home')">← 뒤로</button><h1>📜 일일 퀘스트</h1><span class="sp"></span><span class="coin">🪙 <span class="cc"></span></span></div><div id="qs2"></div></div>
+<div id="season" class="hide"><div class="top"><button class="alt" onclick="show('home')">← 뒤로</button><h1>📅 시즌</h1><span class="sp"></span><span class="coin">🪙 <span class="cc"></span></span></div><div id="sn"></div></div>
 <div id="stage" class="hide">
   <div class="top"><button class="alt" onclick="show('home')">← 뒤로</button><h1>맵 · 난이도 선택</h1></div>
   <div class="tabs"><button id="md0" onclick="setMode(0)">일반</button><button id="md1" class="alt" onclick="setMode(1)">♾ 무한</button><button id="md2" class="alt" onclick="setMode(2)">⏱ 챌린지</button></div><div class="tabs" id="sptabs" style="margin-top:12px"><button id="sp0" onclick="setSp(0)">🗺️ 일반 맵</button><button id="sp1" class="alt" onclick="setSp(1)">⭐ 특별 맵</button></div><div class="row" id="maps"></div>
@@ -117,7 +161,7 @@ button,.card,.chip,.slot{touch-action:manipulation;-webkit-tap-highlight-color:t
 
 <div id="shop" class="hide">
   <div class="top"><button class="alt" onclick="show('home')">← 뒤로</button><h1>상점</h1><span class="sp"></span><span class="coin">🪙 <span class="cc"></span></span></div>
-  <div class="tabs"><button id="t1" onclick="tab=0;shopR()">무기</button><button id="t2" class="alt" onclick="tab=1;shopR()">스킨 (보유 무기)</button><button id="t3" class="alt" onclick="tab=2;shopR()">진화 💎</button><button id="t4" class="alt" onclick="tab=3;shopR()">이벤트 🎉</button></div>
+  <div class="tabs"><button id="t1" onclick="tab=0;shopR()">무기</button><button id="t2" class="alt" onclick="tab=1;shopR()">스킨 (보유 무기)</button><button id="t3" class="alt" onclick="tab=2;shopR()">진화 💎</button><button id="t4" class="alt" onclick="tab=3;shopR()">이벤트 🎉</button><button id="t5" class="alt" onclick="tab=4;shopR()">젬 상점 💎</button></div>
   <div id="sc"></div>
 </div>
 
@@ -882,9 +926,10 @@ const EN_N=['슬라임','박쥐','고블린','해골','오크','드래곤','유�
 // ============================================================
 // 6) 상태 / 유틸
 // ============================================================
-let S={coins:300,owned:['dagger','katana'],load:['dagger','katana'],skins:[],skin:{},best:0,st:{k:0,boss:0,wins:0,hard:0,hell:0,sp:0,up:0,spm:[]},ach:{},mods:[],modOn:[],gems:0,dq:null,tree:{},tm:0,tspent:0};
+let S={coins:300,owned:['dagger','katana'],load:['dagger','katana'],skins:[],skin:{},best:0,st:{k:0,boss:0,wins:0,hard:0,hell:0,sp:0,up:0,spm:[]},ach:{},mods:[],modOn:[],gems:0,dq:null,tree:{},tm:0,tspent:0,season:{id:1,xp:0,lv:1,claimed:[]},gshop:{}};
 try{const t=localStorage.getItem('wtd2');if(t)S=Object.assign(S,JSON.parse(t))}catch(e){}
 S.tree=S.tree||{};S.tm=S.tm||0;S.tspent=S.tspent||0;
+S.season=S.season||{id:1,xp:0,lv:1,claimed:[]};S.gshop=S.gshop||{};
 let nsv=0;const save=()=>{try{localStorage.setItem('wtd2',JSON.stringify(S))}catch(e){if(!nsv){nsv=1;toast('⚠️ 이 환경에서는 저장이 안 됩니다. 새로고침하면 진행도가 초기화돼요')}}};
 const $=id=>document.getElementById(id);
 let selMap=0,selDiff=1,tab=0,skOpen=null,sp=0,mode=0;
@@ -1004,9 +1049,9 @@ function achR(){$('ac').innerHTML=ACH.filter(a=>!a[6]||S.ach[a[0]]).map(a=>`<div
 // 8) 화면 전환 / 공용 렌더
 // ============================================================
 function show(id){id=='game'?bgmOn():bgmOff();
- for(const s of ['home','stage','loadout','shop','game','ach','tree','quest']){const e=$(s);if(e)e.classList.toggle('hide',s!=id)}
+ for(const s of ['home','stage','loadout','shop','game','ach','tree','quest','season']){const e=$(s);if(e)e.classList.toggle('hide',s!=id)}
  syncC();
- if(id=='home')homeR();if(id=='stage')stageR();if(id=='loadout')loadR();if(id=='shop')shopR();if(id=='ach')achR();if(id=='tree')treeR();if(id=='quest')dqR();
+ if(id=='home')homeR();if(id=='stage')stageR();if(id=='loadout')loadR();if(id=='shop')shopR();if(id=='ach')achR();if(id=='tree')treeR();if(id=='quest')dqR();if(id=='season')seasonR();
 }
 function syncC(){const t=S.coins+' · 💎 '+(S.gems||0);$('hc').textContent=t;document.querySelectorAll('.cc').forEach(e=>e.textContent=t)}
 function homeR(){
@@ -1046,8 +1091,38 @@ function stageR(){
 function tog(id){const i=S.load.indexOf(id);if(i>=0){if(S.load.length>1)S.load.splice(i,1)}else{if(S.load.length>=4)S.load.shift();S.load.push(id)}save();loadR()}
 function skm(id){skOpen=id;$('skm').style.display='flex';$('skmb').innerHTML=`<h2 style="margin-top:0">🎨 ${WM[id].n} 스킨 <span class="coin">🪙 ${S.coins}</span></h2><div class="row" style="justify-content:center">${chips(id)}</div><button class="alt" style="margin-top:14px" onclick="skc()">닫기</button>`}
 function skc(){skOpen=null;$('skm').style.display='none'}
-function chips(id){const L=[['기본',0,0]].concat(WS[id].map(k=>[k[0],k[1],k[9]]));return L.map((q,i)=>{if(q[2]&&!S.ach[q[2]])return'';const have=i==0||S.skins.includes(id+':'+i),eq=skOf(id)==i;return `<div class="chip ${eq?'sel':''}" onclick="skinAct('${id}',${i})">${svg(id,i)}${q[0]}<br>${eq?'장착중':have?'장착':'🪙'+q[1]}</div>`}).join('')}
-function skinAct(id,i){const key=id+':'+i;if(i>0&&!S.skins.includes(key)){const k=WS[id][i-1];if(!k)return;if(k[10]&&!S.ach[k[10]])return;const pr=k[1];if(S.coins<pr)return;S.coins-=pr;S.skins.push(key)}S.skin[id]=i;save();chk();if(!$('shop').classList.contains('hide'))shopR();if(!$('loadout').classList.contains('hide'))loadR();if(skOpen)skm(skOpen);syncC()}
+function chips(id){
+  const L=[['기본',0,0]].concat(WS[id].map(k=>[k[0],k[1],k[9]]));
+  return L.map((q,i)=>{
+    if(q[2]&&!S.ach[q[2]])return'';
+    const have = i==0 || S.skins.includes(id+':'+i);
+    const eq = skOf(id)==i;
+    let priceTxt;
+    if(eq) priceTxt = '장착중';
+    else if(have) priceTxt = '장착';
+    else if(i>0 && WS[id][i-1] && WS[id][i-1][1]===0) priceTxt = '시즌 보상';  // ← 추가
+    else priceTxt = '🪙'+q[1];
+    return `<div class="chip ${eq?'sel':''}" onclick="skinAct('${id}',${i})">${svg(id,i)}${q[0]}<br>${priceTxt}</div>`;
+  }).join('');
+}
+function skinAct(id,i){
+  const key=id+':'+i;
+  if(i>0 && !S.skins.includes(key)){
+    const k = WS[id][i-1];
+    if(!k) return;
+    if(k[10] && !S.ach[k[10]]) return;   // 업적 조건
+    if(k[1] === 0){                       // ← 추가: 가격 0 = 보상 전용
+      toast('시즌 보상으로만 획득 가능합니다');
+      return;
+    }
+    const pr = k[1];
+    if(S.coins < pr) return;
+    S.coins -= pr;
+    S.skins.push(key);
+  }
+  S.skin[id]=i;
+  // ...
+}
 function detail(id){const w=WM[id],lv=[1,2,3,4].map(l=>{const k=l-1;return `Lv.${l}: 피해 ${w.pool?'랜덤':Math.round(w.dmg*Math.pow(1.45,k))} · 사거리 ${w.range+k*8} · 간격 ${(w.cd*Math.pow(.93,k)).toFixed(2)}s`}).join('<br>'),up=[1,2,3].map(k=>Math.round(w.cost*.7*k));
  skOpen=null;$('skmb').innerHTML=`<h2 style="margin-top:0;color:${TC[w.t]}">${TIER[w.t]} 등급</h2><div style="display:flex;gap:12px;align-items:center;justify-content:center">${svg(id,skOf(id))}<h1 style="margin:0">${w.n}</h1></div><div class="sub">${w.d}</div><div style="text-align:left;margin:10px 0;line-height:1.7;font-size:13px">설치비 💰${w.cost}${w.price!=null?' · 상점가 🪙'+w.price:''}<br>타격 수 ${w.hits>9?'범위 전체':w.hits}${w.pool?' (공격마다 무기 무작위)':''}${w.gd?'<br>✨ '+w.gd:''}<br>강화비용 💰${up.join(' → ')}<br>${lv}<br>처치 ${wk(id)}회${w.pool?'<br>사용 무기: '+w.pool.map(p=>WM[p].n).join(', '):''}<br>보유 스킨 ${S.skins.filter(s=>s.startsWith(id+':')).length}개 / 전체 ${WS[id].length}개</div><button class="alt" onclick="$('skm').style.display='none'">닫기</button>`;$('skm').style.display='flex'}
 
@@ -1106,9 +1181,9 @@ function loadR(){
  $('lw').innerHTML=grouped(WP.filter(w=>S.owned.includes(w.id)),w=>`<div class="card ${S.load.includes(w.id)?'sel':''}" onclick="tog('${w.id}')">${svg(w.id,skOf(w.id))}<br><b>${w.n}</b><small>💰${w.cost} · ${w.d}</small><button class="alt" onclick="event.stopPropagation();skm('${w.id}')">🎨 스킨</button><button class="alt" onclick="event.stopPropagation();detail('${w.id}')">자세히 보기</button></div>`);
 }
 function shopR(){
- ['t1','t2','t3','t4'].forEach((id,i)=>$(id).className=i==tab?'':'alt');
+ ['t1','t2','t3','t4','t5'].forEach((id,i)=>$(id).className=i==tab?'':'alt');
  if(tab==1){const o=WP.filter(w=>S.owned.includes(w.id));$('sc').innerHTML=o.map(w=>`<div class="srow"><b>${w.n}</b>${chips(w.id)}</div>`).join('')+'<div class="sub">보유한 무기의 스킨만 표시됩니다. 무기를 먼저 구매하세요.</div>'}
- else if(tab==2)evoR();else if(tab==3)evtR();
+ else if(tab==2)evoR();else if(tab==3)evtR();else if(tab==4)gemShopR();
  else $('sc').innerHTML=grouped(WP,w=>{const o=S.owned.includes(w.id);let priceTxt;if(o)priceTxt='✅ 보유 중';else if(w.price==null){if(w.unlock){priceTxt=w.unlock()?'🎁 눌러서 받기':'🔒 해금 조건 필요'}else if(w.t==8)priceTxt=evActive(w.id)?'🎁 눌러서 받기':'🔒 '+EVENTS.find(e=>e.ws.includes(w.id))?.range;else priceTxt='🔒 '+(TLBL[w.t]||'획득 불가')}else priceTxt='🪙 '+w.price;return `<div class="card" onclick="buy('${w.id}')">${svg(w.id,skOf(w.id))}<br><b>${w.n}</b><small>${w.pool?'피해 무기별 랜덤':'피해 '+w.dmg} · 사거리 ${w.range}<br>${w.d}</small>${w.gd?'<small>✨ '+w.gd+'</small>':''}<small>설치 💰${w.cost}</small><small>${priceTxt}</small><button class="alt" onclick="event.stopPropagation();detail('${w.id}')">자세히 보기</button></div>`});
  syncC();
 }
@@ -1135,6 +1210,210 @@ function dq(t,n){dqInit();let ch=0;for(const q of S.dq.q)if(q.t==t&&q.p<q.g){q.p
 function dqR(){dqInit();const q=S.dq,left=Math.ceil((new Date().setHours(24,0,0,0)-Date.now())/3600000),all=q.q.every(x=>x.c);$('qs2').innerHTML=`<div class="sub" style="margin-bottom:8px">매일 새 퀘스트 3개! 모두 받으면 보너스 💎2 + 🪙500. (약 ${left}시간 뒤 새로 고침)</div>`+q.q.map((x,i)=>`<div class="srow"><b style="width:auto;flex:1;min-width:180px">${x.c?'✅':'📜'} ${x.txt}<br><span class="sub">${x.p}/${x.g} · 보상 🪙${x.coin}${x.gem?' 💎'+x.gem:''}</span></b><button ${x.p>=x.g&&!x.c?'':'disabled'} onclick="dqClaim(${i})">${x.c?'수령 완료':x.p>=x.g?'받기':'진행 중'}</button></div>`).join('')+`<div class="srow"><b style="width:auto;flex:1">🎁 전체 완료 보너스</b><button ${all&&!q.all?'':'disabled'} onclick="dqAll()">${q.all?'수령 완료':'받기'}</button></div>`;syncC()}
 function dqClaim(i){const x=S.dq.q[i];if(x.c||x.p<x.g)return;x.c=1;S.coins+=x.coin;S.gems=(S.gems||0)+x.gem;save();chk();dqR();snd('ach')}
 function dqAll(){const q=S.dq;if(q.all||!q.q.every(x=>x.c))return;q.all=1;S.coins+=500;S.gems=(S.gems||0)+2;save();dqR();snd('ach')}
+
+// ============================================================
+// 10.5) 젬 상점 + 시즌
+// ============================================================
+const GEM_ITEMS = [
+  {id:'coin500', n:'코인 500', d:'🪙 500 즉시 획득', cost:3, once:false, fn:()=>{S.coins+=500}},
+  {id:'coin2000', n:'코인 2000', d:'🪙 2000 즉시 획득', cost:10, once:false, fn:()=>{S.coins+=2000}},
+  {id:'tm100', n:'트리머니 100', d:'🌳 트리머니 +100', cost:5, once:false, fn:()=>{S.tm=(S.tm||0)+100}},
+  {id:'tm300', n:'트리머니 300', d:'🌳 트리머니 +300', cost:12, once:false, fn:()=>{S.tm=(S.tm||0)+300}},
+  {id:'pd5', n:'영구 피해 +5%', d:'모든 게임에서 피해 영구 +5%', cost:25, once:true, fn:()=>{S.gshop.pd5=1}},
+  {id:'ps4', n:'영구 공속 +4%', d:'모든 게임에서 공격속도 영구 +4%', cost:25, once:true, fn:()=>{S.gshop.ps4=1}},
+  {id:'pr4', n:'영구 사거리 +4%', d:'모든 게임에서 사거리 영구 +4%', cost:20, once:true, fn:()=>{S.gshop.pr4=1}},
+  {id:'gold30', n:'시작 골드 +30', d:'게임 시작 시 골드 +30 영구', cost:15, once:true, fn:()=>{S.gshop.gold30=1}},
+  {id:'lives1', n:'시작 체력 +1', d:'게임 시작 시 체력 +1 영구', cost:20, once:true, fn:()=>{S.gshop.lives1=1}},
+  {id:'dqref', n:'일일 퀘스트 새로고침', d:'오늘 퀘스트를 다시 뽑습니다', cost:4, once:false, fn:()=>{S.dq=null;dqInit();toast('📜 퀘스트가 새로고침되었습니다')}},
+];
+
+function gemShopR(){
+  const gems = S.gems||0;
+  $('sc').innerHTML = `<div class="sub" style="margin-bottom:10px">보유 💎 <b>${gems}</b> · 젬으로 유용한 것들을 구매하세요. 영구 효과는 한 번만 구매 가능합니다.</div>` +
+    GEM_ITEMS.map(it=>{
+      const bought = it.once && S.gshop[it.id];
+      const can = !bought && gems >= it.cost;
+      return `<div class="srow">
+        <div style="flex:1;min-width:160px"><b>${it.n}</b><br><span class="sub">${it.d}</span></div>
+        <button ${can?'':'disabled'} onclick="buyGem('${it.id}')">${bought?'✅ 구매완료':'💎'+it.cost}</button>
+      </div>`;
+    }).join('');
+}
+
+function buyGem(id){
+  const it = GEM_ITEMS.find(x=>x.id===id);
+  if(!it || (it.once && S.gshop[it.id]) || (S.gems||0) < it.cost) return;
+  S.gems -= it.cost;
+  if(it.once) S.gshop[it.id] = 1;
+  it.fn();
+  save(); chk(); gemShopR(); syncC(); snd('ach');
+  toast('💎 '+it.n+' 구매 완료!');
+}
+
+// 시즌 시스템
+const SEASON_NAME = '시즌 1 · 깨어진 칼날';
+const SEASON_REWARDS = [
+  // lv, type, amount/name
+  {lv:1, type:'coin', v:200},
+  {lv:2, type:'gem', v:2},
+  {lv:3, type:'coin', v:400},
+  {lv:5, type:'gem', v:3},
+  {lv:7, type:'coin', v:600},
+  {lv:9, type:'gem', v:5},
+  {lv:10, type:'skin', v:['rapier','맹렬한 전투']},
+  {lv:12, type:'gem', v:5},
+  {lv:15, type:'coin', v:1500},
+  {lv:20, type:'skin', v:['javelin','맹렬한 전투']},
+  {lv:25, type:'coin', v:2500},
+  {lv:30, type:'gem', v:10},
+  {lv:35, type:'coin', v:3000},
+  {lv:40, type:'skin', v:['spear','맹렬한 전투']},
+  {lv:50, type:'coin', v:4000},
+  {lv:60, type:'gem', v:15},
+  {lv:75, type:'skin', v:['multi','맹렬한 전투']},
+  {lv:90, type:'gem', v:15},
+  {lv:110, type:'coin', v:6000},
+  {lv:130, type:'gem', v:20},
+  {lv:150, type:'skin', v:['crossbow','전쟁']},
+];
+// 시즌 1 스킨
+WS.rapier.push(['맹렬한 전투',0,'#ff5252','#4a0000','<path d="M32 2 L35 14 L35 20 L33 21 L36 26 L34 32 L37 37 L35 44 L29 44 L27 38 L29 33 L26 28 L28 22 L25 16 L29 14Z" fill="#cfd8dc" stroke="#78909c" stroke-width="1"/><path d="M30 8 L33 12 M31 22 L34 26 M30 34 L33 38" stroke="#4a0000" stroke-width="1.2" fill="none"/><path d="M34 16 Q36 18 34 22" stroke="#e53935" stroke-width="1" fill="none"/><circle cx="33" cy="30" r="1.2" fill="#e53935"/><circle cx="31" cy="40" r="1" fill="#b71c1c"/>','<path d="M16 47 Q32 36 48 47 Q32 51 16 47Z" fill="#8d6e63" stroke="#3e2723" stroke-width="1"/><path d="M16 47 L12 44 M48 47 L52 44 M32 36 L32 33" stroke="#5d4037" stroke-width="1.5" fill="none"/><rect x="30" y="48" width="4" height="10" fill="#3e2723"/><path d="M29 50 h6 M29 54 h6" stroke="#8d6e63" stroke-width="0.8"/><circle cx="32" cy="60" r="3" fill="#8d6e63" stroke="#3e2723"/><path d="M30 58 Q32 62 34 58" stroke="#e53935" stroke-width="1" fill="none"/>',null,null,'red',null]);
+WS.javelin.push(['맹렬한 전투',0,'#ff5252','#4a0000','<path d="M28 2 L36 8 L30 12 L38 18 L29 20 L34 24" stroke="#cfd8dc" stroke-width="2.5" fill="none" stroke-linejoin="round"/><path d="M33 0 L37 6 L32 10" stroke="#78909c" stroke-width="1" fill="none"/><path d="M30 6 L33 10 M31 14 L34 18" stroke="#4a0000" stroke-width="1.2" fill="none"/><circle cx="35" cy="14" r="1.2" fill="#e53935"/><circle cx="30" cy="20" r="1" fill="#b71c1c"/>','<rect x="30" y="20" width="4" height="40" fill="#5d4037"/><path d="M30 24 L34 28 M30 32 L34 36 M30 40 L34 44 M30 48 L34 52" stroke="#3e2723" stroke-width="1" fill="none"/><path d="M26 24 H38" stroke="#8d6e63" stroke-width="3"/><path d="M26 24 L22 22 M38 24 L42 22" stroke="#4a0000" stroke-width="1.5" fill="none"/><path d="M31 30 Q32 34 31 38 M33 42 Q34 46 33 50" stroke="#e53935" stroke-width="1" fill="none"/>',null,null,'red',null]);
+WS.spear.push(['맹렬한 전투',0,'#ff5252','#4a0000','<path d="M32 0 L38 8 L34 12 L40 18 L26 20 L30 14 L25 10 L30 4Z" fill="#cfd8dc" stroke="#78909c" stroke-width="1"/><path d="M32 6 L35 10 M31 12 L34 16" stroke="#4a0000" stroke-width="1.2" fill="none"/><path d="M33 2 Q35 6 33 10" stroke="#e53935" stroke-width="1" fill="none"/><circle cx="36" cy="12" r="1.2" fill="#e53935"/><circle cx="29" cy="16" r="1" fill="#b71c1c"/>','<rect x="30" y="14" width="4" height="46" fill="#5d4037"/><path d="M30 20 L34 24 M30 30 L34 34 M30 40 L34 44 M30 50 L34 54" stroke="#3e2723" stroke-width="1" fill="none"/><path d="M26 22 L38 22 L36 28 L28 28Z" fill="#8d6e63" stroke="#3e2723" stroke-width="1"/><path d="M26 22 L22 20 M38 22 L42 20 M28 28 L24 30 M36 28 L40 30" stroke="#4a0000" stroke-width="1.5" fill="none"/><path d="M30 34 Q32 38 30 42" stroke="#e53935" stroke-width="1" fill="none"/>',null,null,'red',null]);
+WS.crossbow.push(['전쟁',0,'#8d9c5a','#2b3018','<path d="M8 20 Q32 2 56 20" stroke="#3e4a2a" stroke-width="4" fill="none"/><path d="M8 20 Q32 6 56 20" stroke="#6b7a3a" stroke-width="1.5" fill="none" opacity="0.7"/><path d="M8 20 L32 28 L56 20" stroke="#9aa1b5" stroke-width="1.5" stroke-dasharray="2 2" fill="none"/><rect x="30" y="6" width="4" height="30" fill="#3e2723"/><path d="M32 2 L37 12 L27 12Z" fill="#b0bec5" stroke="#546e7a"/><path d="M32 12 V20" stroke="#546e7a" stroke-width="1.2"/><circle cx="14" cy="18" r="2" fill="#c62828"/><circle cx="50" cy="18" r="2" fill="#c62828"/><path d="M10 14 L14 18 M54 14 L50 18" stroke="#4a0000" stroke-width="1" fill="none"/>','<rect x="28" y="30" width="8" height="26" rx="2" fill="#3e2723"/><path d="M29 36 H35 M29 42 H35 M29 48 H35" stroke="#5d4037" stroke-width="1"/><path d="M24 34 H40 V38 H24Z" fill="#2b3018" stroke="#10151a" stroke-width="1"/><path d="M26 34 V38 M34 34 V38" stroke="#4a5a2a" stroke-width="1"/><path d="M30 52 Q32 56 30 58" stroke="#8d9c5a" stroke-width="1.5" fill="none"/><circle cx="32" cy="50" r="1.5" fill="#c62828"/>',null,null,'sand',null]);
+WS.multi.push(['맹렬한 전투',0,'#ff5252','#4a0000','','<rect x="24" y="36" width="16" height="26" rx="4" fill="#5d4037" stroke="#3e2723" stroke-width="1.2"/><path d="M26 42 h12 M26 48 h12 M26 54 h12" stroke="#3e2723" stroke-width="1.5"/><path d="M24 40 L20 38 M40 40 L44 38" stroke="#4a0000" stroke-width="1.5" fill="none"/><circle cx="32" cy="38" r="3.5" fill="#8d6e63" stroke="#3e2723" stroke-width="1.2"/><path d="M30 36 Q32 40 34 36" stroke="#e53935" stroke-width="1.2" fill="none"/><circle cx="29" cy="56" r="1.5" fill="#e53935"/><circle cx="35" cy="50" r="1" fill="#b71c1c"/>','<path d="M32 2 L37 10 L34 16 L38 22 L33 28 L36 34 L30 38 L28 34 L31 28 L27 22 L30 16 L26 10 L30 4Z" fill="#cfd8dc" stroke="#78909c" stroke-width="1.2"/><g transform="rotate(-38 32 40)"><path d="M32 14 L35 18 L33 26 L29 30 L27 24 L29 18Z" fill="#90a4ae" stroke="#546e7a" stroke-width="0.8"/><path d="M30 20 L33 24" stroke="#4a0000" stroke-width="1.2"/></g><g transform="rotate(42 32 40)"><path d="M30 16 L36 20 L34 28 L28 30 L27 24 L28 18Z" fill="#b0bec5" stroke="#546e7a" stroke-width="0.8"/><circle cx="32" cy="24" r="1" fill="#b71c1c"/></g><path d="M31 8 L34 12 M30 18 L33 22 M31 28 L34 32" stroke="#4a0000" stroke-width="1.3" fill="none"/><path d="M34 6 Q36 10 34 14" stroke="#e53935" stroke-width="1.2" fill="none"/><circle cx="35" cy="14" r="1.2" fill="#e53935"/><circle cx="29" cy="36" r="1" fill="#b71c1c"/>',null,null,'red',null]);
+
+function seasonXpNeeded(lv){
+  // 초반 완만, 후반 가파르게
+  return Math.floor(80 + lv * 35 + Math.pow(lv, 1.35) * 4);
+}
+
+function addSeasonXp(amount, doSave){
+  if(!S.season) S.season = {id:1, xp:0, lv:1, claimed:[]};
+  S.season.xp += amount;
+  let leveled = false;
+  while(true){
+    const need = seasonXpNeeded(S.season.lv);
+    if(S.season.xp < need) break;
+    S.season.xp -= need;
+    S.season.lv++;
+    leveled = true;
+    // 150 이후는 매 레벨 젬 자동 지급
+    if(S.season.lv > 150){
+      S.gems = (S.gems||0) + 2;
+      toast('📅 시즌 Lv.'+S.season.lv+'! 💎2 획득');
+    }
+  }
+  if(leveled) toast('📅 시즌 레벨 업! Lv.'+S.season.lv);
+  if(doSave !== false) save();
+}
+
+function seasonR(){
+  if(!S.season) S.season = {id:1, xp:0, lv:1, claimed:[]};
+  const se = S.season;
+  const need = seasonXpNeeded(se.lv);
+  const pct = Math.min(100, Math.floor(se.xp / need * 100));
+
+  let html = `<div class="sub" style="margin-bottom:8px">${SEASON_NAME}</div>
+    <div style="background:var(--card);border:2px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <b style="font-size:18px">시즌 레벨 ${se.lv}</b>
+        <span class="sub">${se.xp} / ${need} XP</span>
+      </div>
+      <div style="background:#1b1e29;border-radius:8px;height:14px;overflow:hidden">
+        <div style="background:linear-gradient(90deg,#ffc83d,#ff7043);height:100%;width:${pct}%;transition:width .3s"></div>
+      </div>
+      <div class="sub" style="margin-top:8px">게임을 플레이하면 시즌 경험치를 얻습니다. 레벨이 오르면 아래 보상을 받을 수 있어요.<br>150레벨 이후에는 매 레벨마다 💎2를 자동으로 받습니다.</div>
+    </div>
+    <h2>🎁 시즌 보상</h2>`;
+
+  // 보상 목록 (150 이후 무한 표시용 추가)
+  const rewards = [...SEASON_REWARDS];
+  if(se.lv >= 150){
+    rewards.push({lv: se.lv + 1, type:'gem', v:2, infinite:true});
+  }
+
+  // 가로 스크롤 카드
+  html += '<div class="srewards">' + rewards.map(r=>{
+    const claimed = se.claimed.includes(r.lv);
+    const can = se.lv >= r.lv && !claimed && !r.infinite;
+    const cls = claimed ? 'sreward claimed' : (can ? 'sreward can' : 'sreward');
+
+    // type별 아이콘 / 이름
+    let icon = '🎁', rname = '';
+    if(r.type==='coin'){ icon='🪙'; rname = `🪙 ${r.v}`; }
+    else if(r.type==='gem'){ icon='💎'; rname = `💎 ${r.v}`; }
+    else if(r.type==='tm'){ icon='🌳'; rname = `🌳 ${r.v}`; }
+    else if(r.type==='weapon'){ icon='🗡️'; rname = WM[r.v] ? WM[r.v].n : '무기'; }
+    else if(r.type==='skin'){
+      icon='🎨';
+      let wid = r.v[0], idx = r.v[1];
+      if(typeof idx !== 'number'){
+        idx = WS[wid] ? WS[wid].findIndex(k => k[0] === idx) + 1 : 0;
+      }
+      rname = (WS[wid] && WS[wid][idx-1]) ? WS[wid][idx-1][0] : '스킨';
+    }
+    else if(r.type==='modifier'){ icon='🧪'; rname = (MODS.find(m=>m.id===r.v)||{}).n || '모디파이어'; }
+    if(r.infinite){ icon='💎'; rname = '💎 2 (매 레벨)'; }
+
+    return `<div class="${cls}">
+      <div class="lv">Lv.${r.lv}</div>
+      <div class="icon">${icon}</div>
+      <div class="rname">${rname}</div>
+      <button ${can?'':'disabled'} onclick="claimSeason(${r.lv})">${claimed?'✅ 수령':can?'받기':'잠김'}</button>
+    </div>`;
+  }).join('') + '</div>';
+
+  $('sn').innerHTML = html;
+  syncC();
+}
+
+function claimSeason(lv){
+  const se = S.season;
+  if(se.lv < lv || se.claimed.includes(lv)) return;
+  const r = SEASON_REWARDS.find(x=>x.lv===lv);
+  if(!r) return;
+
+  // type별 지급 처리
+  if(r.type==='coin'){ S.coins += r.v; }
+  else if(r.type==='gem'){ S.gems = (S.gems||0) + r.v; }
+  else if(r.type==='tm'){ S.tm = (S.tm||0) + r.v; }
+  else if(r.type==='weapon'){
+    if(!S.owned.includes(r.v)) S.owned.push(r.v);
+  }
+  else if(r.type==='skin'){
+    let wid, idx;
+    if(Array.isArray(r.v)){
+      wid = r.v[0];
+      if(typeof r.v[1] === 'number'){
+        idx = r.v[1];   // 숫자면 인덱스 그대로
+      } else {
+        // 문자열이면 이름으로 인덱스 조회 (1부터)
+        idx = WS[wid] ? WS[wid].findIndex(k => k[0] === r.v[1]) + 1 : 0;
+      }
+    }
+    if(idx > 0){
+      const key = wid + ':' + idx;
+      if(!S.skins.includes(key)) S.skins.push(key);
+    }
+  }
+  else if(r.type==='modifier'){
+    if(!S.mods.includes(r.v)) S.mods.push(r.v);
+  }
+
+  se.claimed.push(lv);
+  save(); chk(); seasonR(); snd('ach');
+  toast('🎁 시즌 보상 수령!');
+}
+
+// 영구 젬상점 버프 적용
+function applyGshop(g){
+  if(S.gshop.pd5) g.pd *= 1.05;
+  if(S.gshop.ps4) g.ps *= 0.96;
+  if(S.gshop.pr4) g.pr *= 1.04;
+  if(S.gshop.gold30) g.gold += 30;
+  if(S.gshop.lives1) g.lives += 1;
+}
 
 // ============================================================
 // 11) 업그레이드 트리 (그래프형)
@@ -1337,10 +1616,14 @@ function startGame(){
  //    - 임파서블 난이도 (일반 모드) → 강제 무의 경지
  //    - '무의 경지' 모디파이어 선택 → 트리 무효 (코인 x2.5는 모디파이어에서 이미 적용됨)
  const isImpossible = !ch && !sp && d.n === '임파서블';
- const noTree = isImpossible || S.modOn.includes('notree');
+ const noTree = isImpossible
+   || S.modOn.includes('notree')          // 일반 모드 선택
+   || (ch && ch.mod === 'notree');        // ★ 챌린지 모디파이어
  if(!noTree){
    applyTree(G);
  }
+ // 젬 상점 영구 버프
+ applyGshop(G);
  // 임파서블은 추가 보상 2.5배 (무의 경지 모디파이어 보상과 별개)
  if(isImpossible){
    G.cm *= 2.5;
@@ -1416,7 +1699,17 @@ function end(win,quit){
    else{S.st.wins++;if(G.di>=2)S.st.hard++;if(G.di==4)S.st.hell=1;if(G.di==6)S.st.imp=1;if(!G.leak)S.st.flaw=(S.st.flaw||0)+1}
   }
  }
- S.coins+=earn;save();chk();
+ S.coins+=earn;
+ // 시즌 경험치
+ if(!quit){
+   let sxp = G.wave * 8 + (win ? 80 : 20);
+   if(G.di >= 3) sxp = Math.round(sxp * 1.3);
+   if(G.di >= 5) sxp = Math.round(sxp * 1.5);
+   if(G.special) sxp = Math.round(sxp * 1.4);
+   if(G.inf) sxp = Math.round(sxp * 0.7);
+   addSeasonXp(sxp);
+ }
+ save();chk();
  $('ot').textContent=quit?'전투 종료':win?'🏆 승리!':(G.inf?'♾ 종료':'💀 패배...');
  $('od').textContent=`도달 웨이브: ${G.wave} · 획득 코인: 🪙 ${earn}${G.cm&&G.cm!=1?' (x'+G.cm.toFixed(2)+')':''}${rw}`;
  $('over').style.display='flex';if(G.rv)setTimeout(()=>reveal(G.rv),500);
@@ -1455,19 +1748,118 @@ function update(dt){
       G.fx.push({type:'arc',x:t.x,y:t.y,a:t.aim,r:THRUST.includes(t.cur||t.id)?s.range*.75:Math.min(s.range,75)+10,t:.25,m:.25,th:THRUST.includes(t.cur||t.id)});
     }
     
-    const gm=ww.g;for(const e of tg.slice(0,ww.hits+(gm=='pierce'?1:0))){let d2=dm;if(gm=='crit'&&Math.random()<.25)d2*=2;if(gm=='dbl'&&Math.random()<.3)d2*=2;if(gm&&gm.includes('boss')&&e.k.r>=30)d2*=1.6;if(gm&&gm.includes('bleed')){e.bl=4;e.bd=dm*.18}if(gm && gm.includes('burn')){ e.burn = 5; e.bdmg = dm * 0.1; }if(gm && gm.includes('laev')){
-    if(e.k.r >= 30) d2 *= 3;  // 보스 3배
-    else d2 *= 0.5;            // 일반 적 절반
-  }if(gm && gm.includes('bayonet')){
-    const dist = Math.hypot(e.x - t.x, e.y - t.y);
-    if(dist < 70) { e.bl = 4; e.bd = dm * 0.2; }
-  }if(e.k.r>=30)d2*=(G.bd||1);d2*=1-(e.k.df||0)/100;if(gm=='exec'&&e.hp<e.mx*.2)d2=e.hp+1;e.hp-=d2;if(gm=='slow')e.slow=1;if(gm=='knock')e.d=Math.max(0,e.d-30);e.hit=.12;e.by=t;G.fx.push({type:'dmg',x:e.x+(Math.random()-.5)*10,y:e.y-e.k.r,v:Math.round(d2),c:d2>dm*1.4,t:.7,m:.7});G.fx.push({type:'spark',x:e.x,y:e.y,t:.3,m:.3});if(fk&&PF[fk])G.fx.push({type:'p',k:fk,x:e.x,y:e.y,t:.55,m:.55,s:rs()})}
+    // 새 기믹 시스템
+    const gims = normalizeGims(ww.g);
+    let hitCount = ww.hits;
+    for(const g of gims) if(g.type==='pierce') hitCount += (g.count||1);
+
+    const targets = tg.slice(0, hitCount);
+    for(let ti=0; ti<targets.length; ti++){
+      const e = targets[ti];
+      let d2 = dm;
+      let isCrit = false;
+
+      // 기믹 사전 처리 (피해 배수)
+      for(const g of gims){
+        if(g.type==='crit' && Math.random() < (g.chance||0.25)){ d2 *= (g.mult||2); isCrit = true; }
+        if(g.type==='dbl' && Math.random() < (g.chance||0.3)) d2 *= (g.mult||2);
+        if(g.type==='boss' && e.k.r>=30) d2 *= (g.mult||1.6);
+        if(g.type==='laev') d2 *= (e.k.r>=30 ? (g.bossMult||3) : (g.normalMult||0.5));
+        if(g.type==='exec' && e.hp < e.mx * (g.threshold||0.2)) d2 = e.hp + 1;
+      }
+
+      // 보스 추가 피해 (트리)
+      if(e.k.r>=30) d2 *= (G.bd||1);
+      // 방어력 + shred
+      let def = (e.k.df||0);
+      for(const g of gims) if(g.type==='shred') def = Math.max(0, def - (g.amount||15));
+      d2 *= 1 - def/100;
+
+      e.hp -= d2;
+
+      // 기믹 사후 처리 (상태이상)
+      for(const g of gims){
+        if(g.type==='bleed'){ e.bl = g.dur||4; e.bd = dm * (g.ratio||0.18); }
+        if(g.type==='burn'){ e.burn = g.dur||5; e.bdmg = dm * (g.ratio||0.1); }
+        if(g.type==='slow') e.slow = g.dur||1;
+        if(g.type==='stun'){ e.slow = Math.max(e.slow||0, g.dur||0.6); }
+        if(g.type==='knock') e.d = Math.max(0, e.d - (g.dist||30));
+        if(g.type==='bayonet'){
+          const dist = Math.hypot(e.x - t.x, e.y - t.y);
+          if(dist < (g.range||70)){ e.bl = g.dur||4; e.bd = dm * (g.ratio||0.2); }
+        }
+        if(g.type==='vamp'){
+          G.gold += Math.round(d2 * (g.ratio||0.15));
+        }
+        if(g.type==='splash' && ti===0){
+          const rad = g.radius||50, ratio = g.ratio||0.4;
+          for(const oe of G.en){
+            if(oe===e || oe.hp<=0) continue;
+            if(Math.hypot(oe.x-e.x, oe.y-e.y) <= rad){
+              oe.hp -= d2 * ratio;
+              oe.hit = 0.12;
+              G.fx.push({type:'dmg',x:oe.x,y:oe.y-oe.k.r,v:Math.round(d2*ratio),c:false,t:.5,m:.5});
+            }
+          }
+        }
+        if(g.type==='chain' && ti===0){
+          let last = e, left = g.count||2, ratio = g.ratio||0.6, curDmg = d2;
+          for(let c=0;c<left;c++){
+            let best=null, bestD=9999;
+            for(const oe of G.en){
+              if(oe===last || oe.hp<=0) continue;
+              const dd = Math.hypot(oe.x-last.x, oe.y-last.y);
+              if(dd < 120 && dd < bestD){ best=oe; bestD=dd; }
+            }
+            if(!best) break;
+            curDmg *= ratio;
+            best.hp -= curDmg;
+            best.hit = 0.12;
+            G.fx.push({type:'dmg',x:best.x,y:best.y-best.k.r,v:Math.round(curDmg),c:false,t:.5,m:.5});
+            G.fx.push({type:'p',k:'lightning',x:best.x,y:best.y,t:.4,m:.4,s:rs()});
+            last = best;
+          }
+        }
+      }
+
+      e.hit = 0.12;
+      e.by = t;
+      G.fx.push({type:'dmg',x:e.x+(Math.random()-.5)*10,y:e.y-e.k.r,v:Math.round(d2),c:isCrit||d2>dm*1.4,t:.7,m:.7});
+      G.fx.push({type:'spark',x:e.x,y:e.y,t:.3,m:.3});
+      if(fk && PF[fk]) G.fx.push({type:'p',k:fk,x:e.x,y:e.y,t:.55,m:.55,s:rs()});
+    }
    }
   }
  }
  for(const f of G.fx)f.t-=dt;G.fx=G.fx.filter(f=>f.t>0);
 }
-function killed(e){snd('kill');S.st.k++;if(e.k.r>=30)S.st.boss++;S.st.wk=S.st.wk||{};if(e.by)S.st.wk[e.by.id]=(S.st.wk[e.by.id]||0)+1;dq('kill',1);if(e.k.r>=30)dq('boss',1);if(e.by)dq('w:'+e.by.id,1);chk();G.gold+=Math.round(e.k.g*(G.pg||1));dq('gold',e.k.g);if(e.by)e.by.k++;hud();sideLite();G.fx.push({type:'coin',x:e.x,y:e.y,t:.6,m:.6,v:e.k.g});return false}
+
+// 기믹 정규화 (구버전 문자열 호환 + 새 배열 형식)
+function normalizeGims(g){
+  if(!g) return [];
+  if(Array.isArray(g)) return g.map(x => typeof x==='string' ? {type:x} : x);
+  if(typeof g === 'string'){
+    return g.split('+').map(s => {
+      s = s.trim();
+      if(s==='crit') return {type:'crit', chance:0.25, mult:2};
+      if(s==='boss') return {type:'boss', mult:1.6};
+      if(s==='bleed') return {type:'bleed', dur:4, ratio:0.18};
+      if(s==='burn') return {type:'burn', dur:5, ratio:0.1};
+      if(s==='slow') return {type:'slow', dur:1};
+      if(s==='knock') return {type:'knock', dist:30};
+      if(s==='exec') return {type:'exec', threshold:0.2};
+      if(s==='laev') return {type:'laev', bossMult:3, normalMult:0.5};
+      if(s==='bayonet') return {type:'bayonet', range:70, dur:4, ratio:0.2};
+      if(s==='dbl') return {type:'dbl', chance:0.3, mult:2};
+      return {type:s};
+    });
+  }
+  return [];
+}
+function killed(e){snd('kill');S.st.k++;if(e.k.r>=30)S.st.boss++;S.st.wk=S.st.wk||{};if(e.by)S.st.wk[e.by.id]=(S.st.wk[e.by.id]||0)+1;dq('kill',1);if(e.k.r>=30)dq('boss',1);if(e.by)dq('w:'+e.by.id,1);chk();G.gold+=Math.round(e.k.g*(G.pg||1));dq('gold',e.k.g);if(e.by)e.by.k++;
+ // 시즌 XP (처치당 소량, 저장은 게임 종료 시)
+ if(e.k.r>=30) addSeasonXp(12, false); else addSeasonXp(1, false);
+ hud();sideLite();G.fx.push({type:'coin',x:e.x,y:e.y,t:.6,m:.6,v:e.k.g});return false}
 const rs=()=>Array.from({length:10},Math.random);
 const PF={fire:['rise',['#ff9800','#ffeb3b','#ff5722']],poison:['rise',['#76ff03','#33691e']],bubble:['bub',['#80deea']],gold:['burst',['#ffd54f','#fff59d']],red:['burst',['#e53935','#ff8a80']],sand:['drift',['#e0c080','#c8a060']],petal:['fall',['#f8bbd0','#f48fb1']],purple:['burst',['#b388ff','#e040fb','#7c4dff']],water:['fall',['#4fc3f7','#0288d1']],nail:['nail',['#cfd8dc']],binary:['bin',['#00e676']],lightning:['bolt',['#fff59d']],multi:['multi',['#fff']],trail:['burst',['#fff','#e0f7fa']],ding:['burst',['#fff59d','#b0bec5']],chain:['burst',['#cfd8dc']]};
 function pfx(f,p){const[m,cs]=PF[f.k]||PF.gold,q=1-p,x=f.x,y=f.y,s=f.s||rs();cx.save();cx.globalAlpha=Math.min(1,p*1.5);
