@@ -1110,8 +1110,8 @@ function skinAct(id,i){
   if(i>0 && !S.skins.includes(key)){
     const k = WS[id][i-1];
     if(!k) return;
-    if(k[10] && !S.ach[k[10]]) return;   // 업적 조건
-    if(k[1] === 0){                       // ← 추가: 가격 0 = 보상 전용
+    if(k[10] && !S.ach[k[10]]) return;
+    if(k[1] === 0){
       toast('시즌 보상으로만 획득 가능합니다');
       return;
     }
@@ -1121,7 +1121,12 @@ function skinAct(id,i){
     S.skins.push(key);
   }
   S.skin[id]=i;
-  // ...
+  save();                          // ← 복원
+  chk();                           // ← 복원
+  if(!$('shop').classList.contains('hide')) shopR();       // ← 복원
+  if(!$('loadout').classList.contains('hide')) loadR();    // ← 복원
+  if(skOpen) skm(skOpen);          // ← 복원
+  syncC();                         // ← 복원
 }
 function detail(id){const w=WM[id],lv=[1,2,3,4].map(l=>{const k=l-1;return `Lv.${l}: 피해 ${w.pool?'랜덤':Math.round(w.dmg*Math.pow(1.45,k))} · 사거리 ${w.range+k*8} · 간격 ${(w.cd*Math.pow(.93,k)).toFixed(2)}s`}).join('<br>'),up=[1,2,3].map(k=>Math.round(w.cost*.7*k));
  skOpen=null;$('skmb').innerHTML=`<h2 style="margin-top:0;color:${TC[w.t]}">${TIER[w.t]} 등급</h2><div style="display:flex;gap:12px;align-items:center;justify-content:center">${svg(id,skOf(id))}<h1 style="margin:0">${w.n}</h1></div><div class="sub">${w.d}</div><div style="text-align:left;margin:10px 0;line-height:1.7;font-size:13px">설치비 💰${w.cost}${w.price!=null?' · 상점가 🪙'+w.price:''}<br>타격 수 ${w.hits>9?'범위 전체':w.hits}${w.pool?' (공격마다 무기 무작위)':''}${w.gd?'<br>✨ '+w.gd:''}<br>강화비용 💰${up.join(' → ')}<br>${lv}<br>처치 ${wk(id)}회${w.pool?'<br>사용 무기: '+w.pool.map(p=>WM[p].n).join(', '):''}<br>보유 스킨 ${S.skins.filter(s=>s.startsWith(id+':')).length}개 / 전체 ${WS[id].length}개</div><button class="alt" onclick="$('skm').style.display='none'">닫기</button>`;$('skm').style.display='flex'}
