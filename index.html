@@ -272,19 +272,33 @@ bayonet:['<rect x="28" y="42" width="8" height="14" rx="1" fill="#6d4c41"/><rect
    32,44
  ],
   slingshot:[
-    // [0] Y자 나무 손잡이
-    '<path d="M32 60 L32 36 M32 36 L24 20 M32 36 L40 20" stroke="#8d6e63" stroke-width="4" fill="none" stroke-linecap="round"/>',
-    // [1] 고무줄 + 돌
-    `<path d="M24 20 Q32 28 40 20" stroke="#e53935" stroke-width="2" fill="none"/>
-     <circle cx="32" cy="26" r="5" fill="#9e9e9e" stroke="#616161" stroke-width="1.5"/>`,
+    // [0] 나무 Y자 손잡이: 감은 그립 + 갈래 끝 고정 매듭
+    '<path d="M32 62 L32 38" stroke="#6d4c41" stroke-width="6" stroke-linecap="round"/>'+
+    '<path d="M32 42 Q30 32 22 18 M32 42 Q34 32 42 18" stroke="#8d6e63" stroke-width="5" fill="none" stroke-linecap="round"/>'+
+    '<path d="M31 40 Q29 30 22 20 M33 40 Q35 30 42 20" stroke="#a1887f" stroke-width="1.2" fill="none" stroke-linecap="round"/>'+
+    '<rect x="29" y="46" width="6" height="13" rx="2" fill="#4e342e"/>'+
+    '<path d="M29 49 h6 M29 52 h6 M29 55 h6" stroke="#8d6e63" stroke-width="1"/>'+
+    '<circle cx="22" cy="18" r="3" fill="#a1887f" stroke="#5d4037"/><circle cx="42" cy="18" r="3" fill="#a1887f" stroke="#5d4037"/>'+
+    '<rect x="20" y="19" width="4" height="3" fill="#c62828"/><rect x="40" y="19" width="4" height="3" fill="#c62828"/>',
+    // [1] 고무줄 + 가죽 주머니 + 돌
+    `<path d="M22 18 L32 31 L42 18" stroke="#e53935" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+     <path d="M26 28 Q32 22 38 28 Q32 36 26 28Z" fill="#5d4037" stroke="#3e2723" stroke-width="1.2"/>
+     <circle cx="32" cy="27" r="4.5" fill="#9e9e9e" stroke="#616161" stroke-width="1.5"/>
+     <path d="M29.5 25.5 q1.5 -2 3.5 -1.5" stroke="#e0e0e0" stroke-width="1.2" fill="none"/>`,
     32, 50
   ],
   // 돌팔매
   sling:[
-    '<path d="M30 60 Q20 40 32 30 Q44 40 34 60" stroke="#6d4c41" stroke-width="3" fill="none"/>',
-    `<circle cx="32" cy="16" r="7" fill="#9e9e9e" stroke="#616161" stroke-width="1.5"/>
-     <path d="M20 10 Q14 4 8 10" stroke="#cfd8dc" stroke-width="2" fill="none"/>
-     <path d="M44 10 Q50 4 56 10" stroke="#cfd8dc" stroke-width="2" fill="none"/>`,
+    // [0] 손에 거는 손가락 고리 + 매듭 + 끈 꼬리
+    '<circle cx="32" cy="55" r="6" fill="none" stroke="#6d4c41" stroke-width="3"/>'+
+    '<rect x="29" y="46" width="6" height="5" rx="2" fill="#8d6e63" stroke="#4e342e"/>'+
+    '<path d="M32 61 Q27 64 29 67" stroke="#bcaaa4" stroke-width="1.5" fill="none"/>',
+    // [1] 이중 끈 + 가죽 주머니 + 돌 + 풀린 끈 끝
+    `<path d="M32 50 Q26 34 32 20 M32 50 Q38 34 32 20" stroke="#bcaaa4" stroke-width="2" fill="none"/>
+     <path d="M32 21 Q41 12 47 16" stroke="#bcaaa4" stroke-width="1.5" fill="none"/>
+     <path d="M25 15 Q32 8 39 15 Q32 26 25 15Z" fill="#6d4c41" stroke="#3e2723" stroke-width="1.2"/>
+     <circle cx="32" cy="15" r="5" fill="#9e9e9e" stroke="#616161" stroke-width="1.5"/>
+     <path d="M29 13 q2 -3 5 -2" stroke="#e0e0e0" stroke-width="1.2" fill="none"/>`,
     32, 50
   ],
   // 석궁
@@ -296,11 +310,19 @@ bayonet:['<rect x="28" y="42" width="8" height="14" rx="1" fill="#6d4c41"/><rect
      <path d="M32 4 L36 12 H28Z" fill="#eceff1" stroke="#78909c"/>`,
     32, 34
   ],
-  // 발리송
   butterfly:[
-    '<rect x="22" y="30" width="4" height="26" rx="2" fill="#616161"/><rect x="38" y="30" width="4" height="26" rx="2" fill="#616161"/><circle cx="32" cy="32" r="3" fill="#424242"/>',
-    `<path d="M32 30 L36 18 L34 2 L30 2 L28 18Z" fill="#cfd8dc" stroke="#78909c"/>
-     <path d="M32 6 V26" stroke="#90a4ae"/>`,
+    // [0] 양쪽 손잡이: 홈 구멍 + 끝 핀
+    '<rect x="23" y="32" width="9" height="27" rx="3" fill="#455a64" stroke="#263238"/>'+
+    '<rect x="32" y="32" width="9" height="27" rx="3" fill="#546e7a" stroke="#263238"/>'+
+    '<circle cx="27.5" cy="42" r="2" fill="#1b1e29"/><circle cx="27.5" cy="50" r="2" fill="#1b1e29"/>'+
+    '<circle cx="36.5" cy="42" r="2" fill="#1b1e29"/><circle cx="36.5" cy="50" r="2" fill="#1b1e29"/>'+
+    '<circle cx="27.5" cy="57" r="1.3" fill="#cfd8dc"/><circle cx="36.5" cy="57" r="1.3" fill="#cfd8dc"/>',
+    // [1] 날 + 볼스터 + 중심 핀
+    `<path d="M29 30 L29 22 Q28 10 33 1 Q37 10 36 22 L36 30Z" fill="#cfd8dc" stroke="#78909c"/>
+     <path d="M33 3 Q36 12 35.5 24 L33 24Z" fill="#eceff1"/>
+     <path d="M33 5 Q34 14 33 27" stroke="#90a4ae" stroke-width="1"/>
+     <rect x="28" y="28" width="9" height="4" rx="1" fill="#90a4ae" stroke="#546e7a"/>
+     <circle cx="32.5" cy="30" r="2.2" fill="#ffb300" stroke="#b26a00"/>`,
     32, 30
   ],
   // 물총
@@ -314,6 +336,71 @@ bayonet:['<rect x="28" y="42" width="8" height="14" rx="1" fill="#6d4c41"/><rect
 });
 ART.poseidon=[ART.trident[0].replace('#8d6e63','#00acc1'),ART.trident[1].replace(/#cfd8dc/g,'#80deea').replace(/#78909c/g,'#006064'),32,30];
 ART.gaebolg=[ART.spear[0].replace('#8d6e63','#b71c1c'),`<path d="M32 0 L39 18 L32 14 L25 18Z" ${BL}/><path d="M32 14 L38 26 L32 23 L26 26Z" ${BL}/>`,32,18];
+Object.assign(ART,{
+ cupidbow:[
+  '<path d="M8 44 Q32 8 56 44" stroke="#f06292" stroke-width="4" fill="none"/><path d="M8 44 L32 56 L56 44" stroke="#fce4ec" stroke-width="1.5" fill="none"/><rect x="29" y="50" width="6" height="10" rx="2" fill="#ad1457"/>',
+  '<rect x="31" y="16" width="2" height="34" fill="#8d6e63"/><path d="M32 12 C25 2 20 12 32 20 C44 12 39 2 32 12Z" fill="#ff4081" stroke="#c2185b"/><path d="M29 50 L32 46 L35 50Z" fill="#f48fb1"/>',32,50],
+ chocohammer:[
+  '<rect x="30" y="8" width="5" height="52" fill="#6d4c41"/>',
+  '<rect x="14" y="4" width="38" height="20" rx="3" fill="#5d4037" stroke="#3e2723"/><path d="M14 14 H52 M24 4 V24 M33 4 V24 M42 4 V24" stroke="#3e2723"/><rect x="16" y="6" width="6" height="6" fill="#8d6e63"/>',33,14],
+ rosewhip:[
+  '<rect x="29" y="44" width="6" height="16" rx="2" fill="#2e7d32"/><circle cx="32" cy="60" r="3" fill="#c62828"/>',
+  '<path d="M32 44 Q52 38 38 24 Q22 12 40 4" stroke="#388e3c" stroke-width="3" fill="none"/><path d="M44 34 l4 -2 M30 18 l-4 -2 M38 8 l3 -3" stroke="#1b5e20" stroke-width="1.5"/><circle cx="42" cy="4" r="5" fill="#e53935" stroke="#7f0000"/><circle cx="42" cy="4" r="2" fill="#ff8a80"/>',32,44],
+ topspin:[
+  '<path d="M32 60 Q26 52 32 44" stroke="#e53935" stroke-width="2" fill="none"/><rect x="29" y="44" width="6" height="6" rx="2" fill="#ffb300"/>',
+  '<path d="M32 40 L22 22 H42Z" fill="#f44336" stroke="#b71c1c"/><ellipse cx="32" cy="20" rx="14" ry="5" fill="#2196f3" stroke="#0d47a1"/><rect x="30" y="8" width="4" height="12" fill="#ffb300"/><path d="M24 28 H40" stroke="#ffeb3b" stroke-width="2"/>',32,30],
+ bubblegun:[
+  '<rect x="28" y="40" width="8" height="18" rx="2" fill="#f06292"/><rect x="26" y="44" width="12" height="4" rx="1" fill="#ec407a"/>',
+  '<rect x="22" y="26" width="20" height="14" rx="3" fill="#ba68c8" stroke="#6a1b9a"/><circle cx="32" cy="33" r="5" fill="#e1bee7"/><circle cx="32" cy="14" r="5" fill="none" stroke="#80deea" stroke-width="1.5"/><circle cx="26" cy="6" r="3" fill="none" stroke="#80deea"/><circle cx="38" cy="4" r="2.5" fill="none" stroke="#80deea"/>',32,40],
+ ddakji:[
+  '<rect x="29" y="46" width="6" height="12" rx="2" fill="#6d4c41"/>',
+  '<rect x="16" y="8" width="32" height="32" rx="2" fill="#e53935" stroke="#7f0000"/><rect x="22" y="14" width="20" height="20" fill="#ffeb3b" stroke="#f57f17"/><path d="M26 24 L32 18 L38 24 L32 30Z" fill="#1565c0"/>',32,46],
+ taegeuk:[
+  '<rect x="30" y="14" width="4" height="46" fill="#8d6e63"/><circle cx="32" cy="62" r="2.5" fill="#ffb300"/>',
+  '<path d="M32 0 L38 12 L26 12Z" fill="#eceff1" stroke="#78909c"/><rect x="34" y="14" width="22" height="16" fill="#fff" stroke="#9e9e9e"/><path d="M41 22 A4 4 0 0 1 49 22Z" fill="#e53935"/><path d="M41 22 A4 4 0 0 0 49 22Z" fill="#1565c0"/><path d="M36 16 h4 M36 18 h4 M36 20 h4 M50 24 h4 M50 26 h4 M50 28 h4" stroke="#212121" stroke-width="1"/>',32,18],
+ mugunghwa:[
+  '<rect x="30" y="26" width="5" height="34" fill="#6d4c41"/>',
+  '<g fill="#f8bbd0" stroke="#ad1457"><circle cx="32.5" cy="6" r="7"/><circle cx="42" cy="13" r="7"/><circle cx="38" cy="24" r="7"/><circle cx="27" cy="24" r="7"/><circle cx="23" cy="13" r="7"/></g><circle cx="32.5" cy="16" r="5" fill="#d81b60"/><circle cx="32.5" cy="16" r="2" fill="#ffeb3b"/>',32,26],
+ torch:[
+  '<rect x="29" y="26" width="6" height="34" fill="#6d4c41"/><rect x="27" y="26" width="10" height="4" fill="#4e342e"/>',
+  '<path d="M32 0 Q44 12 40 24 Q32 30 24 24 Q20 12 32 0Z" fill="#ff7043" stroke="#bf360c"/><path d="M32 8 Q38 16 35 24 Q32 26 29 24 Q27 16 32 8Z" fill="#ffeb3b"/>',32,26],
+ brush:[
+  '<rect x="30" y="18" width="4" height="42" fill="#9ccc65" stroke="#558b2f"/><path d="M30 30 h4 M30 44 h4" stroke="#558b2f"/>',
+  '<path d="M32 0 Q38 8 36 18 L28 18 Q26 8 32 0Z" fill="#212121" stroke="#000"/><rect x="29" y="16" width="6" height="4" fill="#fbc02d"/>',32,18],
+ inkstone:[
+  '<rect x="30" y="20" width="5" height="40" fill="#6d4c41"/>',
+  '<rect x="14" y="2" width="38" height="20" rx="3" fill="#37474f" stroke="#102027"/><ellipse cx="33" cy="12" rx="12" ry="5" fill="#0d0d0d"/><path d="M18 6 h6" stroke="#78909c" stroke-width="2"/>',33,20],
+ giyeok:[
+  '<rect x="30" y="10" width="4" height="50" fill="#8d6e63"/>',
+  `<path d="M30 0 H56 V34 H48 V10 H30Z" ${BL}/>`,32,10],
+ pepero:[
+  '<rect x="27" y="42" width="10" height="18" rx="1" fill="#c62828" stroke="#7f0000"/><path d="M27 48 h10" stroke="#fff"/><circle cx="32" cy="54" r="3" fill="#ffeb3b"/>',
+  '<rect x="30" y="14" width="4" height="30" fill="#d7b46a" stroke="#a1887f"/><rect x="29.5" y="0" width="5" height="22" rx="2.5" fill="#5d4037" stroke="#3e2723"/><path d="M31 4 v14" stroke="#8d6e63"/>',32,44],
+ garaetteok:[
+  '<rect x="28" y="40" width="8" height="20" rx="4" fill="#f5f5f5" stroke="#bdbdbd"/><rect x="28" y="50" width="8" height="3" fill="#e53935"/>',
+  '<rect x="27" y="2" width="10" height="42" rx="5" fill="#fafafa" stroke="#bdbdbd"/><path d="M29 10 V38" stroke="#eeeeee" stroke-width="2"/>',32,44],
+ chocostick:[
+  '<rect x="27" y="42" width="10" height="16" rx="2" fill="#c62828"/><rect x="27" y="44" width="10" height="3" fill="#ffeb3b"/>',
+  '<rect x="23" y="8" width="4" height="36" rx="2" fill="#8d6e63"/><rect x="30" y="2" width="4" height="42" rx="2" fill="#5d4037"/><rect x="37" y="8" width="4" height="36" rx="2" fill="#8d6e63"/>',32,44],
+ yutnori:[
+  '<rect x="28" y="44" width="8" height="16" rx="3" fill="#8d6e63"/>',
+  '<rect x="16" y="6" width="6" height="36" rx="3" fill="#d7b46a" stroke="#8d6e63"/><rect x="26" y="2" width="6" height="40" rx="3" fill="#d7b46a" stroke="#8d6e63"/><rect x="36" y="2" width="6" height="40" rx="3" fill="#f5deb3" stroke="#8d6e63"/><rect x="46" y="6" width="6" height="36" rx="3" fill="#f5deb3" stroke="#8d6e63"/>',32,44],
+ sebae:[
+  '<rect x="29" y="44" width="6" height="14" rx="2" fill="#6d4c41"/>',
+  '<rect x="18" y="8" width="28" height="34" rx="3" fill="#e53935" stroke="#7f0000"/><path d="M18 20 H46" stroke="#ffd54f" stroke-width="2"/><circle cx="32" cy="30" r="5" fill="#ffd54f" stroke="#f57f17"/>',32,44],
+ tteokguk:[
+  '<rect x="30" y="26" width="4" height="34" fill="#8d6e63"/>',
+  '<ellipse cx="32" cy="14" rx="16" ry="12" fill="#eceff1" stroke="#78909c"/><ellipse cx="32" cy="12" rx="12" ry="7" fill="#fff8e1"/><circle cx="27" cy="12" r="3" fill="#fff" stroke="#bdbdbd"/><circle cx="36" cy="11" r="3" fill="#fff" stroke="#bdbdbd"/><path d="M26 2 q2 -4 0 -6 M34 2 q2 -4 0 -6" stroke="#cfd8dc" stroke-width="1.5" fill="none"/>',32,26],
+ songpyeon:[
+  '<rect x="29" y="44" width="6" height="14" rx="2" fill="#6d4c41"/>',
+  '<path d="M12 36 Q32 -2 52 36Z" fill="#c8e6c9" stroke="#2e7d32"/><path d="M16 34 Q32 6 48 34" stroke="#a5d6a7" fill="none"/><circle cx="32" cy="24" r="2.5" fill="#fff" opacity=".7"/>',32,44],
+ moonmallet:[
+  '<rect x="30" y="22" width="5" height="38" fill="#8d6e63"/>',
+  '<rect x="14" y="2" width="38" height="20" rx="8" fill="#a1887f" stroke="#5d4037"/><circle cx="33" cy="12" r="6" fill="#fff9c4" stroke="#fbc02d"/>',33,22],
+ ganggang:[
+  '<rect x="30" y="38" width="4" height="22" fill="#6d4c41"/>',
+  '<path d="M32 40 L6 20 Q32 -6 58 20Z" fill="#e53935" stroke="#7f0000"/><path d="M32 40 L14 14 M32 40 L32 4 M32 40 L50 14" stroke="#ffd54f"/><path d="M6 20 Q32 -6 58 20" stroke="#1565c0" stroke-width="3" fill="none"/>',32,40]
+});
 
 // ============================================================
 // 2) 무기 데이터 (WP) — 원본 그대로
@@ -403,7 +490,28 @@ const WP=[
  {id:'sling',n:'돌팔매',t:1,cost:70,dmg:20,range:150,hits:1,cd:0.5,price:500,d:'빙글빙글 돌려 빠르게 돌을 던지는 무기'},
  {id:'crossbow',n:'석궁',t:3,cost:200,dmg:160,range:200,hits:1,cd:1.2,price:900,d:'긴 사거리로 멀리 있는 적을 공격한다'},
  {id:'butterfly',n:'발리송',t:3,cost:170,dmg:70,range:100,hits:1,cd:0.5,price:700,d:'빠르게 적을 찌르는 무기'},
- {id:'watergun',n:'물총',t:2,cost:100,dmg:7,range:150,hits:3,cd:0.1,price:800,d:'빠르게 3명의 적을 적시는 무기'}
+ {id:'watergun',n:'물총',t:2,cost:100,dmg:7,range:150,hits:3,cd:0.1,price:800,d:'빠르게 3명의 적을 적시는 무기'},
+ {id:'cupidbow',n:'큐피드의 활',t:8,cost:300,dmg:75,range:260,cd:1,hits:2,price:null,d:'[발렌타인 한정] 하트 화살이 두 적을 꿰뚫는 활'},
+ {id:'chocohammer',n:'초콜릿 망치',t:8,cost:260,dmg:130,range:80,cd:1.3,hits:99,g:'slow',gd:'끈적한 초콜릿 – 맞은 적 1초간 둔화',price:null,d:'[발렌타인 한정] 달콤하게 짓누르는 망치'},
+ {id:'rosewhip',n:'장미 채찍',t:8,cost:220,dmg:30,range:110,cd:.45,hits:3,g:'bleed',gd:'장미 가시 – 맞은 적 출혈',price:null,d:'[발렌타인 한정] 가시 돋친 장미 덩굴'},
+ {id:'topspin',n:'팽이',t:8,cost:200,dmg:55,range:100,cd:.5,hits:3,price:null,d:'[어린이날 한정] 빙글빙글 돌며 3명을 튕겨내는 팽이'},
+ {id:'bubblegun',n:'비눗방울 총',t:8,cost:240,dmg:12,range:170,cd:.12,hits:3,g:'slow',gd:'끈끈한 거품 – 맞은 적 1초간 둔화',price:null,d:'[어린이날 한정] 쉴 새 없이 터지는 비눗방울'},
+ {id:'ddakji',n:'딱지',t:8,cost:180,dmg:120,range:140,cd:.9,hits:2,g:'knock',gd:'딱지 한 방 – 맞은 적을 뒤로 밀어냄',price:null,d:'[어린이날 한정] 힘껏 내리치는 큼직한 딱지'},
+ {id:'taegeuk',n:'태극기 창',t:8,cost:350,dmg:120,range:190,cd:1,hits:3,g:'boss',gd:'보스에게 피해 +60%',price:null,d:'[광복절 한정] 깃발을 단 긴 창'},
+ {id:'mugunghwa',n:'무궁화 철퇴',t:8,cost:300,dmg:150,range:90,cd:1.1,hits:4,price:null,d:'[광복절 한정] 활짝 핀 무궁화 모양 철퇴'},
+ {id:'torch',n:'독립의 횃불',t:8,cost:260,dmg:70,range:110,cd:.6,hits:3,g:'burn',gd:'화상',price:null,d:'[광복절 한정] 꺼지지 않는 불꽃'},
+ {id:'brush',n:'붓',t:8,cost:240,dmg:80,range:130,cd:.7,hits:2,g:'slow',gd:'먹물 – 맞은 적 1초간 둔화',price:null,d:'[한글날 한정] 먹물을 뿌리는 거대한 붓'},
+ {id:'inkstone',n:'벼루 망치',t:8,cost:320,dmg:190,range:80,cd:1.5,hits:99,price:null,d:'[한글날 한정] 묵직한 벼루로 범위 강타'},
+ {id:'giyeok',n:'ㄱ 낫',t:8,cost:280,dmg:100,range:140,cd:1,hits:99,price:null,d:'[한글날 한정] 한글 ㄱ을 닮은 낫'},
+ {id:'pepero',n:'빼빼로',t:8,cost:200,dmg:40,range:120,cd:.4,hits:2,price:null,d:'[빼빼로데이 한정] 초코 코팅 과자로 빠르게 찌르기'},
+ {id:'garaetteok',n:'가래떡 곤봉',t:8,cost:280,dmg:150,range:95,cd:1.2,hits:3,g:'knock',gd:'쫀득한 한 방 – 맞은 적을 뒤로 밀어냄',price:null,d:'[빼빼로데이 한정] 길고 쫀득한 가래떡'},
+ {id:'chocostick',n:'초코 스틱 다발',t:8,cost:300,dmg:30,range:140,cd:.18,hits:1,price:null,d:'[빼빼로데이 한정] 막대과자를 한 움큼 쥐고 연타'},
+ {id:'yutnori',n:'윷',t:8,cost:200,dmg:60,range:110,cd:.6,hits:4,price:null,d:'[설날 한정] 네 개의 윷가락을 던져 4명을 타격'},
+ {id:'sebae',n:'세뱃돈 봉투',t:8,cost:220,dmg:45,range:150,cd:.4,hits:2,price:null,d:'[설날 한정] 빠르게 날아가는 복주머니'},
+ {id:'tteokguk',n:'떡국 국자',t:8,cost:260,dmg:140,range:95,cd:1.1,hits:3,g:'burn',gd:'뜨거운 국물 – 화상',price:null,d:'[설날 한정] 펄펄 끓는 떡국을 퍼붓는 국자'},
+ {id:'songpyeon',n:'송편',t:8,cost:200,dmg:90,range:130,cd:.8,hits:3,price:null,d:'[추석 한정] 반달 모양 송편을 던져 3명을 타격'},
+ {id:'moonmallet',n:'달토끼 방망이',t:8,cost:300,dmg:170,range:85,cd:1.3,hits:99,g:'knock',gd:'떡메치기 – 맞은 적을 뒤로 밀어냄',price:null,d:'[추석 한정] 보름달 아래 떡을 치는 방망이'},
+ {id:'ganggang',n:'강강술래 부채',t:8,cost:280,dmg:80,range:140,cd:.7,hits:5,price:null,d:'[추석 한정] 둥글게 휘돌며 5명을 쓸어내는 부채'}
 ];
 WP.forEach(w=>{if(w.price===undefined)w.price=null;if(w.t===undefined)w.t=0});
 const WM=Object.fromEntries(WP.map(w=>[w.id,w]));
@@ -545,6 +653,27 @@ WS.spear.push(['폭죽',600,'#ff7043','#bf360c',
 WS.tnt.push(['시계',700,'#ffd54f','#ff6f00',
   '<circle cx="32" cy="38" r="18" fill="#37474f" stroke="#000" stroke-width="2"/><circle cx="32" cy="38" r="13" fill="#fafafa"/><path d="M32 38 V28 M32 38 L38 42" stroke="#212121" stroke-width="2" stroke-linecap="round"/><circle cx="32" cy="38" r="1.5" fill="#e53935"/>',
   '<path d="M32 14 Q26 8 32 2 Q34 6 38 4 Q40 10 32 14Z" fill="#ffeb3b" stroke="#ff9800"/>',null,null,'gold']);
+// 발렌타인
+WS.katana.push(['하트',0,'#f8bbd0','#ad1457','<path d="M33 24 C27 19 29 14 33 17 C37 14 39 19 33 24Z" fill="#ff4081"/>','<circle cx="32" cy="46" r="5" fill="#ff4081"/>',null,null,'petal','ev_valentine']);
+WS.dagger.push(['큐피드',0,'#f8bbd0','#ad1457','<path d="M27 30 Q20 24 22 18 Q26 24 29 26Z M37 30 Q44 24 42 18 Q38 24 35 26Z" fill="#fff" stroke="#f48fb1"/>','<circle cx="32" cy="46" r="4" fill="#ff4081"/>',null,null,'red','ev_valentine']);
+// 어린이날
+WS.hammer.push(['풍선 망치',0,'#f48fb1','#ad1457','<circle cx="22" cy="12" r="3" fill="#fff" opacity=".7"/>','',null,null,'bubble','ev_kidsday']);
+WS.sword2.push(['종이칼',0,'#fafafa','#9e9e9e','<path d="M32 10 l-3 4 l6 0 l-3 4 l6 0" stroke="#e53935" fill="none"/>','',null,null,'petal','ev_kidsday']);
+// 광복절
+WS.spear.push(['태극',0,'#ffffff','#1565c0','<circle cx="32" cy="12" r="2.5" fill="#d32f2f" stroke="#1565c0"/>','',null,null,'red','ev_liberation']);
+WS.axe.push(['무궁화',0,'#f8bbd0','#ad1457','<circle cx="46" cy="20" r="3.5" fill="#e040fb"/><circle cx="46" cy="20" r="1.5" fill="#ffeb3b"/>','',null,null,'petal','ev_liberation']);
+// 한글날
+WS.katana.push(['먹물',0,'#455a64','#10151a','<path d="M34 6 Q30 20 33 40" stroke="#fff" stroke-width="1" opacity=".6" fill="none"/>','<rect x="22" y="44" width="20" height="4" rx="2" fill="#212121"/>',null,null,'trail','ev_hangul']);
+WS.spear.push(['붓창',0,'#ffe0b2','#212121','<path d="M32 0 L36 10 L28 10Z" fill="#212121"/>','',null,null,'trail','ev_hangul']);
+// 빼빼로데이
+WS.bat.push(['초코바',0,'#8d6e63','#3e2723','','',null,'<path d="M29 46 L35 46 L39 12 Q39 2 32 2 Q25 2 25 12Z" fill="#5d4037" stroke="#3e2723"/><path d="M26 14 h12 M26 24 h12 M26 34 h11 M32 3 v42" stroke="#8d6e63"/>','gold','ev_pepero']);
+WS.rapier.push(['아몬드',0,'#a1887f','#4e342e','<circle cx="32" cy="12" r="2.5" fill="#d7b46a"/><circle cx="32" cy="24" r="2.5" fill="#d7b46a"/><circle cx="32" cy="36" r="2.5" fill="#d7b46a"/>','',null,null,'gold','ev_pepero']);
+// 설날
+WS.sword2.push(['복',0,'#ffd54f','#c62828','<path d="M32 10 l-3 4 l6 0 l-3 4 l6 0" stroke="#c62828" fill="none"/>','',null,null,'gold','ev_seollal']);
+WS.spear.push(['한복',0,'#e53935','#1565c0','','<path d="M26 40 l-7 6 l7-2z M38 40 l7 6 l-7-2z" fill="#1565c0"/>',null,null,'petal','ev_seollal']);
+// 추석
+WS.dagger.push(['보름달',0,'#fffde7','#fbc02d','<circle cx="32" cy="12" r="3" fill="#fff59d"/>','',null,null,'gold','ev_chuseok']);
+WS.scythe.push(['토끼',0,'#fafafa','#9e9e9e','<circle cx="46" cy="14" r="3" fill="#f48fb1"/>','',null,null,'petal','ev_chuseok']);
 const FXMAP={'용암':'fire','화염':'fire','화염구':'fire','불창':'fire','라그나로크':'fire','태양':'fire','마검':'purple','아발론':'purple','사신':'purple','흑요석':'purple','그림자':'purple','독니':'poison','월영':'trail','월식':'trail','월광':'trail','초승달':'trail','천둥':'lightning','번개':'lightning','토르':'lightning','해왕':'water','심해':'bubble','사막':'sand','구르카':'multi','공성':'multi','피의 도끼':'red','루비':'red','황금':'gold','귀족':'gold','왕의 검':'gold','황금왕':'gold','황금용':'gold','성검':'gold','사이버':'binary','벚꽃':'petal','쇠사슬':'chain','금속배트':'ding','클로 해머':'nail'};
 const AMAP={'귀족':'flurry','사신':'whirl','천둥':'slam','번개':'flurry'};
 for(const id in WS)WS[id].forEach(k=>{if(FXMAP[k[0]]&&!k[8])k[8]=FXMAP[k[0]];if(AMAP[k[0]]&&!k[6])k[6]=AMAP[k[0]]});
@@ -654,6 +783,18 @@ AN.butterfly = p => ({r:p*3*PI, f:Math.sin(p*PI)*8, pr:p*6*PI, pf:0});
 AN.watergun = p => ({r:0, f:-Math.sin(p*PI)*3, pr:0, pf:Math.sin(p*PI)*2});
 // 레바테인: 양손검처럼 묵직하게 휘두르되, 봉인이 풀리면 빠르게 내려찍는 모션
 AN.laev = p => ({r: -2.2 + (p < .5 ? 2*p*p : 1 - 2*(1-p)*(1-p)) * 3.1,f: Math.sin(p * Math.PI) * 12,pr: -Math.sin(p * Math.PI) * .4,pf: 0});
+AN.cupidbow=AN.bow;AN.chocohammer=AN.hammer;AN.rosewhip=AN.whip;
+AN.topspin=p=>({r:p*4*PI,f:0,pr:p*8*PI,pf:0});
+AN.bubblegun=AN.watergun;AN.ddakji=AN.chakram;
+AN.taegeuk=AN.spear;AN.mugunghwa=AN.mace;AN.torch=AN.bat;
+AN.brush=AN.katana;AN.inkstone=AN.hammer;AN.giyeok=AN.scythe;
+AN.pepero=AN.rapier;AN.garaetteok=AN.bat;AN.chocostick=AN.kris;
+AN.yutnori=AN.nunchucks;AN.sebae=AN.javelin;AN.tteokguk=AN.mace;
+AN.songpyeon=AN.chakram;AN.moonmallet=AN.hammer;AN.ganggang=AN.scythe;
+BOOM_MAP.moonmallet={r:65,c1:'#fffde7',c2:'#fff176',c3:'#a1887f'};
+THRUST.push('cupidbow','taegeuk','pepero','chocostick');
+BOOM_MAP.inkstone={r:60,c1:'#ffffff',c2:'#455a64',c3:'#102027'};
+BOOM_MAP.chocohammer={r:60,c1:'#fff3e0',c2:'#8d6e63',c3:'#3e2723'};
 const AN2={carambit:p=>({r:p*6*PI,f:0,pr:sn(p*6*PI)*.3,pf:0}),throw:p=>({r:0,f:sn(p*PI)*80,pr:0,pf:0}),iai:p=>({r:-2+eo(p)*4,f:sn(p*PI)*6,pr:0,pf:0}),spinthrow:p=>({r:0,f:sn(p*PI)*90,s:p*8*PI,pr:0,pf:0}),flurry:p=>({r:0,f:Math.abs(sn(p*3*PI))*28,pr:0,pf:0}),whirl:p=>({r:p*4*PI,f:0,pr:sn(p*2*PI)*.5,pf:0}),slam:p=>({r:p<.6?-2.4*(p/.6):-2.4+2.8*Math.pow((p-.6)/.4,2),f:0,pr:0,pf:p>.85?4:0})};
 function animKey(id){const v=skOf(id);return v>0&&WS[id][v-1]?WS[id][v-1][6]:null}
 function skFx(id){const v=skOf(id);return v>0&&WS[id][v-1]?WS[id][v-1][8]:null}
@@ -873,7 +1014,14 @@ const EVENTS=[
  {id:'aprilfool',n:'🐔 만우절',test:d=>d.getMonth()==3&&d.getDate()==1,range:'4월 1일 하루',w:'chicken',ws:['chicken','banana','squeaky'],skins:[['dagger','고무 칼']]},
  {id:'csat',n:'📖 대학수학능력시험(수능)',test:d=>d.getMonth()==10&&d.getDate()>=14 && d.getDate()<=20,range:'11월 14일~20일',w:'pencil',ws:['pencil','book'],skins:[['javelin','연필'],['book','시험지'],['pencil','컴퓨터싸인펜']]},
  {id:'afd',n:'🪖국군의 날',test:d=>d.getMonth()==9&&d.getDate()>=1 && d.getDate()<=14,range:'10월 1일~14일',w:'sniper',ws:['shovel','bayonet','ar','sniper','drone'],skins:[['ar','k2'],['sniper','k14'],['shovel','방탄'],['drone','헬리콥터'],['bayonet','건블레이드']]},
- {id:'yearend',n:'📅연말',test:d=>d.getMonth()==11&&d.getDate()>=1 && d.getDate()<=31,range:'12월 한 달',w:'firework',ws:['firework','calendar','newyearbell'],skins:[['spear','폭죽'],['tnt','시계']]}
+ {id:'yearend',n:'📅연말',test:d=>d.getMonth()==11&&d.getDate()>=1 && d.getDate()<=31,range:'12월 한 달',w:'firework',ws:['firework','calendar','newyearbell'],skins:[['spear','폭죽'],['tnt','시계']]},
+ {id:'valentine',n:'💘 발렌타인데이',test:d=>d.getMonth()==1&&d.getDate()>=7&&d.getDate()<=14,range:'2월 7일~14일',w:'cupidbow',ws:['cupidbow','chocohammer','rosewhip'],skins:[['katana','하트'],['dagger','큐피드']]},
+ {id:'kidsday',n:'🎈 어린이날',test:d=>d.getMonth()==4&&d.getDate()>=1&&d.getDate()<=5,range:'5월 1일~5일',w:'topspin',ws:['topspin','bubblegun','ddakji'],skins:[['hammer','풍선 망치'],['sword2','종이칼']]},
+ {id:'liberation',n:'🇰🇷 광복절',test:d=>d.getMonth()==7&&d.getDate()>=10&&d.getDate()<=15,range:'8월 10일~15일',w:'taegeuk',ws:['taegeuk','mugunghwa','torch'],skins:[['spear','태극'],['axe','무궁화']]},
+ {id:'hangul',n:'🖌️ 한글날',test:d=>d.getMonth()==9&&d.getDate()>=5&&d.getDate()<=9,range:'10월 5일~9일',w:'brush',ws:['brush','inkstone','giyeok'],skins:[['katana','먹물'],['spear','붓창']]},
+ {id:'pepero',n:'🍫 빼빼로데이',test:d=>d.getMonth()==10&&d.getDate()>=7&&d.getDate()<=11,range:'11월 7일~11일',w:'pepero',ws:['pepero','garaetteok','chocostick'],skins:[['bat','초코바'],['rapier','아몬드']]},
+ {id:'seollal',n:'🧧 설날',test:d=>(d.getMonth()==0&&d.getDate()>=25)||(d.getMonth()==1&&d.getDate()<=15),range:'1월 25일~2월 15일 (음력 설 전후)',w:'yutnori',ws:['yutnori','sebae','tteokguk'],skins:[['sword2','복'],['spear','한복']]},
+ {id:'chuseok',n:'🌕 추석',test:d=>(d.getMonth()==8&&d.getDate()>=12)||(d.getMonth()==9&&d.getDate()<=3),range:'9월 12일~10월 3일 (음력 추석 전후)',w:'songpyeon',ws:['songpyeon','moonmallet','ganggang'],skins:[['dagger','보름달'],['scythe','토끼']]}
 ];
 function evActive(id){const d=new Date();return EVENTS.some(e=>e.ws.includes(id)&&e.test(d))}
 function evtR(){const d=new Date();$('sc').innerHTML='<div class="sub" style="margin-bottom:8px">기간 한정 이벤트! 진행 중일 때만 무기가 보이고, 한 번에 모두 받습니다. 받은 무기와 스킨은 영구 보유됩니다.</div>'+EVENTS.map((e,i)=>{const on=e.test(d),got=S.ach['ev_'+e.id],allHave=e.ws.every(w=>S.owned.includes(w));return `<div class="srow">${(on||got)?e.ws.map(w=>svg(w,0)).join(''):'<b style="font-size:30px">🔒</b>'}<div style="flex:1;min-width:160px"><b style="width:auto">${e.n}</b> <span class="sub">${e.range}</span><br><span class="sub">${(on||got)?e.ws.map(w=>WM[w].n).join(', ')+' + 스킨 '+e.skins.map(s=>s[1]).join(', '):'??? (진행 중일 때 공개)'}</span></div><button ${on&&!allHave?'':'disabled'} onclick="evClaim(${i})">${got&&allHave?'획득 완료':on?'모두 받기 🎁':'기간 아님'}</button></div>`}).join('')}
