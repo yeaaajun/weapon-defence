@@ -1051,7 +1051,15 @@ $('start').onclick = startGame;
 function startWave(force){
  if(!G||G.over||(G.active&&!force)||G.wave>=G.max)return;
  if(G.active)G.gold+=30+G.wave*8;
- G.wave++;const w=G.wave,pl=G.special?[1,2,3,4,6,9,10]:[[0,1,2],[0,1,2,3],[0,1,2,3,4,8],[1,2,3,4,6,8,9],[3,4,6,7,9,10]][G.di];let t=G.active?G.sp:0;
+ G.wave++;const w=G.wave,pl=G.special?[1,2,3,4,6,9,10]:[
+    [0,1,2],           // 0: 쉬움
+    [0,1,2,3],         // 1: 보통
+    [0,1,2,3,4,8],     // 2: 어려움
+    [1,2,3,4,6,8,9],   // 3: 악몽
+    [3,4,6,7,9,10],    // 4: 지옥
+    [4,5,7,8,9,10],    // 5: 세미 임파서블
+    [5,6,8,9,10]       // 6: 임파서블
+  ][G.di];let t=G.active?G.sp:0;
  const n=Math.min(70,Math.round((4+Math.floor(w*1.7))*G.cnt));
  for(let i=0;i<n;i++){t+=Math.max(.35,1-w*.03);G.q.push({t,k:pl[Math.floor(Math.random()*Math.min(pl.length,Math.floor(w/3)+2))]})}
  if(w%5==0)G.q.push({t:t+1.5,k:5});G.q.sort((a,b)=>a.t-b.t);
