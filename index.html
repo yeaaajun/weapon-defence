@@ -758,9 +758,10 @@ const MODS=[
  {id:'horde',n:'적 군단',d:'적 수 +50%',cm:1.5,ap:g=>{g.cnt*=1.5}},
  {id:'rich',n:'풍족',d:'획득 골드 x1.5',cm:.7,ap:g=>{g.pg*=1.5}},
  {id:'sharp',n:'날카로움',d:'우리 피해 +25%',cm:.8,ap:g=>{g.pd*=1.25}},
- {id:'slow',n:'느린 적',d:'적 이동 속도 x0.75',cm:.75,ap:g=>{g.es*=.75}}
+ {id:'slow',n:'느린 적',d:'적 이동 속도 x0.75',cm:.75,ap:g=>{g.es*=.75}},
+ {id:'notree',n:'무의 경지',d:'트리 효과 무효 · 코인 x2.5',cm:2.5,ap:g=>{}},
 ];
-function hrChal(){let s=Math.floor(Date.now()/3600000)*7919+13;const r=()=>{s=(s*9301+49297)%233280;return s/233280};r();r();return{map:Math.floor(r()*MAPS.length),df:Math.floor(r()*DIFF.length),mod:Math.floor(r()*MODS.length)}}
+function hrChal(){let s=Math.floor(Date.now()/3600000)*7919+13;const r=()=>{s=(s*9301+49297)%233280;return s/233280};r();r();return{map:Math.floor(r()*MAPS.length),df:Math.floor(r()*5),mod:Math.floor(r()*MODS.length)}}
 function stageR(){
  for(let i=0;i<3;i++)$('md'+i).className=i==mode?'':'alt';
  $('sp0').className=sp?'alt':'';$('sp1').className=sp?'':'alt';
@@ -1041,7 +1042,23 @@ function startGame(){
  const m=ch?MAPS[ch.map]:(sp?SMAPS:MAPS)[selMap],d=ch?DIFF[ch.df]:(sp?SDIFF[m.df]:DIFF[selDiff]),segs=[];let tot=0;
  for(let i=0;i<m.p.length-1;i++){const a=m.p[i],b=m.p[i+1],l=Math.hypot(b[0]-a[0],b[1]-a[1]);segs.push({a,b,l,s:tot});tot+=l}
  G={m,d,segs,tot,special:sp&&!ch,inf,chal:ch?MODS[ch.mod]:null,di:ch?ch.df:(sp?4:selDiff),max:inf?1e9:(sp?20:MAXW),auto:false,at:0,gold:d.gold,lives:d.lives,wave:0,en:[],tw:[],fx:[],q:[],sp:0,spd:1,sel:null,slot:S.load[0],over:false,active:false,blk:[],eh:1,es:1,pg:1,pd:1,ps:1,pr:1,cnt:1,cm:1,ws:0};
- (ch?[MODS[ch.mod]]:(sp?[]:S.modOn.map(id=>MODS.find(x=>x.id==id)))).forEach(x=>{x.ap(G);G.cm*=x.cm});applyTree(G);
+ 
+ // ① 모디파이어 적용 (기존 그대로)
+ (ch?[MODS[ch.mod]]:(sp?[]:S.modOn.map(id=>MODS.find(x=>x.id==id)))).forEach(x=>{x.ap(G);G.cm*=x.cm});
+ 
+ // ② ★ 트리 무효 체크
+ //    - 임파서블 난이도 (일반 모드) → 강제 무의 경지
+ //    - '무의 경지' 모디파이어 선택 → 트리 무효 (코인 x2.5는 모디파이어에서 이미 적용됨)
+ const isImpossible = !ch && !sp && d.n === '임파서블';
+ const noTree = isImpossible || S.modOn.includes('notree');
+ if(!noTree){
+   applyTree(G);
+ }
+ // 임파서블은 추가 보상 2.5배 (무의 경지 모디파이어 보상과 별개)
+ if(isImpossible){
+   G.cm *= 2.5;
+ }
+ 
  for(let r=0;r<12;r++)for(let c=0;c<20;c++)G.blk[r*20+c]=pathDist(c*40+20,r*40+20)<22;
  show('game');$('spd').textContent='x1';$('auto').textContent='자동: OFF';
  $('bar').innerHTML=S.load.map(id=>{const w=WM[id];return `<div class="slot" data-id="${id}" onclick="pick('${id}')">${svg(id,skOf(id))}${w.n}<br>💰${w.cost}</div>`}).join('');
