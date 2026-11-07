@@ -1332,19 +1332,15 @@ function seasonR(){
     </div>
     <h2>🎁 시즌 보상</h2>`;
 
-  // 보상 목록 (150 이후 무한 표시용 추가)
   const rewards = [...SEASON_REWARDS];
   if(se.lv >= 150){
     rewards.push({lv: se.lv + 1, type:'gem', v:2, infinite:true});
   }
 
-  // 가로 스크롤 카드
   html += '<div class="srewards">' + rewards.map(r=>{
     const claimed = se.claimed.includes(r.lv);
     const can = se.lv >= r.lv && !claimed && !r.infinite;
     const cls = claimed ? 'sreward claimed' : (can ? 'sreward can' : 'sreward');
-
-    // type별 아이콘 / 이름
     let icon = '🎁', rname = '';
     if(r.type==='coin'){ icon='🪙'; rname = `🪙 ${r.v}`; }
     else if(r.type==='gem'){ icon='💎'; rname = `💎 ${r.v}`; }
@@ -1360,7 +1356,6 @@ function seasonR(){
     }
     else if(r.type==='modifier'){ icon='🧪'; rname = (MODS.find(m=>m.id===r.v)||{}).n || '모디파이어'; }
     if(r.infinite){ icon='💎'; rname = '💎 2 (매 레벨)'; }
-
     return `<div class="${cls}">
       <div class="lv">Lv.${r.lv}</div>
       <div class="icon">${icon}</div>
@@ -1371,7 +1366,6 @@ function seasonR(){
 
   $('sn').innerHTML = html;
 
-  // ★ 마우스 휠 → 가로 스크롤 변환 (if 블록 밖으로 이동)
   setTimeout(() => {
     const el = document.querySelector('#sn .srewards');
     if(el && !el.dataset.wheelBound){
@@ -1385,41 +1379,6 @@ function seasonR(){
     }
   }, 0);
 
-  syncC();
-}
-
-  // 가로 스크롤 카드
-  html += '<div class="srewards">' + rewards.map(r=>{
-    const claimed = se.claimed.includes(r.lv);
-    const can = se.lv >= r.lv && !claimed && !r.infinite;
-    const cls = claimed ? 'sreward claimed' : (can ? 'sreward can' : 'sreward');
-
-    // type별 아이콘 / 이름
-    let icon = '🎁', rname = '';
-    if(r.type==='coin'){ icon='🪙'; rname = `🪙 ${r.v}`; }
-    else if(r.type==='gem'){ icon='💎'; rname = `💎 ${r.v}`; }
-    else if(r.type==='tm'){ icon='🌳'; rname = `🌳 ${r.v}`; }
-    else if(r.type==='weapon'){ icon='🗡️'; rname = WM[r.v] ? WM[r.v].n : '무기'; }
-    else if(r.type==='skin'){
-      icon='🎨';
-      let wid = r.v[0], idx = r.v[1];
-      if(typeof idx !== 'number'){
-        idx = WS[wid] ? WS[wid].findIndex(k => k[0] === idx) + 1 : 0;
-      }
-      rname = (WS[wid] && WS[wid][idx-1]) ? WS[wid][idx-1][0] : '스킨';
-    }
-    else if(r.type==='modifier'){ icon='🧪'; rname = (MODS.find(m=>m.id===r.v)||{}).n || '모디파이어'; }
-    if(r.infinite){ icon='💎'; rname = '💎 2 (매 레벨)'; }
-
-    return `<div class="${cls}">
-      <div class="lv">Lv.${r.lv}</div>
-      <div class="icon">${icon}</div>
-      <div class="rname">${rname}</div>
-      <button ${can?'':'disabled'} onclick="claimSeason(${r.lv})">${claimed?'✅ 수령':can?'받기':'잠김'}</button>
-    </div>`;
-  }).join('') + '</div>';
-
-  $('sn').innerHTML = html;
   syncC();
 }
 
