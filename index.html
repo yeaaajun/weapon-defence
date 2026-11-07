@@ -1668,7 +1668,7 @@ function startGame(){
  const isImpossible = !ch && !sp && d.n === '임파서블';
  const noTree = isImpossible
    || S.modOn.includes('notree')          // 일반 모드 선택
-   || (ch && ch.mod === 'notree');        // ★ 챌린지 모디파이어
+   || (ch && MODS[ch.mod] && MODS[ch.mod].id === 'notree');        // ★ 챌린지 모디파이어
  if(!noTree){
    applyTree(G);
  }
