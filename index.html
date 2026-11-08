@@ -1823,7 +1823,7 @@ function dungeonFloorSetup(){
    if(j+1<to.length&&i<from.length-1)addEdge(a.id,to[j+1].id);
   });
  }
- D.rooms=rooms;D.edges=edges;D.visited=0;D.currentNode=null;D.available=rooms.filter(r=>r.col===0).map(r=>r.id);
+ D.rooms=rooms;D.edges=edges;D.visited=0;D.currentNode=null;D.lastAdvancedNode=null;D.available=rooms.filter(r=>r.col===0).map(r=>r.id);
  D.phase='rooms';D.eventChoices=null;D.shopOffers=null;D.roomMap=null;D.roomDiff=null;
 }
 
@@ -1878,7 +1878,7 @@ function dungeonSelectRoom(id){
  G.es*=D.floorHard?1.2:1;G.eh*=1+(D.floor-1)*.06;if(D.overdrive)G.es*=1+(D.floor-1)*.025;
  dungeonApplyGifts();hud();side();
 }function dungeonAdvanceRoom(){
- if(!D||!D.rooms||!D.currentNode)return;
+ if(!D||!D.rooms||D.currentNode==null)return;
  const r=D.rooms.find(x=>x.id===D.currentNode);
  if(!r)return;
  if(D.lastAdvancedNode===r.id)return;
