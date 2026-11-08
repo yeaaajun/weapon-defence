@@ -1844,18 +1844,15 @@ function dungeonGiftAdd(id,rank){if(D)D.gifts.push({id:id,rank:Math.max(1,Math.m
 function dungeonGiftFuse(id,rank){if(!D||rank>=3)return;let n=0;D.gifts=D.gifts.filter(g=>{if(g.id===id&&g.rank===rank&&n<3){n++;return false}return true});if(n<3)return;dungeonGiftAdd(id,rank+1);toast('기프트 '+(rank+1)+'등급 합성이 완료되었습니다.');dungeonR()}
 function dungeonApplyGifts(){if(!G||!D)return;D.gifts.forEach(g=>{const x=DUNGEON_GIFTS.find(v=>v.id===g.id);if(!x)return;const n=x.v*g.rank;if(x.effect==='pd')G.pd*=1+n;else if(x.effect==='ps')G.ps*=1-n;else if(x.effect==='pr')G.pr*=1+n;else if(x.effect==='pg')G.pg*=1+n;else if(x.effect==='lives')G.lives*=1+n;else if(x.effect==='bd')G.bd=(G.bd||1)*(1+n);else if(x.effect==='mixed'){G.pd*=1+n;G.lives*=1+n}else if(x.effect==='cm')G.cm=(G.cm||1)*(1+n);else if(x.effect==='eh')G.eh*=Math.max(.55,1-n);else if(x.effect==='es')G.es*=Math.max(.55,1-n);else if(x.effect==='cnt')G.cnt*=1+n});(D.curses||[]).forEach(x=>{if(x==='frail')G.lives*=.72;if(x==='horde')G.cnt*=1.35;if(x==='armor')G.eh*=1.4;if(x==='haste')G.es*=1.25;if(x==='poor')G.pg*=.65})}
 function dungeonOverdriveUnlocked(){return !!(S.dungeonOverdrive||(S.dungeonHardClears||0)>0)}
-function dungeonAskStart(overdrive){
- const useOverdrive=!!overdrive;
- if(useOverdrive&&!dungeonOverdriveUnlocked()){toast('중첩 모드는 일반 던전 1~5층을 모두 클리어해야 해금됩니다.');return}
- ask(useOverdrive?'15층 중첩 던전에 입장하시겠습니까?':'일반 5층 던전에 입장하시겠습니까?',()=>{
+function dungeonAskStart(){
+ ask('일반 던전 1~5층에 입장하시겠습니까? 5개 층을 모두 하드로 클리어하면 중첩모드 6층으로 자동 진입합니다.',()=>{
   $('cf').style.display='none';
   $('dun-modal').style.display='none';
-  dungeonStart(useOverdrive);
+  dungeonStart();
  });
 }
-function dungeonStart(overdrive){
- const useOverdrive=!!overdrive&&dungeonOverdriveUnlocked();
- D={hard:false,floorHard:false,allHard:true,overdrive:useOverdrive,maxFloor:useOverdrive?15:5,floor:1,phase:'loadout',currency:0,gifts:[],curses:[],inBattle:false,floorCoins:0,visited:0,loadout:S.load.slice(0,4)};
+function dungeonStart(){
+ D={hard:false,floorHard:false,allHard:true,overdrive:false,maxFloor:5,floor:1,phase:'loadout',currency:0,gifts:[],curses:[],inBattle:false,floorCoins:0,visited:0,loadout:S.load.slice(0,4)};
  mode=3;sp=0;stageR();
 }
 function dungeonToggleLoadout(id){
@@ -1957,9 +1954,14 @@ function dungeonFinishShopRoom(){
 function dungeonContinueFloor(){
  if(!D||D.phase!=='floorReward')return;
  const floor=D.floor;D.allHard=!!D.allHard&&!!D.floorHard;
+ if(floor===5&&!D.overdrive&&D.allHard){
+  S.dungeonHardClears=(S.dungeonHardClears||0)+1;
+  D.overdrive=true;D.maxFloor=15;D.floor=6;D.floorHard=false;D.hard=false;
+  D.phase='select';save();dungeonR();return;
+ }
  if(floor===10&&D.overdrive){D.phase='curse';D.curseChoices=[['frail','부서진 생명력','시작 체력 -28%'],['horde','끝없는 군세','적 수 +35%'],['armor','강철 군단','적 체력 +40%'],['haste','광폭화','적 이동 속도 +25%'],['poor','메마른 전리품','처치 골드 -35%']].sort(()=>Math.random()-.5).slice(0,3);save();dungeonR();return}
  D.floor++;
- if(D.floor>D.maxFloor){S.dungeonClears=(S.dungeonClears||0)+1;if(!D.overdrive){S.dungeonOverdrive=true;if(D.allHard)S.dungeonHardClears=(S.dungeonHardClears||0)+1}
+ if(D.floor>D.maxFloor){S.dungeonClears=(S.dungeonClears||0)+1;
   const bonus=D.overdrive?400:D.allHard?220:160;S.dungeonCoins+=bonus;D.floorCoins+=bonus;save();D.finished=true;D.summary='던전 완전 정복! 추가 던전 코인 +'+bonus;D.coins=D.floorCoins;D.floor=D.maxFloor;D.phase='finished';dungeonR();return}
  D.phase='select';D.floorHard=false;D.hard=false;save();dungeonR();
 }function dungeonBattleEnd(win,quit){
@@ -2009,9 +2011,7 @@ function dungeonR(){
  syncC();
  const coins='<span class="coin">🏅 던전 코인 '+(S.dungeonCoins||0)+'</span>';
  if(!D){
-  const overdriveUnlocked=dungeonOverdriveUnlocked();
-  const overdriveEntry=overdriveUnlocked?'<button class="big alt" onclick="dungeonAskStart(true)">♾ 중첩 모드 입장 · 15층</button>':'<p class="sub">🔒 일반 던전 1~5층을 모두 클리어하면 15층 중첩 모드가 해금됩니다.</p>';
-  el.innerHTML='<div class="dungeon-shell"><div class="dungeon-head"><h1>🏰 던전</h1><span class="sp"></span><button class="alt" onclick="mode=0;show(\'stage\')">닫기</button></div><div class="dun-panel"><p>13개의 방이 연결된 미로를 탐험합니다. 경로를 직접 선택해 5개 방을 클리어하면 보급 상점과 보스가 등장합니다.</p><div class="stat"><span>🏆 클리어 '+(S.dungeonClears||0)+'</span><span>🔥 하드 완주 '+(S.dungeonHardClears||0)+'</span><span>최고 '+(S.dungeonBestFloor||0)+'층</span></div>'+coins+'<button class="big" onclick="dungeonAskStart(false)">🏰 일반 던전 입장 · 5층</button>'+overdriveEntry+'<p class="sub">각 층의 난이도는 직접 선택하실 수 있습니다. 중첩 모드에서는 10층 돌파 후 제약이 추가됩니다.</p></div></div>';
+  el.innerHTML='<div class="dungeon-shell"><div class="dungeon-head"><h1>🏰 던전</h1><span class="sp"></span><button class="alt" onclick="mode=0;show(\'stage\')">닫기</button></div><div class="dun-panel"><p>13개의 방이 연결된 미로를 탐험합니다. 경로를 직접 선택해 5개 방을 클리어하면 보급 상점과 보스가 등장합니다.</p><div class="stat"><span>🏆 클리어 '+(S.dungeonClears||0)+'</span><span>🔥 하드 완주 '+(S.dungeonHardClears||0)+'</span><span>최고 '+(S.dungeonBestFloor||0)+'층</span></div>'+coins+'<button class="big" onclick="dungeonAskStart()">🏰 일반 던전 입장 · 5층</button><p class="sub">1~5층을 모두 하드로 클리어하면 중첩모드 6층으로 자동 진입합니다. 중첩모드 10층 돌파 후 제약이 추가됩니다.</p></div></div>';
   $('dun-modal').style.display='none';return
  }
  if(D.finished){
