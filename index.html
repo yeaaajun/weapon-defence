@@ -1077,30 +1077,10 @@ const DUNGEON_GIFTS=[
  {id:'swarm',n:'군세의 메아리',icon:'🐝',d:'적 수 +5%/등급',effect:'cnt',v:.05}
 ];
 const DUNGEON_SHOP=[
- {id:'goedendag',type:'weapon',name:'고덴닥',price:420,desc:'던전 등급 · 중세 플랑드르 곤봉'},
- {id:'fauchard',type:'weapon',name:'포샤르',price:520,desc:'던전 등급 · 중세 유럽 장병기'},
- {id:'kris',type:'weapon',name:'크리스',price:260,desc:'진화 무기 · 빠르고 날카로운 단검'},
- {id:'tachi',type:'weapon',name:'타치',price:430,desc:'진화 무기 · 균형 잡힌 일본도'},
- {id:'greatsword',type:'weapon',name:'그레이트소드',price:620,desc:'진화 무기 · 묵직한 양손 대검'},
- {id:'pike',type:'weapon',name:'파이크',price:560,desc:'진화 무기 · 초장거리 보병 창'},
- {id:'labrys',type:'weapon',name:'라브리스',price:690,desc:'진화 무기 · 처형 효과를 지닌 양날 도끼'},
- {id:'glaive',type:'weapon',name:'글레이브',price:670,desc:'진화 무기 · 넓은 범위를 휩쓰는 장병기'},
- {id:'estoc',type:'weapon',name:'에스톡',price:390,desc:'진화 무기 · 치명타 특화 찌르기 검'},
- {id:'shamshir',type:'weapon',name:'샴시르',price:450,desc:'진화 무기 · 빠른 연속 베기'},
- {id:'flangedmace',type:'weapon',name:'플랜지드 메이스',price:560,desc:'진화 무기 · 갑옷을 부수는 철퇴'},
- {id:'ranseur',type:'weapon',name:'랜서',price:590,desc:'진화 무기 · 다수의 적을 꿰뚫는 창'},
- {id:'poleaxe',type:'weapon',name:'폴액스',price:650,desc:'진화 무기 · 도끼와 망치를 결합한 장병기'},
- {id:'lucerne',type:'weapon',name:'루체른 해머',price:740,desc:'진화 무기 · 적을 밀어내는 전투망치'},
- {id:'falchion',type:'weapon',name:'팔션',price:680,desc:'진화 무기 · 강력한 대형 외날검'},
- {id:'meteorhammer',type:'weapon',name:'유성추',price:570,desc:'진화 무기 · 넓은 사거리의 연쇄 타격'},
- {id:'pudao',type:'weapon',name:'박도',price:620,desc:'진화 무기 · 다수 타격 장병도'},
- {id:'catonine',type:'weapon',name:'구미호 채찍',price:490,desc:'진화 무기 · 출혈을 일으키는 다중 채찍'},
- {id:'pilum',type:'weapon',name:'필룸',price:540,desc:'진화 무기 · 보스 특화 투창'},
- {id:'sarissa',type:'weapon',name:'사리사',price:760,desc:'진화 무기 · 최장거리급 장창'},
- {id:'arbalest',type:'weapon',name:'아발레스트',price:820,desc:'진화 무기 · 보스 특화 대형 쇠뇌'},
- {id:'dynamite',type:'weapon',name:'다이너마이트',price:700,desc:'진화 무기 · 범위 폭발 공격'},
- {id:'goedendagSkin',type:'skin',weapon:'goedendag',index:5,name:'묘지의 망령',price:260,desc:'던전 등급 전용 스킨'},
- {id:'fauchardSkin',type:'skin',weapon:'fauchard',index:5,name:'심연의 초승달',price:300,desc:'던전 등급 전용 스킨'}
+ {id:'goedendag',type:'weapon',name:'고덴닥',price:420,desc:'던전 전용 무기 · 중세 플랑드르의 못 박힌 곤봉'},
+ {id:'fauchard',type:'weapon',name:'포샤르',price:520,desc:'던전 전용 무기 · 넓은 곡날을 가진 장병기'},
+ {id:'goedendagSkin',type:'skin',weapon:'goedendag',index:5,name:'묘지의 망령',price:260,desc:'고덴닥 전용 던전 스킨'},
+ {id:'fauchardSkin',type:'skin',weapon:'fauchard',index:5,name:'심연의 초승달',price:300,desc:'포샤르 전용 던전 스킨'}
 ];
 let nsv=0;const save=()=>{try{localStorage.setItem('wtd2',JSON.stringify(S))}catch(e){if(!nsv){nsv=1;toast('⚠️ 이 환경에서는 저장이 안 됩니다. 새로고침하면 진행도가 초기화돼요')}}};
 const $=id=>document.getElementById(id);
