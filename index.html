@@ -122,6 +122,22 @@ button,.card,.chip,.slot{touch-action:manipulation;-webkit-tap-highlight-color:t
 }
 .hide{display:none!important}
 .dungeon-window.hide{display:none!important}.dungeon-window{position:fixed!important;inset:2vh 2vw!important;z-index:9999!important;display:block!important;overflow:auto!important;background:var(--bg)!important;border:2px solid var(--gold);border-radius:14px;padding:10px;box-shadow:0 0 0 100vmax rgba(0,0,0,.86),0 12px 50px #000}.dungeon-window #dungeon-gamebar{display:flex;align-items:center;gap:10px;padding:5px 2px 12px;position:sticky;top:0;background:var(--bg);z-index:5}.dungeon-window #hud{position:sticky;top:42px;z-index:4}.dun-shopitem.selected{border:2px solid var(--gold);box-shadow:0 0 10px #ffc83d55}
+
+/* Dungeon independent screen and modal layout */
+#dungeon-mode.dungeon-lobby-window{position:fixed!important;inset:0!important;z-index:10000!important;display:block!important;overflow:auto!important;background:rgba(10,12,18,.98)!important;padding:clamp(12px,3vw,30px)!important}
+#dungeon-mode .dungeon-shell{max-width:1120px;margin:0 auto;min-height:100%}
+#dungeon-mode .dungeon-head{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:4;background:#14161c;padding:8px 0 12px;border-bottom:1px solid var(--line)}
+#dungeon-mode .dun-map{height:clamp(320px,58vh,560px)}
+#dungeon-mode .dun-node{width:48px;height:48px;font-size:21px}
+#dungeon-mode .dun-endnode{cursor:pointer}
+#dungeon-mode .dun-endnode:disabled{opacity:.45;cursor:default}
+#dun-modal{z-index:10020;background:rgba(0,0,0,.82)}
+#dun-modal>div{width:min(760px,96vw);max-width:760px;max-height:88vh;overflow:auto;text-align:left;border:2px solid var(--gold);box-shadow:0 18px 60px #000;padding:18px}
+#dun-modal h2{text-align:center;margin-top:0}
+#dun-modal .dun-modal-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+#dun-modal .dun-modal-actions button{min-width:130px}
+#dun-modal .dun-loadout-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px}
+#dun-modal .dun-loadout-grid .card{min-width:0}
 </style>
 </head>
 <body>
@@ -177,6 +193,7 @@ button,.card,.chip,.slot{touch-action:manipulation;-webkit-tap-highlight-color:t
   <div id="bar"></div>
 </div>
 </div>
+<div class="ov" id="dun-modal" onclick="if(event.target===this)dungeonModalClose()"><div id="dun-modal-body"></div></div>
 <div class="ov" id="over"><div><h1 id="ot"></h1><p id="od"></p><button id="ob">메인 메뉴로</button></div></div>
 <div class="ov" id="skm" onclick="if(event.target==this)skc()"><div id="skmb"></div></div>
 <div class="ov" id="pk"><div id="pkb"></div></div>
@@ -1036,7 +1053,17 @@ const DUNGEON_GIFTS=[
  {id:'fortune',n:'황금 주머니',icon:'💰',d:'처치 골드 +12%/등급',effect:'pg',v:.12},
  {id:'vital',n:'수호자의 심장',icon:'❤️',d:'시작 체력 +10%/등급',effect:'lives',v:.1},
  {id:'slayer',n:'용살자의 문장',icon:'🐉',d:'보스 피해 +12%/등급',effect:'bd',v:.12},
- {id:'fortress',n:'철벽의 파편',icon:'🛡️',d:'피해와 체력 +6%/등급',effect:'mixed',v:.06}
+ {id:'fortress',n:'철벽의 파편',icon:'🛡️',d:'피해와 체력 +6%/등급',effect:'mixed',v:.06},
+ {id:'keen',n:'예리한 통찰',icon:'✨',d:'공격 피해 +5%/등급',effect:'pd',v:.05},
+ {id:'haste',n:'질풍의 룬',icon:'🌪️',d:'공격 간격 -6%/등급',effect:'ps',v:.06},
+ {id:'scout',n:'매의 시야',icon:'🦅',d:'사거리 +9%/등급',effect:'pr',v:.09},
+ {id:'bounty',n:'현상금 인장',icon:'🏵️',d:'처치 골드 +18%/등급',effect:'pg',v:.18},
+ {id:'bulwark',n:'거인의 갑주',icon:'🏰',d:'시작 체력 +15%/등급',effect:'lives',v:.15},
+ {id:'warcry',n:'전장의 함성',icon:'📯',d:'보스 피해 +20%/등급',effect:'bd',v:.20},
+ {id:'riches',n:'황금 나침반',icon:'🧭',d:'던전 최종 보상 +8%/등급',effect:'cm',v:.08},
+ {id:'weakening',n:'쇠약의 저주',icon:'🕯️',d:'적 체력 -5%/등급',effect:'eh',v:.05},
+ {id:'frost',n:'빙결의 파편',icon:'❄️',d:'적 이동 속도 -5%/등급',effect:'es',v:.05},
+ {id:'swarm',n:'군세의 메아리',icon:'🐝',d:'적 수 +5%/등급',effect:'cnt',v:.05}
 ];
 const DUNGEON_SHOP=[
  {id:'goedendag',type:'weapon',name:'고덴닥',price:420,desc:'던전 등급 · 중세 플랑드르 곤봉'},
@@ -1193,7 +1220,7 @@ function hrChal(){let s=Math.floor(Date.now()/3600000)*7919+13;const r=()=>{s=(s
 function stageR(){
  for(let i=0;i<4;i++)$('md'+i).className=i==mode?'':'alt';
  $('sp0').className=sp?'alt':'';$('sp1').className=sp?'':'alt';
- $('dungeon-mode').classList.toggle('hide',mode!==3);$('dungeon-mode').style.display=mode===3?'block':'none';
+ $('dungeon-mode').classList.toggle('hide',mode!==3);$('dungeon-mode').classList.toggle('dungeon-lobby-window',mode===3);$('dungeon-mode').style.display=mode===3?'block':'none';
  ['maps','dfh','diffs','modsec','lo','start'].forEach(id=>$(id).style.display=mode===3?'none':'');
  $('sptabs').style.display=mode?'none':'flex';
  if(mode===3){dungeonR();return;}
