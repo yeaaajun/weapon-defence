@@ -115,6 +115,7 @@ button,.card,.chip,.slot{touch-action:manipulation;-webkit-tap-highlight-color:t
 #sn .sreward .lv{font-size:11px;color:var(--mut);font-weight:700}
 #sn .sreward .rname{font-size:13px;font-weight:700}
 #sn .sreward button{width:100%;padding:6px 4px;font-size:12px}
+.dun-panel{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}.dun-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px}.dun-room{background:#1b1e29;border:2px solid var(--line);border-radius:10px;padding:9px;text-align:center}.dun-room.done{border-color:#4caf7a;opacity:.65}.dun-room.now{border-color:var(--gold);box-shadow:0 0 10px #ffc83d44}.dun-shopitem{background:#1b1e29;border:1px solid var(--line);border-radius:9px;padding:9px}.dun-gift{display:flex;gap:8px;align-items:center;background:#1b1e29;border:1px solid var(--line);border-radius:8px;padding:8px;margin:5px 0;text-align:left}.dun-gift .dg-icon{font-size:24px;width:32px}.dun-gift>div:nth-child(2){flex:1}.dun-r1{color:#9aa1b5}.dun-r2{color:#4d8bff}.dun-r3{color:#ffc83d}
 @media(max-width:720px){
   #sn .sreward{flex:0 0 100px;min-height:130px;padding:10px 6px}
   #sn .sreward .icon{font-size:32px}
@@ -147,7 +148,7 @@ button,.card,.chip,.slot{touch-action:manipulation;-webkit-tap-highlight-color:t
 <div id="season" class="hide"><div class="top"><button class="alt" onclick="show('home')">← 뒤로</button><h1>📅 시즌</h1><span class="sp"></span><span class="coin">🪙 <span class="cc"></span></span></div><div id="sn"></div></div>
 <div id="stage" class="hide">
   <div class="top"><button class="alt" onclick="show('home')">← 뒤로</button><h1>맵 · 난이도 선택</h1></div>
-  <div class="tabs"><button id="md0" onclick="setMode(0)">일반</button><button id="md1" class="alt" onclick="setMode(1)">♾ 무한</button><button id="md2" class="alt" onclick="setMode(2)">⏱ 챌린지</button></div><div class="tabs" id="sptabs" style="margin-top:12px"><button id="sp0" onclick="setSp(0)">🗺️ 일반 맵</button><button id="sp1" class="alt" onclick="setSp(1)">⭐ 특별 맵</button></div><div class="row" id="maps"></div>
+  <div class="tabs"><button id="md0" onclick="setMode(0)">일반</button><button id="md1" class="alt" onclick="setMode(1)">♾ 무한</button><button id="md2" class="alt" onclick="setMode(2)">⏱ 챌린지</button><button id="md3" class="alt" onclick="setMode(3)">🏰 던전</button></div><div id="dungeon-mode" class="hide"></div><div class="tabs" id="sptabs" style="margin-top:12px"><button id="sp0" onclick="setSp(0)">🗺️ 일반 맵</button><button id="sp1" class="alt" onclick="setSp(1)">⭐ 특별 맵</button></div><div class="row" id="maps"></div>
   <h2 id="dfh">🔥 난이도</h2><div class="row" id="diffs"></div><div id="modsec"></div>
   <h2>🎒 출전 무기</h2><div class="row" id="lo"></div>
   <button class="big" id="start">전투 시작!</button>
@@ -481,6 +482,8 @@ Object.assign(ART,{
 // ============================================================
 // 2) 무기 데이터 (WP) — 원본 그대로
 // ============================================================
+ART.goedendag=['<rect x="29" y="42" width="6" height="18" fill="#6d4c41"/>','<rect x="23" y="5" width="18" height="34" rx="3" fill="#8d6e63" stroke="#4e342e" stroke-width="2"/><path d="M32 2 L36 13 L28 13Z" fill="#cfd8dc" stroke="#546e7a"/>',32,42];
+ART.fauchard=['<rect x="30" y="15" width="4" height="45" fill="#8d6e63"/>','<path d="M32 2 Q54 10 51 31 Q43 25 37 35 L32 35Z" fill="#cfd8dc" stroke="#546e7a" stroke-width="2"/>',32,30];
 const WP=[
  {id:'dagger',n:'단검',price:0,cost:50,dmg:12,range:70,cd:.35,hits:1,d:'빠른 연타'},
  {id:'katana',n:'외날검',price:0,cost:100,dmg:32,range:105,cd:.7,hits:1,d:'균형형'},
@@ -616,12 +619,14 @@ const WP=[
  {id:'surfboard',n:'서프보드',t:8,cost:280,dmg:90,range:130,cd:.9,hits:5,price:null,d:'[여름 바캉스 한정] 파도처럼 5명을 쓸어내는 보드'},
  {id:'patjuk',n:'팥죽 국자',t:8,cost:260,dmg:110,range:95,cd:.9,hits:3,g:'burn',gd:'펄펄 끓는 팥죽 – 화상',price:null,d:'[동지 한정] 액운을 쫓는 뜨거운 팥죽'},
  {id:'salt',n:'소금',t:8,cost:200,dmg:35,range:140,cd:.3,hits:3,g:'slow',gd:'정화의 소금 – 맞은 적 1초간 둔화',price:null,d:'[동지 한정] 귀신을 쫓는 소금 뿌리기'},
- {id:'dokkaebi',n:'도깨비 방망이',t:8,cost:320,dmg:250,range:90,cd:1.4,hits:99,g:'knock',gd:'뚝딱! – 맞은 적을 뒤로 밀어냄',price:null,d:'[동지 한정] 두드리면 뭐든 나오는 방망이'}
+ {id:'dokkaebi',n:'도깨비 방망이',t:8,cost:320,dmg:250,range:90,cd:1.4,hits:99,g:'knock',gd:'뚝딱! – 맞은 적을 뒤로 밀어냄',price:null,d:'[동지 한정] 두드리면 뭐든 나오는 방망이'},
+ {id:'goedendag',n:'고덴닥',t:9,cost:470,dmg:185,range:95,cd:1.15,hits:2,g:'knock',price:null,d:'중세 플랑드르 보병이 사용한 못 박힌 곤봉'},
+ {id:'fauchard',n:'포샤르',t:9,cost:520,dmg:135,range:175,cd:.85,hits:4,g:'bleed',price:null,d:'중세 유럽에서 사용한 곡날 장병기'}
 ];
 WP.forEach(w=>{if(w.price===undefined)w.price=null;if(w.t===undefined)w.t=0});
 const WM=Object.fromEntries(WP.map(w=>[w.id,w]));
-const TIER=['일반','희귀','영웅','전설','특별','진화','트리','아스트라','이벤트'];
-const TC=['#9aa1b5','#4caf7a','#4d8bff','#ffc83d','#e040fb','#00e5ff','#76ff03','#ff1744','#ff9100'];
+const TIER=['일반','희귀','영웅','전설','특별','진화','트리','아스트라','이벤트','던전'];
+const TC=['#9aa1b5','#4caf7a','#4d8bff','#ffc83d','#e040fb','#00e5ff','#76ff03','#ff1744','#ff9100','#b388ff'];
 const TI={dagger:0,katana:0,rapier:0,spear:0,sword2:1,scimitar:1,mace:1,trident:1,axe:1,scythe:2,halberd:2,hammer:2,bastard:2,claymore:3,multi:3,excal:4,gungnir:4,mjolnir:4,kukri:0,flail:1,guandao:2,whip:0,bat:0,javelin:0,lance:1,ballista:3,dslayer:3,bow:2,zweihander:3,nodachi:3,kusarigama:3,nunchaku:4,chakram:4,chaos:4,tnt:3,saber:1,morningstar:1,nunchucks:1,masamune:3,fangtian:3,poseidon:4,gaebolg:4,aegis:6,tyrfing:6};
 WP.forEach(w=>{if(TI[w.id]!==undefined)w.t=TI[w.id]});
 const BAND=[[50,100],[120,200],[220,300],[320,380]];
@@ -1006,17 +1011,38 @@ const SMAPS=[
  {n:'로키의 봉인',c:'#2a1f3a',reward:'laev',df:8,t:[[-1,1],[16,1],[16,4],[3,4],[3,7],[16,7],[16,10],[8,10],[8,9]]}
 ];
 SMAPS.forEach(MP);
-const EN=[{e:'🟢',hp:30,sp:50,r:11,g:4},{e:'🦇',hp:25,sp:95,r:11,g:4},{e:'👺',hp:70,sp:60,r:13,g:7},{e:'💀',hp:120,sp:55,r:14,g:10},{e:'👹',hp:260,sp:42,r:17,g:18},{e:'🐉',hp:1800,sp:30,r:30,g:150},{e:'👻',hp:150,sp:75,r:14,g:14},{e:'😈',hp:420,sp:50,r:18,g:26},{e:'🐢',hp:140,sp:35,r:15,g:16,df:30},{e:'🪖',hp:260,sp:48,r:15,g:22,df:45},{e:'🗿',hp:700,sp:30,r:20,g:45,df:65}];
+const EN=[
+ {e:'🟢',hp:30,sp:50,r:11,g:4},{e:'🦇',hp:25,sp:95,r:11,g:4},{e:'👺',hp:70,sp:60,r:13,g:7},{e:'💀',hp:120,sp:55,r:14,g:10},{e:'👹',hp:260,sp:42,r:17,g:18},{e:'🐉',hp:1800,sp:30,r:30,g:150},{e:'👻',hp:150,sp:75,r:14,g:14},{e:'😈',hp:420,sp:50,r:18,g:26},{e:'🐢',hp:140,sp:35,r:15,g:16,df:30},{e:'🪖',hp:260,sp:48,r:15,g:22,df:45},{e:'🗿',hp:700,sp:30,r:20,g:45,df:65},
+ {e:'🏹',hp:95,sp:72,r:12,g:9},{e:'🐺',hp:180,sp:88,r:14,g:13},{e:'🧟',hp:330,sp:34,r:17,g:20},{e:'🛡️',hp:420,sp:38,r:18,g:25,df:35},{e:'🧌',hp:560,sp:27,r:20,g:32},
+ {e:'🐂',hp:2600,sp:36,r:32,g:190},{e:'🐙',hp:3800,sp:31,r:34,g:230},{e:'🧙',hp:5200,sp:43,r:33,g:280,df:15},{e:'🦣',hp:7200,sp:23,r:38,g:360,df:30},{e:'🐍',hp:9500,sp:29,r:36,g:440}
+];
+const BOSS_EN=[5,16,17,18,19,20];
 const MAXW=15;
-const EN_N=['슬라임','박쥐','고블린','해골','오크','드래곤','유령','악마','거북이','병사','모아이'];
+const EN_N=['슬라임','박쥐','고블린','해골','오크','드래곤','유령','악마','거북이','병사','모아이','고블린 궁수','늑대','망자','방패병','트롤','미노타우로스','크라켄','리치','베히모스','히드라'];
 
 // ============================================================
 // 6) 상태 / 유틸
 // ============================================================
-let S={coins:300,owned:['dagger','katana'],load:['dagger','katana'],skins:[],skin:{},best:0,st:{k:0,boss:0,wins:0,hard:0,hell:0,sp:0,up:0,spm:[]},ach:{},mods:[],modOn:[],gems:0,dq:null,tree:{},tm:0,tspent:0,season:{id:1,xp:0,lv:1,claimed:[]},gshop:{}};
+let S={coins:300,owned:['dagger','katana'],load:['dagger','katana'],skins:[],skin:{},best:0,st:{k:0,boss:0,wins:0,hard:0,hell:0,sp:0,up:0,spm:[]},ach:{},mods:[],modOn:[],gems:0,dq:null,tree:{},tm:0,tspent:0,season:{id:1,xp:0,lv:1,claimed:[]},gshop:{},dungeonCoins:0,dungeonClears:0,dungeonHardClears:0,dungeonOverdrive:false,dungeonBestFloor:0};
 try{const t=localStorage.getItem('wtd2');if(t)S=Object.assign(S,JSON.parse(t))}catch(e){}
 S.tree=S.tree||{};S.tm=S.tm||0;S.tspent=S.tspent||0;
-S.season=S.season||{id:1,xp:0,lv:1,claimed:[]};S.gshop=S.gshop||{};
+S.season=S.season||{id:1,xp:0,lv:1,claimed:[]};S.gshop=S.gshop||{};S.dungeonCoins=S.dungeonCoins||0;S.dungeonClears=S.dungeonClears||0;S.dungeonHardClears=S.dungeonHardClears||0;S.dungeonBestFloor=S.dungeonBestFloor||0;
+let D=null;
+const DUNGEON_GIFTS=[
+ {id:'edge',n:'날 선 계약',icon:'⚔️',d:'타워 피해 +8%/등급',effect:'pd',v:.08},
+ {id:'tempo',n:'속도의 인장',icon:'💨',d:'공격 간격 -4%/등급',effect:'ps',v:.04},
+ {id:'reach',n:'탐색자의 눈',icon:'🎯',d:'사거리 +6%/등급',effect:'pr',v:.06},
+ {id:'fortune',n:'황금 주머니',icon:'💰',d:'처치 골드 +12%/등급',effect:'pg',v:.12},
+ {id:'vital',n:'수호자의 심장',icon:'❤️',d:'시작 체력 +10%/등급',effect:'lives',v:.1},
+ {id:'slayer',n:'용살자의 문장',icon:'🐉',d:'보스 피해 +12%/등급',effect:'bd',v:.12},
+ {id:'fortress',n:'철벽의 파편',icon:'🛡️',d:'피해와 체력 +6%/등급',effect:'mixed',v:.06}
+];
+const DUNGEON_SHOP=[
+ {id:'goedendag',type:'weapon',name:'고덴닥',price:420,desc:'던전 등급 · 중세 플랑드르 곤봉'},
+ {id:'fauchard',type:'weapon',name:'포샤르',price:520,desc:'던전 등급 · 중세 유럽 장병기'},
+ {id:'goedendagSkin',type:'skin',weapon:'goedendag',index:5,name:'묘지의 망령',price:260,desc:'던전 등급 전용 스킨'},
+ {id:'fauchardSkin',type:'skin',weapon:'fauchard',index:5,name:'심연의 초승달',price:300,desc:'던전 등급 전용 스킨'}
+];
 let nsv=0;const save=()=>{try{localStorage.setItem('wtd2',JSON.stringify(S))}catch(e){if(!nsv){nsv=1;toast('⚠️ 이 환경에서는 저장이 안 됩니다. 새로고침하면 진행도가 초기화돼요')}}};
 const $=id=>document.getElementById(id);
 let selMap=0,selDiff=1,tab=0,skOpen=null,sp=0,mode=0;
@@ -1149,7 +1175,7 @@ function homeR(){
 }
 function pvSvg(m){const pts=m.p.map(q=>q.join(',')).join(' '),e=m.p[m.p.length-1];return `<svg class="pv" viewBox="0 0 800 480" style="background:${m.c}"><polyline points="${pts}" fill="none" stroke="#6e5638" stroke-width="46" stroke-linejoin="round" stroke-linecap="round"/><polyline points="${pts}" fill="none" stroke="#a68a5e" stroke-width="40" stroke-linejoin="round" stroke-linecap="round"/><circle cx="20" cy="${m.p[0][1]}" r="16" fill="#4caf7a"/><circle cx="${Math.min(e[0],780)}" cy="${e[1]}" r="16" fill="#e0533d"/></svg>`}
 function setSp(v){sp=v;selMap=0;selDiff=v?0:1;stageR()}
-function setMode(v){mode=v;sp=0;selMap=0;if(v)selDiff=1;stageR()}
+function setMode(v){mode=v;if(v!==3)sp=0;selMap=0;if(v&&v!==3)selDiff=1;stageR()}
 function togMod(id){const i=S.modOn.indexOf(id);if(i>=0)S.modOn.splice(i,1);else{if(S.modOn.length>=2)S.modOn.shift();S.modOn.push(id)}save();stageR()}
 const MODS=[
  {id:'iron',n:'강철 피부',d:'적 체력 x1.5',cm:1.5,ap:g=>{g.eh*=1.5}},
@@ -1164,9 +1190,12 @@ const MODS=[
 ];
 function hrChal(){let s=Math.floor(Date.now()/3600000)*7919+13;const r=()=>{s=(s*9301+49297)%233280;return s/233280};r();r();return{map:Math.floor(r()*MAPS.length),df:Math.floor(r()*5),mod:Math.floor(r()*MODS.length)}}
 function stageR(){
- for(let i=0;i<3;i++)$('md'+i).className=i==mode?'':'alt';
+ for(let i=0;i<4;i++)$('md'+i).className=i==mode?'':'alt';
  $('sp0').className=sp?'alt':'';$('sp1').className=sp?'':'alt';
+ $('dungeon-mode').style.display=mode===3?'block':'none';
+ ['maps','dfh','diffs','modsec','lo','start'].forEach(id=>$(id).style.display=mode===3?'none':'');
  $('sptabs').style.display=mode?'none':'flex';
+ if(mode===3){dungeonR();return;}
  if(mode==2){const c=hrChal(),m=MAPS[c.map],md=MODS[c.mod];$('maps').innerHTML=`<div class="card sel" style="flex:1 1 100%;text-align:left">${pvSvg(m)}<b>${m.n}</b> · 난이도 <b>${DIFF[c.df].n}</b><br>🧪 모디파이어: <b>${md.n}</b> – ${md.d}<br>🪙 코인 배율 x${md.cm}<small>${60-new Date().getMinutes()}분 후 바뀜 · 클리어하면 모디파이어 획득${S.mods.includes(md.id)?' (이미 보유)':''}</small></div>`;$('diffs').innerHTML='';$('dfh').style.display='none';$('modsec').innerHTML=''}
  else{
   $('maps').innerHTML=(sp?SMAPS:MAPS).map((m,i)=>`<div class="card ${i==selMap?'sel':''}" onclick="selMap=${i};stageR()">${pvSvg(m)}<b>${m.n}</b>${m.reward?`<small>🎁 보상: ${WM[m.reward].n} ${S.owned.includes(m.reward)?'✅ 획득':''}</small>`:''}</div>`).join('');
@@ -1221,7 +1250,7 @@ function detail(id){const w=WM[id],lv=[1,2,3,4].map(l=>{const k=l-1;return `Lv.$
 // ============================================================
 // 9) 등급 필터 / 검색
 // ============================================================
-const TORD=[0,1,2,3,5,6,7,8,4];let tierF=-1,qS='';
+const TORD=[0,1,2,3,5,6,7,8,9,4];let tierF=-1,qS='';
 let TGS={s:null,l:null};
 function curK(){return $('shop').classList.contains('hide')?'l':'s'}
 function tvis(w){if(w.unlock&&!w.unlock()&&!S.owned.includes(w.id))return false;return w.t!=8||S.owned.includes(w.id)||evActive(w.id)}
@@ -1380,6 +1409,8 @@ WS.spear.push(['맹렬한 전투',0,'#ff5252','#4a0000','<path d="M32 0 L38 8 L3
 WS.crossbow.push(['전쟁',0,'#8d9c5a','#2b3018','<path d="M8 20 Q32 2 56 20" stroke="#3e4a2a" stroke-width="4" fill="none"/><path d="M8 20 Q32 6 56 20" stroke="#6b7a3a" stroke-width="1.5" fill="none" opacity="0.7"/><path d="M8 20 L32 28 L56 20" stroke="#9aa1b5" stroke-width="1.5" stroke-dasharray="2 2" fill="none"/><rect x="30" y="6" width="4" height="30" fill="#3e2723"/><path d="M32 2 L37 12 L27 12Z" fill="#b0bec5" stroke="#546e7a"/><path d="M32 12 V20" stroke="#546e7a" stroke-width="1.2"/><circle cx="14" cy="18" r="2" fill="#c62828"/><circle cx="50" cy="18" r="2" fill="#c62828"/><path d="M10 14 L14 18 M54 14 L50 18" stroke="#4a0000" stroke-width="1" fill="none"/>','<rect x="28" y="30" width="8" height="26" rx="2" fill="#3e2723"/><path d="M29 36 H35 M29 42 H35 M29 48 H35" stroke="#5d4037" stroke-width="1"/><path d="M24 34 H40 V38 H24Z" fill="#2b3018" stroke="#10151a" stroke-width="1"/><path d="M26 34 V38 M34 34 V38" stroke="#4a5a2a" stroke-width="1"/><path d="M30 52 Q32 56 30 58" stroke="#8d9c5a" stroke-width="1.5" fill="none"/><circle cx="32" cy="50" r="1.5" fill="#c62828"/>',null,null,'sand',null]);
 WS.multi.push(['맹렬한 전투',0,'#ff5252','#4a0000','','<rect x="24" y="36" width="16" height="26" rx="4" fill="#5d4037" stroke="#3e2723" stroke-width="1.2"/><path d="M26 42 h12 M26 48 h12 M26 54 h12" stroke="#3e2723" stroke-width="1.5"/><path d="M24 40 L20 38 M40 40 L44 38" stroke="#4a0000" stroke-width="1.5" fill="none"/><circle cx="32" cy="38" r="3.5" fill="#8d6e63" stroke="#3e2723" stroke-width="1.2"/><path d="M30 36 Q32 40 34 36" stroke="#e53935" stroke-width="1.2" fill="none"/><circle cx="29" cy="56" r="1.5" fill="#e53935"/><circle cx="35" cy="50" r="1" fill="#b71c1c"/>','<path d="M32 2 L37 10 L34 16 L38 22 L33 28 L36 34 L30 38 L28 34 L31 28 L27 22 L30 16 L26 10 L30 4Z" fill="#cfd8dc" stroke="#78909c" stroke-width="1.2"/><g transform="rotate(-38 32 40)"><path d="M32 14 L35 18 L33 26 L29 30 L27 24 L29 18Z" fill="#90a4ae" stroke="#546e7a" stroke-width="0.8"/><path d="M30 20 L33 24" stroke="#4a0000" stroke-width="1.2"/></g><g transform="rotate(42 32 40)"><path d="M30 16 L36 20 L34 28 L28 30 L27 24 L28 18Z" fill="#b0bec5" stroke="#546e7a" stroke-width="0.8"/><circle cx="32" cy="24" r="1" fill="#b71c1c"/></g><path d="M31 8 L34 12 M30 18 L33 22 M31 28 L34 32" stroke="#4a0000" stroke-width="1.3" fill="none"/><path d="M34 6 Q36 10 34 14" stroke="#e53935" stroke-width="1.2" fill="none"/><circle cx="35" cy="14" r="1.2" fill="#e53935"/><circle cx="29" cy="36" r="1" fill="#b71c1c"/>',null,null,'red',null]);
 
+WS.goedendag.push(['묘지의 망령',0,'#b0bec5','#37474f','<path d="M32 2 L36 12 L28 12Z" fill="#b0bec5" stroke="#37474f"/>','<path d="M23 16 Q32 10 41 16 L41 38 Q32 46 23 38Z" fill="#455a64" stroke="#263238"/>',null,null,'purple',null]);
+WS.fauchard.push(['심연의 초승달',0,'#80deea','#006064','<path d="M32 2 Q53 12 48 31 Q42 22 36 34Z" fill="#80deea" stroke="#006064"/>','<path d="M30 14 Q40 22 35 38" stroke="#00acc1" stroke-width="2" fill="none"/>',null,null,'water',null]);
 function seasonXpNeeded(lv){
   // 초반 완만, 후반 가파르게
   return Math.floor(80 + lv * 35 + Math.pow(lv, 1.35) * 4);
@@ -1716,7 +1747,7 @@ function startGame(){
  G={m,d,segs,tot,special:sp&&!ch,inf,chal:ch?MODS[ch.mod]:null,di:ch?ch.df:(sp?4:selDiff),max:inf?1e9:(sp?20:MAXW),auto:false,at:0,gold:d.gold,lives:d.lives,wave:0,en:[],tw:[],fx:[],q:[],sp:0,spd:1,sel:null,slot:S.load[0],over:false,active:false,blk:[],eh:1,es:1,pg:1,pd:1,ps:1,pr:1,cnt:1,cm:1,ws:0};
  
  // ① 모디파이어 적용 (기존 그대로)
- (ch?[MODS[ch.mod]]:(sp?[]:S.modOn.map(id=>MODS.find(x=>x.id==id)))).forEach(x=>{x.ap(G);G.cm*=x.cm});
+ if(!D?.inBattle)(ch?[MODS[ch.mod]]:(sp?[]:S.modOn.map(id=>MODS.find(x=>x.id==id)))).forEach(x=>{x.ap(G);G.cm*=x.cm});
  
  // ② ★ 트리 무효 체크
  //    - 임파서블 난이도 (일반 모드) → 강제 무의 경지
@@ -1741,21 +1772,52 @@ function startGame(){
  side();hud();last=performance.now();requestAnimationFrame(loop);
 }
 $('start').onclick = startGame;
+function dungeonFloorSetup(){
+ const events=1+Math.floor(Math.random()*3),slots=[0,1,2,3,4].sort(()=>Math.random()-.5).slice(0,events);
+ D.rooms=Array.from({length:5},(_,i)=>({type:slots.includes(i)?'event':'battle',event:slots.includes(i)?['treasure','shrine','gamble','sacrifice'][Math.floor(Math.random()*4)]:null,map:Math.floor(Math.random()*MAPS.length),diff:Math.floor(Math.random()*5)}));D.room=1;D.phase='rooms';D.eventChoices=null;D.shopOffers=null;
+}
+function dungeonGiftAdd(id,rank){if(D)D.gifts.push({id:id,rank:Math.max(1,Math.min(3,rank||1))})}
+function dungeonGiftFuse(id,rank){if(!D||rank>=3)return;let n=0;D.gifts=D.gifts.filter(g=>{if(g.id===id&&g.rank===rank&&n<3){n++;return false}return true});if(n<3)return;dungeonGiftAdd(id,rank+1);toast('기프트 '+(rank+1)+'등급 합성 완료!');dungeonR()}
+function dungeonApplyGifts(){if(!G||!D)return;D.gifts.forEach(g=>{const x=DUNGEON_GIFTS.find(v=>v.id===g.id);if(!x)return;const n=x.v*g.rank;if(x.effect==='pd')G.pd*=1+n;else if(x.effect==='ps')G.ps*=1-n;else if(x.effect==='pr')G.pr*=1+n;else if(x.effect==='pg')G.pg*=1+n;else if(x.effect==='lives')G.lives*=1+n;else if(x.effect==='bd')G.bd=(G.bd||1)*(1+n);else if(x.effect==='mixed'){G.pd*=1+n;G.lives*=1+n}});(D.curses||[]).forEach(x=>{if(x==='frail')G.lives*=.72;if(x==='horde')G.cnt*=1.35;if(x==='armor')G.eh*=1.4;if(x==='haste')G.es*=1.25;if(x==='poor')G.pg*=.65})}
+function dungeonStart(hard,overdrive){D={hard:!!hard,overdrive:!!overdrive,maxFloor:overdrive?15:5,floor:1,room:1,phase:'rooms',currency:0,gifts:[],curses:[],inBattle:false,floorCoins:0};dungeonFloorSetup();mode=3;sp=0;stageR()}
+function dungeonEnterBattle(boss){if(!D||D.inBattle)return;const r=boss?{map:Math.floor(Math.random()*MAPS.length),diff:Math.floor(Math.random()*5)}:D.rooms[D.room-1];D.roomMap=r.map;D.roomDiff=r.diff;D.inBattle=true;mode=0;sp=0;selMap=r.map;selDiff=r.diff;const bossId=boss?BOSS_EN[Math.floor(Math.random()*BOSS_EN.length)]:null;startGame();if(!G)return;G.dungeonRoom=true;G.dungeonBoss=!!boss;G.dungeonBossIndex=bossId;G.dungeonFloor=D.floor;G.max=boss?5:3;G.di=r.diff;G.d={...G.d,hp:G.d.hp*(D.hard?1.45:1)*(1+(D.floor-1)*.09)};G.es*=D.hard?1.2:1;G.eh*=1+(D.floor-1)*.06;if(D.overdrive)G.es*=1+(D.floor-1)*.025;dungeonApplyGifts();hud();side()}
+function dungeonAdvanceRoom(){D.room++;if(D.room>5){D.room=6;D.phase='shop';D.shopOffers=Array.from({length:4},()=>({id:DUNGEON_GIFTS[Math.floor(Math.random()*DUNGEON_GIFTS.length)].id,rank:1+Math.floor(Math.random()*2)}))}else{D.phase='rooms';D.eventChoices=null}dungeonR()}
+function dungeonOpenEvent(){if(!D||D.eventChoices)return;const pick=()=>DUNGEON_GIFTS[Math.floor(Math.random()*DUNGEON_GIFTS.length)].id,t=D.rooms[D.room-1].event;if(t==='treasure')D.eventChoices=[{type:'gift',id:pick(),rank:1,label:'1등급 기프트'},{type:'gift',id:pick(),rank:1,label:'1등급 기프트'},{type:'coins',amount:18+D.floor*4,label:'재화 +' +(18+D.floor*4)}];else if(t==='shrine')D.eventChoices=[{type:'gift',id:pick(),rank:2,label:'2등급 기프트'},{type:'gift',id:pick(),rank:1,label:'1등급 기프트'},{type:'coins',amount:30+D.floor*3,label:'재화 +' +(30+D.floor*3)}];else if(t==='gamble')D.eventChoices=[{type:'gift',id:pick(),rank:3,label:'3등급 기프트'},{type:'coins',amount:45+D.floor*5,label:'확정 재화 +' +(45+D.floor*5)},{type:'gift',id:pick(),rank:1,label:'안전한 기프트'}];else D.eventChoices=[{type:'gift',id:pick(),rank:2,label:'2등급 기프트 (재화 15 소모)'},{type:'coins',amount:35+D.floor*4,label:'재화 +' +(35+D.floor*4)},{type:'gift',id:pick(),rank:1,label:'1등급 기프트'}]}
+function dungeonChooseEvent(i){if(!D)return;dungeonOpenEvent();const o=D.eventChoices[i];if(!o)return;if(D.rooms[D.room-1].event==='sacrifice'&&o.type==='gift'&&o.rank===2){if(D.currency<15){toast('던전 재화 15개가 필요합니다');return}D.currency-=15}if(o.type==='gift')dungeonGiftAdd(o.id,o.rank);else D.currency+=o.amount;D.currency+=8+D.floor*2;D.eventChoices=null;dungeonAdvanceRoom()}
+function dungeonBuyGift(i){if(!D||D.phase!=='shop')return;const o=D.shopOffers[i],price=14+o.rank*8+D.floor*2;if(D.currency<price){toast('던전 재화가 부족합니다');return}D.currency-=price;dungeonGiftAdd(o.id,o.rank);D.shopOffers.splice(i,1);dungeonR()}
+function dungeonContinueBoss(){if(D&&D.phase==='shop'){D.phase='boss';D.room=7;D.roomMap=Math.floor(Math.random()*MAPS.length);D.roomDiff=Math.floor(Math.random()*5);dungeonR()}}
+function dungeonBattleEnd(win,quit){const boss=G&&G.dungeonBoss;G=null;if(!D)return;D.inBattle=false;if(quit||!win){S.dungeonBestFloor=Math.max(S.dungeonBestFloor||0,D.floor-1);save();D=null;mode=3;show('stage');return}if(!boss){const reward=8+D.floor*2+D.roomDiff*3;D.currency+=reward;toast('방 클리어! 던전 재화 +'+reward);dungeonAdvanceRoom();return}const floor=D.floor,reward=50+floor*22+(D.hard?floor*12:0)+(D.overdrive?floor*20:0);S.dungeonCoins=(S.dungeonCoins||0)+reward;S.dungeonBestFloor=Math.max(S.dungeonBestFloor||0,floor);D.floorCoins+=reward;toast('층 클리어! 던전 코인 +'+reward);if(floor===10&&D.overdrive){D.floor=11;D.phase='curse';D.curseChoices=[['frail','부서진 생명력','우리 시작 체력 -28%'],['horde','끝없는 군세','적 수 +35%'],['armor','강철 군단','적 체력 +40%'],['haste','광폭화','적 이동 속도 +25%'],['poor','메마른 전리품','처치 골드 -35%']].sort(()=>Math.random()-.5).slice(0,3);save();dungeonR();return}D.floor++;if(D.floor>D.maxFloor){S.dungeonClears=(S.dungeonClears||0)+1;if(D.hard&&!D.overdrive){S.dungeonHardClears=(S.dungeonHardClears||0)+1;S.dungeonOverdrive=true}const bonus=D.overdrive?400:D.hard?220:160;S.dungeonCoins+=bonus;D.floorCoins+=bonus;save();D.finished=true;D.summary='던전 완전 정복! 추가 던전 코인 +'+bonus;D.floor=D.maxFloor;mode=3;show('stage');return}dungeonFloorSetup();save();dungeonR()}
+function dungeonChooseCurse(i){if(!D||D.phase!=='curse')return;const c=D.curseChoices[i];if(!c)return;D.curses.push(c[0]);D.currency+=65;dungeonFloorSetup();save();dungeonR();toast('제약 선택: '+c[1]+' · 재화 +65')}
+function dungeonShopBuy(id){const x=DUNGEON_SHOP.find(v=>v.id===id);if(!x||S.dungeonCoins<x.price)return;if(x.type==='weapon'&&S.owned.includes(x.id))return;if(x.type==='skin'&&S.skins.includes(x.weapon+':'+x.index))return;S.dungeonCoins-=x.price;if(x.type==='weapon')S.owned.push(x.id);else S.skins.push(x.weapon+':'+x.index);save();chk();syncC();dungeonR()}
+function dungeonStoreHtml(){let s='<div class="dun-panel"><h2>🏪 영구 던전 상점</h2><p class="sub">던전 코인으로 구매합니다. 이 상점에서 얻는 무기와 스킨은 모두 던전 등급입니다.</p><div class="dun-grid">';DUNGEON_SHOP.forEach(x=>{const done=x.type==='weapon'?S.owned.includes(x.id):S.skins.includes(x.weapon+':'+x.index);s+='<div class="dun-shopitem">'+(x.type==='weapon'?svg(x.id,0):svg(x.weapon,x.index))+'<b>'+x.name+'</b><div class="sub">'+x.desc+'</div><button style="width:100%;margin-top:7px" '+(done||S.dungeonCoins<x.price?'disabled':'')+' onclick="dungeonShopBuy(\''+x.id+'\')">'+(done?'보유 중':'🏅 '+x.price+' 구매')+'</button></div>'});return s+'</div></div>'}
+function dungeonR(){
+ const el=$('dungeon-mode');if(!el)return;const coins='<span class="coin">🏅 던전 코인 '+(S.dungeonCoins||0)+'</span>';
+ if(!D){el.innerHTML='<div class="dun-panel"><h2>🏰 던전</h2><p>한 층은 7개 방으로 진행합니다. 앞의 5개 방을 탐험하고 상점에서 기프트를 정비한 뒤, 바로 다음 방에서 보스와 싸웁니다.</p><p class="sub">층마다 1~3개의 ?방이 무작위로 등장합니다. 기프트는 1~3등급이며 같은 기프트 3개를 합성할 수 있습니다. 일반·하드 던전은 5층, 하드 5층 완주 후 중첩 모드가 열리며 중첩 모드는 15층입니다.</p><div class="stat"><span>🏆 클리어 '+(S.dungeonClears||0)+'</span><span>🔥 하드 '+(S.dungeonHardClears||0)+'</span><span>최고 '+(S.dungeonBestFloor||0)+'층</span></div><div class="row"><button class="big" onclick="dungeonStart(false,false)">일반 던전 입장 · 5층</button><button class="big" onclick="dungeonStart(true,false)">하드 던전 입장 · 5층</button>'+(S.dungeonOverdrive?'<button class="big" onclick="dungeonStart(true,true)">♾ 중첩 모드 · 15층</button>':'')+'</div><p class="sub">하드 모드는 적의 체력과 이동 속도가 증가합니다. 중첩 모드 10층을 깨면 제약을 하나 선택해야 합니다.</p></div>'+coins+dungeonStoreHtml();return}
+ if(D.finished){el.innerHTML='<div class="dun-panel"><h2>🏆 '+D.summary+'</h2><p>'+D.floor+'층 '+(D.hard?'하드':'일반')+(D.overdrive?' · 중첩 모드':'')+' 완료</p><p>이번 탐험 획득 던전 코인: 🏅 '+D.coins+'</p><button onclick="D=null;dungeonR()">던전 로비로</button></div>'+coins+dungeonStoreHtml();return}
+ let room=D.room,html='<div class="dun-panel"><div class="top"><h2 style="margin:0">🏰 '+(D.overdrive?'중첩 ':'')+(D.hard?'하드':'일반')+' 던전 · '+D.floor+'/'+D.maxFloor+'층</h2><span class="sp"></span><b>🪙 내부 재화 '+D.currency+'</b></div><div class="dun-grid">';
+ for(let i=1;i<=7;i++){const label=i<=5?(D.rooms[i-1].type==='event'?'?방':'전투방'):i===6?'상점':'보스',done=i<room||(D.phase==='shop'&&i<=5)||(D.phase==='boss'&&i<=6),now=i===room||(D.phase==='shop'&&i===6)||(D.phase==='boss'&&i===7);html+='<div class="dun-room '+(done?'done ':'')+(now?'now':'')+'"><b>'+i+'번 방</b><div style="font-size:24px">'+(i<=5?(D.rooms[i-1].type==='event'?'❔':'⚔️'):i===6?'🛒':'👑')+'</div>'+label+'</div>'}html+='</div></div>';
+ if(D.phase==='rooms'){const r=D.rooms[room-1];if(r.type==='event'){const names={treasure:'보물 상자',shrine:'수호자의 제단',gamble:'운명의 도박',sacrifice:'희생의 제단'};if(!D.eventChoices)dungeonOpenEvent();html+='<div class="dun-panel"><h2>❔ '+names[r.event]+'</h2><p>방의 종류와 선택에 따라 다른 기프트 또는 재화를 얻습니다.</p><div class="dun-grid">';D.eventChoices.forEach((o,i)=>{const g=o.type==='gift'?DUNGEON_GIFTS.find(x=>x.id===o.id):null;html+='<div class="dun-shopitem"><b>'+(g?g.icon+' '+g.n+' · '+o.rank+'등급':'🪙 '+o.label)+'</b><div class="sub">'+(g?g.d:o.label)+'</div><button style="width:100%;margin-top:7px" onclick="dungeonChooseEvent('+i+')">선택</button></div>'});html+='</div></div>'}else{html+='<div class="dun-panel"><h2>⚔️ '+room+'번 전투방</h2><p>맵 <b>'+MAPS[r.map].n+'</b> · 난이도 <b>'+DIFF[r.diff].n+'</b></p>'+pvSvg(MAPS[r.map])+'<p class="sub">방마다 맵과 난이도가 무작위로 바뀝니다. 클리어 시 내부 재화 '+(8+D.floor*2+r.diff*3)+'개 획득.</p><button class="big" onclick="dungeonEnterBattle(false)">방 입장</button></div>'}}
+ else if(D.phase==='shop'){html+='<div class="dun-panel"><h2>🛒 층간 보급 상점</h2><p>기프트를 구매하거나 합성하세요. 상점 바로 다음은 보스방입니다.</p><div class="dun-grid">';(D.shopOffers||[]).forEach((o,i)=>{const g=DUNGEON_GIFTS.find(x=>x.id===o.id),price=14+o.rank*8+D.floor*2;html+='<div class="dun-shopitem"><b>'+g.icon+' '+g.n+'</b><div class="sub">'+o.rank+'등급 · '+g.d+'</div><button style="width:100%;margin-top:7px" '+(D.currency<price?'disabled':'')+' onclick="dungeonBuyGift('+i+')">🪙 '+price+' 구매</button></div>'});html+='</div><button class="big" onclick="dungeonContinueBoss()">👑 보스방으로</button></div>'}
+ else if(D.phase==='boss'){const map=MAPS[D.roomMap||0],diff=DIFF[D.roomDiff||0];html+='<div class="dun-panel"><h2>👑 '+D.floor+'층 보스방</h2><p>맵 '+map.n+' · 난이도 '+diff.n+' · 보스 무작위 출현</p>'+pvSvg(map)+'<button class="big" onclick="dungeonEnterBattle(true)">보스에게 도전</button></div>'}
+ else if(D.phase==='curse'){html+='<div class="dun-panel"><h2>⚠️ 10층 돌파 제약 선택</h2><p>팀에 불리한 제약입니다. 남은 탐험 동안 적용되지만 보상 재화를 얻습니다.</p><div class="dun-grid">';D.curseChoices.forEach((x,i)=>{html+='<div class="dun-shopitem"><b>'+x[1]+'</b><p class="sub">'+x[2]+'</p><button onclick="dungeonChooseCurse('+i+')">제약 수락</button></div>'});html+='</div></div>'}
+ const gifts=D.gifts.map(g=>{const x=DUNGEON_GIFTS.find(v=>v.id===g.id);return '<div class="dun-gift"><span class="dg-icon">'+x.icon+'</span><div><b>'+x.n+'</b><div class="sub">'+x.d+'</div></div><b class="dun-r'+g.rank+'">'+g.rank+'등급</b></div>'}).join('');let fuse='';DUNGEON_GIFTS.forEach(g=>[1,2].forEach(rank=>{if(D.gifts.filter(x=>x.id===g.id&&x.rank===rank).length>=3)fuse+='<button class="alt" onclick="dungeonGiftFuse(\''+g.id+'\','+rank+')">'+g.n+' '+rank+'등급 ×3 → '+(rank+1)+'등급 합성</button>'}));
+ html+='<div class="dun-panel"><h2>🎁 현재 기프트</h2>'+(gifts||'<div class="sub">아직 기프트가 없습니다.</div>')+'<div class="row">'+fuse+'</div></div><div class="row"><button class="alt" onclick="ask(\'던전 탐험을 포기할까요? 이번 층 진행은 사라집니다.\',()=>{D=null;dungeonR()})">탐험 포기</button></div>';el.innerHTML=html;
+}
 function startWave(force){
  if(!G||G.over||(G.active&&!force)||G.wave>=G.max)return;
  if(G.active)G.gold+=30+G.wave*8;
  G.wave++;const w=G.wave,pl=G.special?[1,2,3,4,6,9,10]:[
-    [0,1,2],           // 0: 쉬움
-    [0,1,2,3],         // 1: 보통
-    [0,1,2,3,4,8],     // 2: 어려움
-    [1,2,3,4,6,8,9],   // 3: 악몽
-    [3,4,6,7,9,10],    // 4: 지옥
-    [4,5,7,8,9,10],    // 5: 세미 임파서블
-    [5,6,8,9,10]       // 6: 임파서블
+    [0,1,2,11,12],           // 0: 쉬움
+    [0,1,2,3,11,12],         // 1: 보통
+    [0,1,2,3,4,8,11,13],     // 2: 어려움
+    [1,2,3,4,6,8,9,12,13,14],   // 3: 악몽
+    [3,4,6,7,9,10,11,12,13,14,15],    // 4: 지옥
+    [4,5,7,8,9,10,11,12,13,14,15],    // 5: 세미 임파서블
+    [5,6,8,9,10,12,13,14,15]       // 6: 임파서블
   ][G.di];let t=G.active?G.sp:0;
  const n=Math.min(70,Math.round((4+Math.floor(w*1.7))*G.cnt));
  for(let i=0;i<n;i++){t+=Math.max(.35,1-w*.03);G.q.push({t,k:pl[Math.floor(Math.random()*Math.min(pl.length,Math.floor(w/3)+2))]})}
- if(w%5==0)G.q.push({t:t+1.5,k:5});G.q.sort((a,b)=>a.t-b.t);
+ if(w%5==0)G.q.push({t:t+1.5,k:G.dungeonBossIndex||BOSS_EN[Math.floor(Math.random()*BOSS_EN.length)]});G.q.sort((a,b)=>a.t-b.t);
  snd('wave');if(!G.active)G.sp=0;G.ws=G.sp;G.active=true;hud();
 }
 function hud(){
@@ -1795,7 +1857,9 @@ $('auto').onclick=()=>{if(!G)return;G.auto=!G.auto;$('auto').textContent='자동
 $('next').onclick=()=>G&&startWave(G.active);
 $('quit').onclick=()=>ask('정말로 나가시겠습니까? 진행 상황은 저장되지 않으며 코인도 받을 수 없습니다.',()=>{if(G)end(false,true)});
 function end(win,quit){
- if(!G||G.over)return;G.over=true;snd(quit?'click':win?'win':'lose');
+ if(!G||G.over)return;
+ if(G.dungeonRoom){G.over=true;dungeonBattleEnd(win,quit);return}
+ G.over=true;snd(quit?'click':win?'win':'lose');
  let earn=quit?0:Math.round(G.wave*15*G.d.rew+(win?150*G.d.rew:0));earn=Math.round(earn*(G.cm||1));if(win)dq('clear',1);let rw='';
  if(!quit){
   if(G.inf)S.st.binf=Math.max(S.st.binf||0,G.wave-1);else if(!G.special&&!G.chal)S.best=Math.max(S.best||0,win?MAXW:G.wave-1);
