@@ -123,6 +123,9 @@ button,.card,.chip,.slot{touch-action:manipulation;-webkit-tap-highlight-color:t
 .hide{display:none!important}
 .dungeon-window.hide{display:none!important}.dungeon-window{position:fixed!important;inset:2vh 2vw!important;z-index:9999!important;display:block!important;overflow:auto!important;background:var(--bg)!important;border:2px solid var(--gold);border-radius:14px;padding:10px;box-shadow:0 0 0 100vmax rgba(0,0,0,.86),0 12px 50px #000}.dungeon-window #dungeon-gamebar{display:flex;align-items:center;gap:10px;padding:5px 2px 12px;position:sticky;top:0;background:var(--bg);z-index:5}.dungeon-window #hud{position:sticky;top:42px;z-index:4}.dun-shopitem.selected{border:2px solid var(--gold);box-shadow:0 0 10px #ffc83d55}
 
+/* Dungeon combat keeps the exact same 1100px game frame and 800:480 canvas layout as normal play. */
+.dungeon-window{inset:auto!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;width:min(100vw,1100px)!important;max-width:1100px!important;max-height:100dvh!important;overflow:auto!important;padding:12px!important;border:0!important;border-radius:0!important;box-shadow:0 0 0 100vmax rgba(0,0,0,.86)!important}
+#cf{z-index:10060!important}
 /* Dungeon independent screen and modal layout */
 #dungeon-mode.dungeon-lobby-window{position:fixed!important;inset:0!important;z-index:10000!important;display:block!important;overflow:auto!important;background:rgba(10,12,18,.98)!important;padding:clamp(12px,3vw,30px)!important}
 #dungeon-mode .dungeon-shell{max-width:1120px;margin:0 auto;min-height:100%}
@@ -1820,13 +1823,20 @@ function dungeonFloorSetup(){
    if(j+1<to.length&&i<from.length-1)addEdge(a.id,to[j+1].id);
   });
  }
- D.rooms=rooms;D.edges=edges;D.visited=0;D.currentNode=null;D.available=rooms.filter(r=>r.col===0).map(r=>r.id);
+ D.rooms=rooms;D.edges=edges;D.visited=0;D.currentNode=null;D.lastAdvancedNode=null;D.available=rooms.filter(r=>r.col===0).map(r=>r.id);
  D.phase='rooms';D.eventChoices=null;D.shopOffers=null;D.roomMap=null;D.roomDiff=null;
 }
 
 function dungeonGiftAdd(id,rank){if(D)D.gifts.push({id:id,rank:Math.max(1,Math.min(3,rank||1))})}
 function dungeonGiftFuse(id,rank){if(!D||rank>=3)return;let n=0;D.gifts=D.gifts.filter(g=>{if(g.id===id&&g.rank===rank&&n<3){n++;return false}return true});if(n<3)return;dungeonGiftAdd(id,rank+1);toast('기프트 '+(rank+1)+'등급 합성이 완료되었습니다.');dungeonR()}
 function dungeonApplyGifts(){if(!G||!D)return;D.gifts.forEach(g=>{const x=DUNGEON_GIFTS.find(v=>v.id===g.id);if(!x)return;const n=x.v*g.rank;if(x.effect==='pd')G.pd*=1+n;else if(x.effect==='ps')G.ps*=1-n;else if(x.effect==='pr')G.pr*=1+n;else if(x.effect==='pg')G.pg*=1+n;else if(x.effect==='lives')G.lives*=1+n;else if(x.effect==='bd')G.bd=(G.bd||1)*(1+n);else if(x.effect==='mixed'){G.pd*=1+n;G.lives*=1+n}else if(x.effect==='cm')G.cm=(G.cm||1)*(1+n);else if(x.effect==='eh')G.eh*=Math.max(.55,1-n);else if(x.effect==='es')G.es*=Math.max(.55,1-n);else if(x.effect==='cnt')G.cnt*=1+n});(D.curses||[]).forEach(x=>{if(x==='frail')G.lives*=.72;if(x==='horde')G.cnt*=1.35;if(x==='armor')G.eh*=1.4;if(x==='haste')G.es*=1.25;if(x==='poor')G.pg*=.65})}
+function dungeonAskStart(){
+ ask('던전에 입장하시겠습니까?',()=>{
+  $('cf').style.display='none';
+  $('dun-modal').style.display='none';
+  dungeonStart(!!S.dungeonOverdrive);
+ });
+}
 function dungeonStart(overdrive){
  D={hard:false,floorHard:false,allHard:true,overdrive:!!overdrive,maxFloor:overdrive?15:5,floor:1,phase:'loadout',currency:0,gifts:[],curses:[],inBattle:false,floorCoins:0,visited:0,loadout:S.load.slice(0,4)};
  mode=3;sp=0;stageR();
@@ -1860,26 +1870,41 @@ function dungeonSelectRoom(id){
  D.roomMap=r.map;D.roomDiff=r.diff;D.inBattle=true;D.battleKind=boss?'boss':'room';mode=0;sp=0;selMap=r.map;selDiff=r.diff;
  const bossId=boss?BOSS_EN[Math.floor(Math.random()*BOSS_EN.length)]:null;
  D.battleBossId=bossId;
- startGame();if(!G){D.inBattle=false;D.battleKind=null;D.battleBossId=null;return}
+ $('dun-modal').style.display='none';
+ startGame();
+ if(!G){D.inBattle=false;D.battleKind=null;D.battleBossId=null;mode=3;show('stage');dungeonR();return}
  G.dungeonLoadout=D.loadout.slice();G.di=r.diff;
  G.d={...G.d,hp:G.d.hp*(D.floorHard?1.45:1)*(1+(D.floor-1)*.09)};
  G.es*=D.floorHard?1.2:1;G.eh*=1+(D.floor-1)*.06;if(D.overdrive)G.es*=1+(D.floor-1)*.025;
  dungeonApplyGifts();hud();side();
-}
-function dungeonAdvanceRoom(){
- const r=D.rooms.find(x=>x.id===D.currentNode);if(r)r.done=true;
- D.visited++;D.eventChoices=null;
- if(D.visited>=5){
-  D.phase='shopReady';D.shopOffers=Array.from({length:4},()=>({id:DUNGEON_GIFTS[Math.floor(Math.random()*DUNGEON_GIFTS.length)].id,rank:1+Math.floor(Math.random()*2)}));
+}function dungeonAdvanceRoom(){
+ if(!D||!D.rooms||D.currentNode==null)return;
+ const r=D.rooms.find(x=>x.id===D.currentNode);
+ if(!r)return;
+ if(D.lastAdvancedNode===r.id)return;
+ D.lastAdvancedNode=r.id;r.done=true;
+ D.visited=Math.min(5,(D.visited||0)+1);D.eventChoices=null;
+ if(D.visited>=5||r.col>=4){
+  D.phase='shopReady';
+  D.shopOffers=Array.from({length:4},()=>({id:DUNGEON_GIFTS[Math.floor(Math.random()*DUNGEON_GIFTS.length)].id,rank:1+Math.floor(Math.random()*2)}));
  }else{
-  const next=(D.edges||[]).filter(e=>e[0]===D.currentNode).map(e=>e[1]);
-  D.available=[...new Set(next)].filter(id=>{const x=D.rooms.find(r=>r.id===id);return x&&!x.done});
-  D.phase='rooms';
+  let next=(D.edges||[]).filter(e=>e[0]===r.id).map(e=>e[1]);
+  next=[...new Set(next)].filter(id=>{const x=D.rooms.find(v=>v.id===id);return x&&!x.done});
+  if(!next.length){
+   next=D.rooms.filter(x=>x.col===r.col+1&&!x.done).map(x=>x.id);
+  }
+  if(!next.length){
+   for(let col=r.col+2;col<5&&!next.length;col++)next=D.rooms.filter(x=>x.col===col&&!x.done).map(x=>x.id);
+  }
+  if(!next.length){
+   D.phase='shopReady';
+   D.shopOffers=Array.from({length:4},()=>({id:DUNGEON_GIFTS[Math.floor(Math.random()*DUNGEON_GIFTS.length)].id,rank:1}));
+  }else{
+   D.available=next;D.phase='rooms';
+  }
  }
- dungeonR();
-}
-
-function dungeonOpenEvent(){if(!D||D.eventChoices)return;const pick=()=>DUNGEON_GIFTS[Math.floor(Math.random()*DUNGEON_GIFTS.length)].id,r=D.rooms.find(x=>x.id===D.currentNode),t=r&&r.event;if(t==='treasure')D.eventChoices=[{type:'gift',id:pick(),rank:1,label:'1등급 기프트'},{type:'gift',id:pick(),rank:1,label:'1등급 기프트'},{type:'coins',amount:18+D.floor*4,label:'재화 +' +(18+D.floor*4)}];else if(t==='shrine')D.eventChoices=[{type:'gift',id:pick(),rank:2,label:'2등급 기프트'},{type:'gift',id:pick(),rank:1,label:'1등급 기프트'},{type:'coins',amount:30+D.floor*3,label:'재화 +' +(30+D.floor*3)}];else if(t==='gamble')D.eventChoices=[{type:'gift',id:pick(),rank:3,label:'3등급 기프트'},{type:'coins',amount:45+D.floor*5,label:'확정 재화 +' +(45+D.floor*5)},{type:'gift',id:pick(),rank:1,label:'안전한 기프트'}];else D.eventChoices=[{type:'gift',id:pick(),rank:2,label:'2등급 기프트 (재화 15 소모)'},{type:'coins',amount:35+D.floor*4,label:'재화 +' +(35+D.floor*4)},{type:'gift',id:pick(),rank:1,label:'1등급 기프트'}]}
+ save();dungeonR();
+}function dungeonOpenEvent(){if(!D||D.eventChoices)return;const pick=()=>DUNGEON_GIFTS[Math.floor(Math.random()*DUNGEON_GIFTS.length)].id,r=D.rooms.find(x=>x.id===D.currentNode),t=r&&r.event;if(t==='treasure')D.eventChoices=[{type:'gift',id:pick(),rank:1,label:'1등급 기프트'},{type:'gift',id:pick(),rank:1,label:'1등급 기프트'},{type:'coins',amount:18+D.floor*4,label:'재화 +' +(18+D.floor*4)}];else if(t==='shrine')D.eventChoices=[{type:'gift',id:pick(),rank:2,label:'2등급 기프트'},{type:'gift',id:pick(),rank:1,label:'1등급 기프트'},{type:'coins',amount:30+D.floor*3,label:'재화 +' +(30+D.floor*3)}];else if(t==='gamble')D.eventChoices=[{type:'gift',id:pick(),rank:3,label:'3등급 기프트'},{type:'coins',amount:45+D.floor*5,label:'확정 재화 +' +(45+D.floor*5)},{type:'gift',id:pick(),rank:1,label:'안전한 기프트'}];else D.eventChoices=[{type:'gift',id:pick(),rank:2,label:'2등급 기프트 (재화 15 소모)'},{type:'coins',amount:35+D.floor*4,label:'재화 +' +(35+D.floor*4)},{type:'gift',id:pick(),rank:1,label:'1등급 기프트'}]}
 function dungeonChooseEvent(i){
  if(!D)return;dungeonOpenEvent();const o=D.eventChoices[i];if(!o)return;
  if((D.rooms.find(x=>x.id===D.currentNode)||{}).event==='sacrifice'&&o.type==='gift'&&o.rank===2){if(D.currency<15){toast('던전 재화 15개가 필요합니다.');return}D.currency-=15}
@@ -1952,7 +1977,7 @@ function dungeonR(){
  const el=$('dungeon-mode');if(!el)return;
  const coins='<span class="coin">🏅 던전 코인 '+(S.dungeonCoins||0)+'</span>';
  if(!D){
-  el.innerHTML='<div class="dungeon-shell"><div class="dungeon-head"><h1>🏰 던전</h1><span class="sp"></span><button class="alt" onclick="mode=0;show(\'stage\')">닫기</button></div><div class="dun-panel"><p>13개의 방이 연결된 미로를 탐험합니다. 경로를 직접 선택해 5개 방을 클리어하면 보급 상점과 보스가 등장합니다.</p><div class="stat"><span>🏆 클리어 '+(S.dungeonClears||0)+'</span><span>🔥 하드 완주 '+(S.dungeonHardClears||0)+'</span><span>최고 '+(S.dungeonBestFloor||0)+'층</span></div>'+coins+'<button class="big" onclick="dungeonStart(!!S.dungeonOverdrive)">🏰 던전 입장</button><p class="sub">층마다 난이도를 선택하실 수 있습니다. 5층 모두 하드로 클리어하면 15층 중첩 모드가 해금됩니다.</p></div></div>';
+  el.innerHTML='<div class="dungeon-shell"><div class="dungeon-head"><h1>🏰 던전</h1><span class="sp"></span><button class="alt" onclick="mode=0;show(\'stage\')">닫기</button></div><div class="dun-panel"><p>13개의 방이 연결된 미로를 탐험합니다. 경로를 직접 선택해 5개 방을 클리어하면 보급 상점과 보스가 등장합니다.</p><div class="stat"><span>🏆 클리어 '+(S.dungeonClears||0)+'</span><span>🔥 하드 완주 '+(S.dungeonHardClears||0)+'</span><span>최고 '+(S.dungeonBestFloor||0)+'층</span></div>'+coins+'<button class="big" onclick="dungeonAskStart()">🏰 던전 입장</button><p class="sub">층마다 난이도를 선택하실 수 있습니다. 5층 모두 하드로 클리어하면 15층 중첩 모드가 해금됩니다.</p></div></div>';
   $('dun-modal').style.display='none';return
  }
  if(D.finished){
