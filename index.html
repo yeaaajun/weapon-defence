@@ -1916,7 +1916,20 @@ function dungeonChooseEvent(i){
  const o=D.shopOffers[i];if(!o)return;const price=14+o.rank*8+D.floor*2;
  if(D.currency<price){toast('던전 재화가 부족합니다.');return}
  D.currency-=price;dungeonGiftAdd(o.id,o.rank);D.shopOffers.splice(i,1);dungeonR();
-}function dungeonContinueBoss(){
+}function dungeonOpenShop(){
+ if(!D||D.phase!=='shopReady')return;
+ if(!Array.isArray(D.shopOffers)||!D.shopOffers.length){
+  D.shopOffers=Array.from({length:4},()=>({id:DUNGEON_GIFTS[Math.floor(Math.random()*DUNGEON_GIFTS.length)].id,rank:1+Math.floor(Math.random()*2)}));
+ }
+ D.phase='shop';dungeonR();
+}
+function dungeonOpenBoss(){
+ if(!D||D.phase!=='bossReady')return;
+ if(!Number.isInteger(D.roomMap))D.roomMap=Math.floor(Math.random()*MAPS.length);
+ if(!Number.isInteger(D.roomDiff))D.roomDiff=Math.floor(Math.random()*DIFF.length);
+ D.phase='boss';dungeonR();
+}
+function dungeonContinueBoss(){
  if(D&&D.phase==='shop'){D.phase='bossReady';D.roomMap=Math.floor(Math.random()*MAPS.length);D.roomDiff=Math.floor(Math.random()*5);dungeonR()}
 }
 function dungeonFinishShopRoom(){
