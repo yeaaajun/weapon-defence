@@ -1810,6 +1810,7 @@ function dungeonFloorSetup(){
  counts.forEach((count,col)=>ys[col].forEach(y=>rooms.push({id:id++,col,x:xs[col],y,type:'battle',event:null,map:Math.floor(Math.random()*MAPS.length),diff:Math.floor(Math.random()*5),done:false})));
  const eventCount=1+Math.floor(Math.random()*3),eventIds=rooms.map(x=>x.id).sort(()=>Math.random()-.5).slice(0,eventCount);
  eventIds.forEach(i=>{const r=rooms[i];r.type='event';r.event=['treasure','shrine','gamble','sacrifice'][Math.floor(Math.random()*4)]});
+ const shopCandidates=rooms.filter(r=>r.col===3);if(shopCandidates.length){const shop=shopCandidates[Math.floor(Math.random()*shopCandidates.length)];shop.type='shop';shop.event='shop'}
  const edges=[],addEdge=(a,b)=>{if(!edges.some(e=>e[0]===a&&e[1]===b))edges.push([a,b])};
  for(let col=0;col<4;col++){
   const from=rooms.filter(r=>r.col===col),to=rooms.filter(r=>r.col===col+1),den=Math.max(1,from.length-1);
@@ -1909,8 +1910,8 @@ function dungeonContinueFloor(){
  const battle=G,boss=!!(battle&&battle.dungeonBoss);if(battle)battle.over=true;G=null;if(!D)return;
  D.inBattle=false;D.battleKind=null;D.battleBossId=null;mode=3;show('stage');
  if(quit||!win){S.dungeonBestFloor=Math.max(S.dungeonBestFloor||0,D.floor-1);save();D=null;dungeonR();return}
- if(!boss){const reward=8+D.floor*2+D.roomDiff*3;D.currency+=reward;D.pendingReward='🏆 방을 클리어했습니다! 던전 재화 '+reward+'개를 획득했습니다.';D.phase='reward';dungeonR();return}
- const floor=D.floor,reward=50+floor*22+(D.floorHard?floor*12:0)+(D.overdrive?floor*20:0);
+ if(!boss){const reward=Math.round((8+D.floor*2+D.roomDiff*3)*(battle.cm||1));D.currency+=reward;D.pendingReward='🏆 방을 클리어했습니다! 던전 재화 '+reward+'개를 획득했습니다.';D.phase='reward';dungeonR();return}
+ const floor=D.floor,reward=Math.round((50+floor*22+(D.floorHard?floor*12:0)+(D.overdrive?floor*20:0))*(battle.cm||1));
  S.dungeonCoins=(S.dungeonCoins||0)+reward;S.dungeonBestFloor=Math.max(S.dungeonBestFloor||0,floor);D.floorCoins+=reward;
  D.pendingReward='👑 '+floor+'층 보스를 처치했습니다! 던전 코인 '+reward+'개를 획득했습니다.';D.phase='floorReward';save();dungeonR();
 }function dungeonChooseCurse(i){
