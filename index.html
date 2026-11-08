@@ -2026,6 +2026,7 @@ function dungeonMapHtml(){
 }
 function dungeonR(){
  const el=$('dungeon-mode');if(!el)return;
+ syncC();
  const coins='<span class="coin">🏅 던전 코인 '+(S.dungeonCoins||0)+'</span>';
  if(!D){
   const overdriveUnlocked=dungeonOverdriveUnlocked();
