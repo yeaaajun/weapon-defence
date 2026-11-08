@@ -1721,7 +1721,7 @@ function treeR(){
 // 12) 인게임
 // ============================================================
 const cv=$('cv'),cx=cv.getContext('2d');
-let G=null,mouse={x:-99,y:-99},last=0;
+let G=null,mouse={x:-99,y:-99},last=0,loopEpoch=0;
 const PERKS=[
  {n:'날카로운 날',d:'우리 피해 +15% / 적 체력 +8%',f:()=>{G.pd*=1.15;G.eh*=1.08}},
  {n:'속사',d:'공격 속도 +12% / 적 이동 +6%',f:()=>{G.ps*=.89;G.es*=1.06}},
@@ -1746,7 +1746,7 @@ function startGame(){
  const ch=mode==2?hrChal():null,inf=mode==1&&!sp;
  const m=ch?MAPS[ch.map]:(sp?SMAPS:MAPS)[selMap],d=ch?DIFF[ch.df]:(sp?SDIFF[m.df]:DIFF[selDiff]),segs=[];let tot=0;
  for(let i=0;i<m.p.length-1;i++){const a=m.p[i],b=m.p[i+1],l=Math.hypot(b[0]-a[0],b[1]-a[1]);segs.push({a,b,l,s:tot});tot+=l}
- G={m,d,segs,tot,special:sp&&!ch,inf,chal:ch?MODS[ch.mod]:null,di:ch?ch.df:(sp?4:selDiff),max:inf?1e9:(sp?20:MAXW),auto:false,at:0,gold:d.gold,lives:d.lives,wave:0,en:[],tw:[],fx:[],q:[],sp:0,spd:1,sel:null,slot:(D&&D.inBattle?D.loadout[0]:S.load[0]),over:false,active:false,blk:[],eh:1,es:1,pg:1,pd:1,ps:1,pr:1,cnt:1,cm:1,ws:0};
+ G={m,d,segs,tot,special:sp&&!ch,inf,chal:ch?MODS[ch.mod]:null,di:ch?ch.df:(sp?4:selDiff),max:dungeonRun?(D.battleKind==='boss'?5:3):(inf?1e9:(sp?20:MAXW)),dungeonRoom:dungeonRun,dungeonBoss:dungeonRun&&D.battleKind==='boss',dungeonBossIndex:dungeonRun?(D.battleBossId||null):null,dungeonFloor:dungeonRun?D.floor:null,auto:false,at:0,gold:d.gold,lives:d.lives,wave:0,en:[],tw:[],fx:[],q:[],sp:0,spd:1,sel:null,slot:(D&&D.inBattle?D.loadout[0]:S.load[0]),over:false,active:false,blk:[],eh:1,es:1,pg:1,pd:1,ps:1,pr:1,cnt:1,cm:1,ws:0};
  
  // ① 모디파이어 적용 (기존 그대로)
  if(!D?.inBattle)(ch?[MODS[ch.mod]]:(sp?[]:S.modOn.map(id=>MODS.find(x=>x.id==id)))).forEach(x=>{x.ap(G);G.cm*=x.cm});
@@ -1774,7 +1774,7 @@ function startGame(){
  if(!dungeonRun&&$('dungeon-gamebar'))$('dungeon-gamebar').remove();
  $('spd').textContent='x1';$('auto').textContent='자동: OFF';
  $('bar').innerHTML=(D&&D.inBattle?D.loadout:S.load).map(id=>{const w=WM[id];return `<div class="slot" data-id="${id}" onclick="pick('${id}')">${svg(id,skOf(id))}${w.n}<br>💰${w.cost}</div>`}).join('');
- side();hud();last=performance.now();requestAnimationFrame(loop);
+ side();hud();last=performance.now();const epoch=++loopEpoch;requestAnimationFrame(now=>loop(now,epoch));
 }
 $('start').onclick = startGame;
 function dungeonFloorSetup(){
@@ -1831,8 +1831,9 @@ function dungeonEnterBattle(boss){
  if(!r)return;
  D.roomMap=r.map;D.roomDiff=r.diff;D.inBattle=true;D.battleKind=boss?'boss':'room';mode=0;sp=0;selMap=r.map;selDiff=r.diff;
  const bossId=boss?BOSS_EN[Math.floor(Math.random()*BOSS_EN.length)]:null;
- startGame();if(!G){D.inBattle=false;return}
- G.dungeonRoom=true;G.dungeonBoss=!!boss;G.dungeonLoadout=D.loadout.slice();G.dungeonBossIndex=bossId;G.dungeonFloor=D.floor;G.max=boss?5:3;G.di=r.diff;
+ D.battleBossId=bossId;
+ startGame();if(!G){D.inBattle=false;D.battleKind=null;D.battleBossId=null;return}
+ G.dungeonLoadout=D.loadout.slice();G.di=r.diff;
  G.d={...G.d,hp:G.d.hp*(D.floorHard?1.45:1)*(1+(D.floor-1)*.09)};
  G.es*=D.floorHard?1.2:1;G.eh*=1+(D.floor-1)*.06;if(D.overdrive)G.es*=1+(D.floor-1)*.025;
  dungeonApplyGifts();hud();side();
@@ -1854,7 +1855,7 @@ function dungeonOpenEvent(){if(!D||D.eventChoices)return;const pick=()=>DUNGEON_
 function dungeonChooseEvent(i){if(!D)return;dungeonOpenEvent();const o=D.eventChoices[i];if(!o)return;if((D.rooms.find(x=>x.id===D.currentNode)||{}).event==='sacrifice'&&o.type==='gift'&&o.rank===2){if(D.currency<15){toast('던전 재화 15개가 필요합니다');return}D.currency-=15}if(o.type==='gift')dungeonGiftAdd(o.id,o.rank);else D.currency+=o.amount;D.currency+=8+D.floor*2;D.eventChoices=null;dungeonAdvanceRoom()}
 function dungeonBuyGift(i){if(!D||D.phase!=='shop')return;const o=D.shopOffers[i],price=14+o.rank*8+D.floor*2;if(D.currency<price){toast('던전 재화가 부족합니다');return}D.currency-=price;dungeonGiftAdd(o.id,o.rank);D.shopOffers.splice(i,1);dungeonR()}
 function dungeonContinueBoss(){if(D&&D.phase==='shop'){D.phase='boss';D.roomMap=Math.floor(Math.random()*MAPS.length);D.roomDiff=Math.floor(Math.random()*5);dungeonR()}}
-function dungeonBattleEnd(win,quit){const boss=G&&G.dungeonBoss;G=null;if(!D)return;D.inBattle=false;if(quit||!win){S.dungeonBestFloor=Math.max(S.dungeonBestFloor||0,D.floor-1);save();D=null;mode=3;show('stage');return}if(!boss){const reward=8+D.floor*2+D.roomDiff*3;D.currency+=reward;toast('방 클리어! 던전 재화 +'+reward);dungeonAdvanceRoom();mode=3;show('stage');return}const floor=D.floor,reward=50+floor*22+(D.floorHard?floor*12:0)+(D.overdrive?floor*20:0);S.dungeonCoins=(S.dungeonCoins||0)+reward;S.dungeonBestFloor=Math.max(S.dungeonBestFloor||0,floor);D.floorCoins+=reward;toast('층 클리어! 던전 코인 +'+reward);if(floor===10&&D.overdrive){D.phase='curse';D.curseChoices=[['frail','부서진 생명력','우리 시작 체력 -28%'],['horde','끝없는 군세','적 수 +35%'],['armor','강철 군단','적 체력 +40%'],['haste','광폭화','적 이동 속도 +25%'],['poor','메마른 전리품','처치 골드 -35%']].sort(()=>Math.random()-.5).slice(0,3);save();mode=3;show('stage');return}D.allHard=D.allHard&&D.floorHard;D.floor++;if(D.floor>D.maxFloor){S.dungeonClears=(S.dungeonClears||0)+1;if(D.allHard&&!D.overdrive){S.dungeonHardClears=(S.dungeonHardClears||0)+1;S.dungeonOverdrive=true}const bonus=D.overdrive?400:D.allHard?220:160;S.dungeonCoins+=bonus;D.floorCoins+=bonus;save();D.finished=true;D.summary='던전 완전 정복! 추가 던전 코인 +'+bonus;D.coins=D.floorCoins;D.floor=D.maxFloor;mode=3;show('stage');return}D.phase='select';D.floorHard=false;D.hard=false;save();mode=3;show('stage')}
+function dungeonBattleEnd(win,quit){const battle=G,boss=!!(battle&&battle.dungeonBoss);if(battle)battle.over=true;G=null;if(!D)return;D.inBattle=false;D.battleKind=null;D.battleBossId=null;if(quit||!win){S.dungeonBestFloor=Math.max(S.dungeonBestFloor||0,D.floor-1);save();D=null;mode=3;show('stage');return}if(!boss){const reward=8+D.floor*2+D.roomDiff*3;D.currency+=reward;toast('방 클리어! 던전 재화 +'+reward);dungeonAdvanceRoom();mode=3;show('stage');return}const floor=D.floor,reward=50+floor*22+(D.floorHard?floor*12:0)+(D.overdrive?floor*20:0);S.dungeonCoins=(S.dungeonCoins||0)+reward;S.dungeonBestFloor=Math.max(S.dungeonBestFloor||0,floor);D.floorCoins+=reward;toast('층 클리어! 던전 코인 +'+reward);if(floor===10&&D.overdrive){D.phase='curse';D.curseChoices=[['frail','부서진 생명력','우리 시작 체력 -28%'],['horde','끝없는 군세','적 수 +35%'],['armor','강철 군단','적 체력 +40%'],['haste','광폭화','적 이동 속도 +25%'],['poor','메마른 전리품','처치 골드 -35%']].sort(()=>Math.random()-.5).slice(0,3);save();mode=3;show('stage');return}D.allHard=D.allHard&&D.floorHard;D.floor++;if(D.floor>D.maxFloor){S.dungeonClears=(S.dungeonClears||0)+1;if(D.allHard&&!D.overdrive){S.dungeonHardClears=(S.dungeonHardClears||0)+1;S.dungeonOverdrive=true}const bonus=D.overdrive?400:D.allHard?220:160;S.dungeonCoins+=bonus;D.floorCoins+=bonus;save();D.finished=true;D.summary='던전 완전 정복! 추가 던전 코인 +'+bonus;D.coins=D.floorCoins;D.floor=D.maxFloor;mode=3;show('stage');return}D.phase='select';D.floorHard=false;D.hard=false;save();mode=3;show('stage')}
 function dungeonChooseCurse(i){if(!D||D.phase!=='curse')return;const c=D.curseChoices[i];if(!c)return;D.curses.push(c[0]);D.currency+=65;D.floor=11;D.phase='select';D.floorHard=false;D.hard=false;save();mode=3;show('stage');toast('제약 선택: '+c[1]+' · 재화 +65')}
 function dungeonShopBuy(id){const x=DUNGEON_SHOP.find(v=>v.id===id);if(!x||S.dungeonCoins<x.price)return;if(x.type==='weapon'&&S.owned.includes(x.id))return;if(x.type==='skin'&&S.skins.includes(x.weapon+':'+x.index))return;S.dungeonCoins-=x.price;if(x.type==='weapon')S.owned.push(x.id);else S.skins.push(x.weapon+':'+x.index);save();chk();syncC();if(!$('shop').classList.contains('hide'))shopR();else dungeonR()}
 function dungeonStoreHtml(){let s='<div class="dun-panel"><h2>🏪 영구 던전 상점</h2><p class="sub">던전 코인으로 구매합니다. 이 상점에서 얻는 무기와 스킨은 모두 던전 등급입니다.</p><div class="dun-grid">';DUNGEON_SHOP.forEach(x=>{const done=x.type==='weapon'?S.owned.includes(x.id):S.skins.includes(x.weapon+':'+x.index);s+='<div class="dun-shopitem">'+(x.type==='weapon'?svg(x.id,0):svg(x.weapon,x.index))+'<b>'+x.name+'</b><div class="sub">'+x.desc+'</div><button style="width:100%;margin-top:7px" '+(done||S.dungeonCoins<x.price?'disabled':'')+' onclick="dungeonShopBuy(\''+x.id+'\')">'+(done?'보유 중':'🏅 '+x.price+' 구매')+'</button></div>'});return s+'</div></div>'}
@@ -1983,7 +1984,7 @@ $('next').onclick=()=>G&&startWave(G.active);
 $('quit').onclick=()=>{if(G)end(false,true)};
 function end(win,quit){
  if(!G||G.over)return;
- if(G.dungeonRoom){G.over=true;dungeonBattleEnd(win,quit);return}
+ if(G.dungeonRoom||(D&&D.inBattle)){G.over=true;dungeonBattleEnd(win,quit);return}
  G.over=true;snd(quit?'click':win?'win':'lose');
  let earn=quit?0:Math.round(G.wave*15*G.d.rew+(win?150*G.d.rew:0));earn=Math.round(earn*(G.cm||1));if(win)dq('clear',1);let rw='';
  if(!quit){
@@ -2261,13 +2262,13 @@ function tip(e){const i=EN.indexOf(e.k),nm=(EN_N[i]||'적')+(e.k.r>=30?' (보스
  cx.fillStyle='#ccd';cx.font='11px sans-serif';cx.fillText(Math.ceil(e.hp)+' / '+Math.ceil(e.mx),x+8,y+45);cx.fillText('💰'+e.k.g,x+w-52,y+45);
  if(e.k.df){cx.fillStyle='#90caf9';cx.fillText('🛡️ 방어 '+e.k.df+'% (피해 경감)',x+8,y+61)}
  cx.restore()}
-function loop(now){
- if(!G)return;
+function loop(now,epoch){
+ if(epoch!==loopEpoch||!G)return;
  if(G.over){draw();return}
  if(G.pause){last=now;requestAnimationFrame(loop);return}
  const dt=Math.min(.05,(now-last)/1000)*G.spd;last=now;
  update(dt);if(G&&!G.over){draw();hud()}
- requestAnimationFrame(loop);
+ requestAnimationFrame(t=>loop(t,epoch));
 }
 
 // ============================================================
