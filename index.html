@@ -125,11 +125,13 @@ button,.card,.chip,.slot{touch-action:manipulation;-webkit-tap-highlight-color:t
 .dungeon-window.hide{display:none!important}.dungeon-window{position:fixed!important;inset:2vh 2vw!important;z-index:9999!important;display:block!important;overflow:auto!important;background:var(--bg)!important;border:2px solid var(--gold);border-radius:14px;padding:10px;box-shadow:0 0 0 100vmax rgba(0,0,0,.86),0 12px 50px #000}.dungeon-window #dungeon-gamebar{display:flex;align-items:center;gap:10px;padding:5px 2px 12px;position:sticky;top:0;background:var(--bg);z-index:5}.dungeon-window #hud{position:sticky;top:42px;z-index:4}.dun-shopitem.selected{border:2px solid var(--gold);box-shadow:0 0 10px #ffc83d55}
 
 /* Dungeon combat keeps the exact same 1100px game frame and 800:480 canvas layout as normal play. */
-.dungeon-window{inset:auto!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;width:min(100vw,1100px)!important;max-width:1100px!important;max-height:100dvh!important;overflow:auto!important;padding:12px!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important}
+.dungeon-window{position:static!important;inset:auto!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;transform:none!important;z-index:auto!important;display:block!important;width:100%!important;max-width:none!important;max-height:none!important;overflow:visible!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:var(--bg)!important}
 .dungeon-window #dungeon-gamebar{background:rgba(20,22,28,.82)!important}
 #cf{z-index:10060!important}
 /* Dungeon independent screen and modal layout */
 #dungeon-mode.dungeon-lobby-window{position:fixed!important;inset:0!important;z-index:10000!important;display:block!important;overflow:auto!important;background:rgba(10,12,18,.58)!important;padding:clamp(12px,3vw,30px)!important}
+#stage.dungeon-mode-active>.top,#stage.dungeon-mode-active>.tabs:not(#sptabs){display:none!important}
+body.dungeon-battle-active #stage{display:none!important}
 #dungeon-mode .dungeon-shell{max-width:1120px;margin:0 auto;min-height:100%}
 #dungeon-mode .dungeon-head{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:4;background:rgba(20,22,28,.78);padding:8px 0 12px;border-bottom:1px solid var(--line)}
 #dungeon-mode .dun-map{height:clamp(320px,58vh,560px)}
@@ -1223,7 +1225,9 @@ const MODS=[
 ];
 function hrChal(){let s=Math.floor(Date.now()/3600000)*7919+13;const r=()=>{s=(s*9301+49297)%233280;return s/233280};r();r();return{map:Math.floor(r()*MAPS.length),df:Math.floor(r()*5),mod:Math.floor(r()*MODS.length)}}
 function stageR(){
+ $('stage').classList.toggle('dungeon-mode-active',mode===3);
  document.body.classList.toggle('dungeon-active',mode===3);
+ document.body.classList.remove('dungeon-battle-active');
  for(let i=0;i<4;i++)$('md'+i).className=i==mode?'':'alt';
  $('sp0').className=sp?'alt':'';$('sp1').className=sp?'':'alt';
  $('dungeon-mode').classList.toggle('hide',mode!==3);$('dungeon-mode').classList.toggle('dungeon-lobby-window',mode===3);$('dungeon-mode').style.display=mode===3?'block':'none';
@@ -1777,6 +1781,7 @@ function pathDist(x,y){let m=1e9;const sg=G?G.segs:[];for(const s of sg){const d
 function startGame(){
  const dungeonRun=!!(D&&D.inBattle);
  document.body.classList.toggle('dungeon-active',dungeonRun);
+ document.body.classList.toggle('dungeon-battle-active',dungeonRun);
  const ch=mode==2?hrChal():null,inf=mode==1&&!sp;
  const m=ch?MAPS[ch.map]:(sp?SMAPS:MAPS)[selMap],d=ch?DIFF[ch.df]:(sp?SDIFF[m.df]:DIFF[selDiff]),segs=[];let tot=0;
  for(let i=0;i<m.p.length-1;i++){const a=m.p[i],b=m.p[i+1],l=Math.hypot(b[0]-a[0],b[1]-a[1]);segs.push({a,b,l,s:tot});tot+=l}
