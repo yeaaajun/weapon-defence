@@ -792,6 +792,43 @@ WS.trident.push(['튜브',0,'#ffeb3b','#e65100','<circle cx="32" cy="12" r="4" f
 WS.hammer.push(['수박',0,'#ef5350','#1b5e20','<path d="M20 12 h26" stroke="#2e7d32" stroke-width="3"/>','',null,null,'bubble','ev_summer']);
 WS.mace.push(['팥죽',0,'#b71c1c','#3e2723','<circle cx="32.5" cy="14" r="3" fill="#f8bbd0"/>','',null,null,'fire','ev_dongji']);
 WS.hammer.push(['도깨비',0,'#8d6e63','#3e2723','<circle cx="33" cy="8" r="2" fill="#ffd54f"/>','',null,null,'fire','ev_dongji']);
+// 고유 스킨이 없던 무기들에 무기별 테마 스킨을 추가한다.
+const EXTRA_SKINS={
+ kris:['다마스쿠스',420,'#90a4ae','#263238','#e0e0e0'],
+ tachi:['무사',520,'#ef9a9a','#7f0000','#fff59d'],
+ greatsword:['십자군',650,'#eceff1','#37474f','#c62828'],
+ pike:['장창병',500,'#cfd8dc','#455a64','#90a4ae'],
+ labrys:['미노스',680,'#ffd54f','#5d4037','#ff8f00'],
+ glaive:['초승달',620,'#b3e5fc','#283593','#fff'],
+ zanbato:['전국',700,'#ef5350','#3e2723','#ffd54f'],
+ katar:['호랑이 발톱',450,'#ffcc80','#4e342e','#fff59d'],
+ falx:['다키아',650,'#a5d6a7','#1b5e20','#e8f5e9'],
+ sai:['류큐',460,'#80deea','#006064','#fff'],
+ harpoon:['포경선',650,'#90a4ae','#37474f','#cfd8dc'],
+ chainsaw:['벌목꾼',900,'#ffb74d','#4e342e','#fff176'],
+ stunbaton:['경찰특수대',650,'#80cbc4','#263238','#fff176'],
+ pistol:['서부개척',700,'#cfd8dc','#5d4037','#ffca28'],
+ shotgun:['펌프액션',850,'#8d6e63','#263238','#eceff1'],
+ sniper:['정밀저격',1000,'#90a4ae','#263238','#80deea'],
+ saber:['기병대',500,'#fff59d','#795548','#fff'],
+ morningstar:['철가시',600,'#b0bec5','#37474f','#eceff1'],
+ nunchucks:['쌍룡',550,'#ffd54f','#6d4c41','#e53935'],
+ masamune:['장인의 불꽃',900,'#80deea','#263238','#fff59d'],
+ fangtian:['여포',950,'#ef5350','#4e342e','#ffd54f'],
+ aegis:['용병대',800,'#90a4ae','#37474f','#eceff1'],
+ tyrfing:['북방의 검',900,'#b3e5fc','#1a237e','#fff']
+};
+for(const [id,k] of Object.entries(EXTRA_SKINS)){
+ const w=WM[id];
+ if(w&&w.t!==4&&w.t!==8&&WS[id]&&WS[id].length===4){
+  const mark=k[4];
+  WS[id].push([k[0],k[1],k[2],k[3],
+   '<path d="M32 5 L36 14 L32 23 L28 14Z" fill="'+mark+'" stroke="'+k[3]+'"/><path d="M32 25 V40" stroke="'+mark+'" stroke-width="2"/>',
+   '<circle cx="32" cy="50" r="5" fill="'+mark+'" stroke="'+k[3]+'"/>']);
+ }
+}
+if(WS.ar)WS.ar.push(['정찰병',850,'#a5d6a7','#263238','<path d="M14 18 H50 V23 H14Z" fill="#a5d6a7" stroke="#263238"/><circle cx="32" cy="14" r="4" fill="#80deea"/>','<rect x="27" y="42" width="10" height="12" fill="#263238"/>']);
+
 const FXMAP={'용암':'fire','화염':'fire','화염구':'fire','불창':'fire','라그나로크':'fire','태양':'fire','마검':'purple','아발론':'purple','사신':'purple','흑요석':'purple','그림자':'purple','독니':'poison','월영':'trail','월식':'trail','월광':'trail','초승달':'trail','천둥':'lightning','번개':'lightning','토르':'lightning','해왕':'water','심해':'bubble','사막':'sand','구르카':'multi','공성':'multi','피의 도끼':'red','루비':'red','황금':'gold','귀족':'gold','왕의 검':'gold','황금왕':'gold','황금용':'gold','성검':'gold','사이버':'binary','벚꽃':'petal','쇠사슬':'chain','금속배트':'ding','클로 해머':'nail'};
 const AMAP={'귀족':'flurry','사신':'whirl','천둥':'slam','번개':'flurry'};
 for(const id in WS)WS[id].forEach(k=>{if(FXMAP[k[0]]&&!k[8])k[8]=FXMAP[k[0]];if(AMAP[k[0]]&&!k[6])k[6]=AMAP[k[0]]});
@@ -1234,7 +1271,7 @@ const EVENTS=[
 function evActive(id){const d=new Date();return EVENTS.some(e=>e.ws.includes(id)&&e.test(d))}
 function evtR(){const d=new Date();$('sc').innerHTML='<div class="sub" style="margin-bottom:8px">기간 한정 이벤트! 진행 중일 때만 무기가 보이고, 한 번에 모두 받습니다. 받은 무기와 스킨은 영구 보유됩니다.</div>'+EVENTS.map((e,i)=>{const on=e.test(d),got=S.ach['ev_'+e.id],allHave=e.ws.every(w=>S.owned.includes(w));return `<div class="srow">${(on||got)?e.ws.map(w=>svg(w,0)).join(''):'<b style="font-size:30px">🔒</b>'}<div style="flex:1;min-width:160px"><b style="width:auto">${e.n}</b> <span class="sub">${e.range}</span><br><span class="sub">${(on||got)?e.ws.map(w=>WM[w].n).join(', ')+' + 스킨 '+e.skins.map(s=>s[1]).join(', '):'??? (진행 중일 때 공개)'}</span></div><button ${on&&!allHave?'':'disabled'} onclick="evClaim(${i})">${got&&allHave?'획득 완료':on?'모두 받기 🎁':'기간 아님'}</button></div>`}).join('')}
 function evClaim(i){const e=EVENTS[i];if(!e.test(new Date()))return;S.ach['ev_'+e.id]=1;e.ws.forEach(w=>{if(!S.owned.includes(w))S.owned.push(w)});e.skins.forEach(s=>{const ix=WS[s[0]].findIndex(k=>k[0]==s[1])+1;if(ix>0&&!S.skins.includes(s[0]+':'+ix))S.skins.push(s[0]+':'+ix)});save();chk();shopR();reveal(e.ws[0])}
-function buy(id){const w=WM[id];if(w.price==null){if(w.t==8){const i=EVENTS.findIndex(e=>e.ws.includes(id));if(i>=0)evClaim(i)}return}if(S.owned.includes(id)||S.coins<w.price)return;S.coins-=w.price;S.owned.push(id);save();chk();shopR();reveal(id)}
+function buy(id){const w=WM[id];if(!w||S.owned.includes(id))return;if(w.t==8){const i=EVENTS.findIndex(e=>e.ws.includes(id));if(i>=0)evClaim(i);return}if(w.unlock){if(!w.unlock())return;S.owned.push(id);save();chk();shopR();reveal(id);return}if(w.price==null||S.coins<w.price)return;S.coins-=w.price;S.owned.push(id);save();chk();shopR();reveal(id)}
 function evo(i){const e=EVO[i];if(S.owned.includes(e[1])||S.coins<e[3]||(S.gems||0)<e[4]||wk(e[0])<e[2])return;S.coins-=e[3];S.gems-=e[4];S.owned.push(e[1]);S.st.evo=(S.st.evo||0)+1;save();chk();shopR();reveal(e[1])}
 function evoR(){$('sc').innerHTML='<div class="sub" style="margin-bottom:8px">무기를 오래 쓰면(처치 수) 경험치가 쌓입니다. 경험치가 차면 코인과 젠(특별 맵 보상)으로 상위 무기로 진화시킬 수 있어요. 진화 무기는 원래 무기와 다른 무기입니다.</div>'+EVO.map((e,i)=>{const f=WM[e[0]],t=WM[e[1]],k=wk(e[0]),need=Math.floor(e[2]/50),done=S.owned.includes(e[1]),ok=S.owned.includes(e[0])&&k>=e[2]&&S.coins>=e[3]&&(S.gems||0)>=e[4]&&!done;return `<div class="srow">${svg(e[0],skOf(e[0]))}<span>→</span>${svg(e[1],skOf(e[1]))}<div style="flex:1;min-width:150px"><b>${f.n} → ${t.n}</b><br><span class="sub">경험치 Lv.${Math.min(Math.floor(k/50),need)}/${need} (${Math.min(k,e[2])}/${e[2]})${S.owned.includes(e[0])?'':' · 원본 무기 필요'}</span></div><button ${ok?'':'disabled'} onclick="evo(${i})">${done?'진화 완료':'🪙'+e[3]+' 💎'+e[4]}</button></div>`}).join('')}
 function loadR(){
@@ -1594,16 +1631,16 @@ function mkBr(b,sp,ws,wn){const o=ORG[b],q=b.toLowerCase(),add=(id,k,nm,u,v,par,
  sp.slice(0,3).forEach((a,i)=>add(q+(i+1),'n',a[0],i?270:150,i==1?-130:i==2?130:0,i?[q+'1']:['root'],5,a[1],a[2],a[3],a[4]));
  add(q+'4','n',sp[3][0],400,0,[q+'2',q+'3'],3,sp[3][1],sp[3][2],sp[3][3],sp[3][4]);
  add('w'+q+'1','w',WM[ws[0]].n,530,0,[q+'4'],1,wn[0],0,null,null,ws[0]);
- add('s'+q+'1','s',wn[2],530,-140,['w'+q+'1'],5,250,200,l=>`${WM[ws[0]].n} 피해 +${l*12}%`,(g,l)=>wmul(g,ws[0],'wd',1+.12*l),ws[0]);
- add('s'+q+'2','s',wn[3],530,140,['w'+q+'1'],5,250,200,l=>`${WM[ws[0]].n} 공속 +${l*6}%`,(g,l)=>wmul(g,ws[0],'wc',1-.06*l),ws[0]);
+ add('s'+q+'1','s',wn[2],530,-140,['w'+q+'1'],5,250,200,l=>`${WM[ws[0]].n} 피해 +${l*8}%`,(g,l)=>wmul(g,ws[0],'wd',1+.08*l),ws[0]);
+ add('s'+q+'2','s',wn[3],530,140,['w'+q+'1'],5,250,200,l=>`${WM[ws[0]].n} 공속 +${l*4}%`,(g,l)=>wmul(g,ws[0],'wc',1-.04*l),ws[0]);
  add(q+'5','n',sp[4][0],660,0,['w'+q+'1'],3,sp[4][1],sp[4][2],sp[4][3],sp[4][4]);
  add('w'+q+'2','w',WM[ws[1]].n,790,0,[q+'5'],1,wn[1],0,null,null,ws[1]);
- add('t'+q+'1','s',wn[4],790,-140,['w'+q+'2'],5,350,250,l=>`${WM[ws[1]].n} 피해 +${l*12}%`,(g,l)=>wmul(g,ws[1],'wd',1+.12*l),ws[1]);
- add('t'+q+'2','s',wn[5],790,140,['w'+q+'2'],5,350,250,l=>`${WM[ws[1]].n} 공속 +${l*6}%`,(g,l)=>wmul(g,ws[1],'wc',1-.06*l),ws[1])}
-mkBr('A',[['날 갈기',120,80,l=>`피해 +${l*5}%`,(g,l)=>{g.pd*=1+.05*l}],['속사 훈련',150,80,l=>`공격 속도 +${l*4}%`,(g,l)=>{g.ps*=1-.04*l}],['용 사냥꾼',200,120,l=>`보스 피해 +${l*8}%`,(g,l)=>{g.bd=1+.08*l}],['전투 본능',400,250,l=>`피해 +${l*6}%`,(g,l)=>{g.pd*=1+.06*l}],['대장간의 비전',600,300,l=>`피해 +${l*8}%`,(g,l)=>{g.pd*=1+.08*l}]],['zanbato','falx'],[900,1800,'참마도 연마','참마도 속사','팔크스 연마','팔크스 속사']);
-mkBr('B',[['두둑한 주머니',100,80,l=>`시작 골드 +${l*15}`,(g,l)=>{g.gold+=15*l}],['전리품 수집',150,100,l=>`처치 골드 +${l*3}%`,(g,l)=>{g.pg*=1+.03*l}],['전투 보상',150,100,l=>`코인 보상 +${l*3}%`,(g,l)=>{g.cm*=1+.03*l}],['상인 길드',400,250,l=>`시작 골드 +${l*30}`,(g,l)=>{g.gold+=30*l}],['대상인의 인맥',600,300,l=>`코인 보상 +${l*4}%`,(g,l)=>{g.cm*=1+.04*l}]],['katar','sai'],[700,1500,'카타르 연마','카타르 속사','사이 연마','사이 속사']);
-mkBr('C',[['사거리 훈련',150,80,l=>`사거리 +${l*4}%`,(g,l)=>{g.pr*=1+.04*l}],['성벽 보강',150,100,l=>`체력 +${l*6}%`,(g,l)=>{g.lives*=1+.06*l}],['판매 환급',100,100,l=>`판매 환급 +${l*4}%p`,(g,l)=>{g.sv=.04*l}],['요새화',400,250,l=>`체력 +${l*8}% · 사거리 +${l*3}%`,(g,l)=>{g.lives*=1+.08*l;g.pr*=1+.03*l}],['철벽의 맹세',600,300,l=>`체력 +${l*6}%`,(g,l)=>{g.lives*=1+.06*l}]],['repeater','harpoon'],[800,1600,'연노 연마','연노 속사','작살 연마','작살 속사']);
-const XN=[['x1','화력 집중',1150,580,['a3','b2'],l=>`피해 +${l*8}%`,(g,l)=>{g.pd*=1+.08*l}],['x2','보급선',900,1010,['b3','c2'],l=>`시작 골드 +${l*40} · 체력 +${l*5}%`,(g,l)=>{g.gold+=40*l;g.lives*=1+.05*l}],['x3','철벽 포진',650,580,['c3','a2'],l=>`사거리 +${l*5}% · 공속 +${l*4}%`,(g,l)=>{g.pr*=1+.05*l;g.ps*=1-.04*l}]];
+ add('t'+q+'1','s',wn[4],790,-140,['w'+q+'2'],5,350,250,l=>`${WM[ws[1]].n} 피해 +${l*8}%`,(g,l)=>wmul(g,ws[1],'wd',1+.08*l),ws[1]);
+ add('t'+q+'2','s',wn[5],790,140,['w'+q+'2'],5,350,250,l=>`${WM[ws[1]].n} 공속 +${l*4}%`,(g,l)=>wmul(g,ws[1],'wc',1-.04*l),ws[1])}
+mkBr('A',[['날 갈기',120,80,l=>`피해 +${l*3}%`,(g,l)=>{g.pd*=1+.02*l}],['속사 훈련',150,80,l=>`공격 속도 +${l*2.5}%`,(g,l)=>{g.ps*=1-.025*l}],['용 사냥꾼',200,120,l=>`보스 피해 +${l*5}%`,(g,l)=>{g.bd=1+.05*l}],['전투 본능',400,250,l=>`피해 +${l*4}%`,(g,l)=>{g.pd*=1+.025*l}],['대장간의 비전',600,300,l=>`피해 +${l*5}%`,(g,l)=>{g.pd*=1+.05*l}]],['zanbato','falx'],[900,1800,'참마도 연마','참마도 속사','팔크스 연마','팔크스 속사']);
+mkBr('B',[['두둑한 주머니',100,80,l=>`시작 골드 +${l*10}`,(g,l)=>{g.gold+=10*l}],['전리품 수집',150,100,l=>`처치 골드 +${l*2}%`,(g,l)=>{g.pg*=1+.02*l}],['전투 보상',150,100,l=>`코인 보상 +${l*2}%`,(g,l)=>{g.cm*=1+.02*l}],['상인 길드',400,250,l=>`시작 골드 +${l*20}`,(g,l)=>{g.gold+=20*l}],['대상인의 인맥',600,300,l=>`코인 보상 +${l*2.5}%`,(g,l)=>{g.cm*=1+.025*l}]],['katar','sai'],[700,1500,'카타르 연마','카타르 속사','사이 연마','사이 속사']);
+mkBr('C',[['사거리 훈련',150,80,l=>`사거리 +${l*3}%`,(g,l)=>{g.pr*=1+.025*l}],['성벽 보강',150,100,l=>`체력 +${l*4}%`,(g,l)=>{g.lives*=1+.025*l}],['판매 환급',100,100,l=>`판매 환급 +${l*3}%p`,(g,l)=>{g.sv=.03*l}],['요새화',400,250,l=>`체력 +${l*5}% · 사거리 +${l*2}%`,(g,l)=>{g.lives*=1+.05*l;g.pr*=1+.02*l}],['철벽의 맹세',600,300,l=>`체력 +${l*4}%`,(g,l)=>{g.lives*=1+.025*l}]],['repeater','harpoon'],[800,1600,'연노 연마','연노 속사','작살 연마','작살 속사']);
+const XN=[['x1','화력 집중',1150,580,['a3','b2'],l=>`피해 +${l*5}%`,(g,l)=>{g.pd*=1+.05*l}],['x2','보급선',900,1010,['b3','c2'],l=>`시작 골드 +${l*25} · 체력 +${l*3}%`,(g,l)=>{g.gold+=40*l;g.lives*=1+.02*l}],['x3','철벽 포진',650,580,['c3','a2'],l=>`사거리 +${l*3}% · 공속 +${l*2.5}%`,(g,l)=>{g.pr*=1+.02*l;g.ps*=1-.025*l}]];
 XN.forEach(x=>{TN[x[0]]={id:x[0],k:'x',n:x[1],x:x[2],y:x[3],par:x[4],mx:3,c0:350,c1:250,ds:x[5],ef:x[6]}});
 function treeR(){
   let ln='',nd='';const pos=id=>id=='root'?[900,840]:[TN[id].x,TN[id].y];
