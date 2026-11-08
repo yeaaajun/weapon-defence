@@ -1870,7 +1870,7 @@ function dungeonAdvanceRoom(){
  const r=D.rooms.find(x=>x.id===D.currentNode);if(r)r.done=true;
  D.visited++;D.eventChoices=null;
  if(D.visited>=5){
-  D.phase='shop';D.shopOffers=Array.from({length:4},()=>({id:DUNGEON_GIFTS[Math.floor(Math.random()*DUNGEON_GIFTS.length)].id,rank:1+Math.floor(Math.random()*2)}));
+  D.phase='shopReady';D.shopOffers=Array.from({length:4},()=>({id:DUNGEON_GIFTS[Math.floor(Math.random()*DUNGEON_GIFTS.length)].id,rank:1+Math.floor(Math.random()*2)}));
  }else{
   const next=(D.edges||[]).filter(e=>e[0]===D.currentNode).map(e=>e[1]);
   D.available=[...new Set(next)].filter(id=>{const x=D.rooms.find(r=>r.id===id);return x&&!x.done});
@@ -1892,7 +1892,7 @@ function dungeonChooseEvent(i){
  if(D.currency<price){toast('던전 재화가 부족합니다.');return}
  D.currency-=price;dungeonGiftAdd(o.id,o.rank);D.shopOffers.splice(i,1);dungeonR();
 }function dungeonContinueBoss(){
- if(D&&D.phase==='shop'){D.phase='boss';D.roomMap=Math.floor(Math.random()*MAPS.length);D.roomDiff=Math.floor(Math.random()*5);dungeonR()}
+ if(D&&D.phase==='shop'){D.phase='bossReady';D.roomMap=Math.floor(Math.random()*MAPS.length);D.roomDiff=Math.floor(Math.random()*5);dungeonR()}
 }
 function dungeonFinishShopRoom(){
  if(!D||D.phase!=='shopRoom')return;
@@ -1924,7 +1924,8 @@ function dungeonModal(html){$('dun-modal-body').innerHTML=html;$('dun-modal').st
 function dungeonModalClose(){
  if(!D){$('dun-modal').style.display='none';return}
  if(D.phase==='room'||D.phase==='event'){D.phase='rooms';D.currentNode=null}
- else if(D.phase==='boss'){D.phase='shop'}
+ else if(D.phase==='boss'){D.phase='bossReady'}
+ else if(D.phase==='shop'){D.phase='shopReady'}
  else if(['loadout','select','reward','floorReward'].includes(D.phase))return;
  $('dun-modal').style.display='none';dungeonR()
 }
@@ -1942,8 +1943,8 @@ function dungeonMapHtml(){
   nodes+='<button class="dun-node '+(done?'done ':'')+(avail?'available ':'')+'" style="left:'+r.x+'%;top:'+(r.y/4.4)+'%" '+(avail?'onclick="dungeonSelectRoom('+r.id+')"':'disabled')+'>'+icon+'</button>'
  });
  if(reveal>=4){
-  nodes+='<button class="dun-endnode '+(D.phase==='shop'?'active':'')+'" style="left:91%;top:50%" '+(D.phase==='shop'?'onclick="dungeonR()"':'disabled')+'>🛒<small>상점</small></button>';
-  nodes+='<button class="dun-endnode '+(D.phase==='boss'?'active':'')+'" style="left:97.5%;top:50%" '+(D.phase==='boss'?'onclick="dungeonR()"':'disabled')+'>👑<small>보스</small></button>'
+  nodes+='<button class="dun-endnode '+(['shopReady','shop'].includes(D.phase)?'active':'')+'" style="left:91%;top:50%" '+(['shopReady','shop'].includes(D.phase)?'onclick="dungeonOpenShop()"':'disabled')+'>🛒<small>상점</small></button>';
+  nodes+='<button class="dun-endnode '+(['bossReady','boss'].includes(D.phase)?'active':'')+'" style="left:97.5%;top:50%" '+(['bossReady','boss'].includes(D.phase)?'onclick="dungeonOpenBoss()"':'disabled')+'>👑<small>보스</small></button>'
  }
  return '<div class="dun-map"><svg viewBox="0 0 1000 440" preserveAspectRatio="none">'+lines+'</svg>'+nodes+'</div>'
 }
