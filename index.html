@@ -1847,7 +1847,7 @@ function dungeonStoreHtml(){let s='<div class="dun-panel"><h2>🏪 영구 던전
 function dungeonMapHtml(){
  const roomById=id=>D.rooms.find(r=>r.id===id);
  let lines='';
- lines+='<path d="M 20 220 L 90 '+(D.rooms.find(r=>r.col===0)?.y||220)+'" />';
+  D.rooms.filter(r=>r.col===0).forEach(r=>{lines+='<path d="M 20 220 L 90 '+r.y+'" />'});
  (D.edges||[]).forEach(e=>{const a=roomById(e[0]),b=roomById(e[1]);if(a&&b)lines+='<path d="M '+(a.x*10)+' '+a.y+' L '+(b.x*10)+' '+b.y+'" />'});
  const startY=220,shopX=910,bossX=975;
  const last=D.rooms.filter(r=>r.col===4);
