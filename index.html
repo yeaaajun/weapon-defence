@@ -1153,6 +1153,7 @@ if(S.dq&&typeof S.dq==='object'&&!Array.isArray(S.dq)&&Array.isArray(S.dq.q)&&S.
  S.dq.all=!!S.dq.all;
  S.dq.q=S.dq.q.map(q=>({...q,g:safeNum(q.g,1,1,100000000),p:safeNum(q.p,0,0,100000000),c:!!q.c,txt:typeof q.txt==='string'?q.txt:'퀘스트',coin:safeNum(q.coin,0),gem:safeNum(q.gem,0)}));
 }else S.dq=null;
+let D=null;
 const DUNGEON_GIFTS=[
  {id:'edge',n:'날 선 계약',icon:'⚔️',d:'타워 피해 +8%/등급',effect:'pd',v:.08},
  {id:'tempo',n:'속도의 인장',icon:'💨',d:'공격 간격 -4%/등급',effect:'ps',v:.04},
