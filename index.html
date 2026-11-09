@@ -2230,7 +2230,7 @@ cv.onpointerdown=e=>{
  if(G.blk[r*20+c]||G.gold<w.cost)return;
  snd('place');G.gold-=w.cost;G.tw.push({id:w.id,c,r,x:c*40+20,y:r*40+20,lv:1,cd:0,aim:-Math.PI/2,sw:0,inv:w.cost,k:0});dq('place',1);side();hud();
 };
-$('spd').onclick=()=>{if(!G)return;G.spd=G.spd%3+1;$('spd').textContent='x'+G.spd};
+$('spd').onclick=()=>{if(!G)return;if(ADMIN_MODE){adminApplyLive();$('spd').textContent='x'+G.spd;return}G.spd=G.spd%3+1;$('spd').textContent='x'+G.spd};
 $('auto').onclick=()=>{if(!G)return;G.auto=!G.auto;$('auto').textContent='자동: '+(G.auto?'ON':'OFF')};
 $('next').onclick=()=>G&&startWave(G.active);
 $('quit').onclick=()=>{if(G)end(false,true)};
@@ -2277,7 +2277,7 @@ function update(dt){
   e.d+=e.k.sp*dt*(G.es||1)*(e.slow>0?.5:1);
   e.hit=Math.max(0,e.hit-dt);
   [e.x,e.y]=posAt(e.d);
-  if(e.d>=G.tot){e.dead=1;snd('leak');G.leak=1;G.lives-=Math.max(0,Math.ceil(e.hp));if(G.lives<=0){G.lives=0;hud();end(false);return}}
+  if(e.d>=G.tot){e.dead=1;snd('leak');G.leak=1;G.lives-=Math.max(0,Math.ceil(e.hp));if(G.lives<=0){if(ADMIN_MODE){G.lives=1e9}else{G.lives=0;hud();end(false);return}}}
  }
  G.en=G.en.filter(e=>e.hp>0?!e.dead:killed(e));
  for(const t of G.tw){
