@@ -156,7 +156,8 @@ body.admin-mode #adminToggle{background:#b00065;border-color:#ff9bd2}
 </head>
 <body>
 <div id="fl"></div>
-<button id="adminToggle" onclick="adminToggle()">🛡️ 관리자 모드</button><button id="adminReopen" class="hide" onclick="adminOpenPanel()" style="position:fixed;left:8px;bottom:calc(54px + env(safe-area-inset-bottom,0px));z-index:10070;background:#7041a6;border:2px solid #d7b8ff">🛡️ 관리자 패널 열기</button><div id="adminPanel" style="display:none;position:fixed;inset:4%;z-index:10080;overflow:auto;background:#171525;color:white;border:2px solid #b88cff;border-radius:14px;padding:16px"><h2>관리자 컨트롤 <button onclick="adminClosePanel()">닫기</button></h2><p>배율은 0.1~10배. 관리자 값이 인게임 설정보다 우선합니다.</p><div>아군 피해량 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('pd',this.value)"></div><div>적 체력 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('eh',this.value)"></div><div>적 이동 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('es',this.value)"></div><div>게임 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('spd',this.value)"></div><div>공격 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('ps',1/Number(this.value))"></div><div>사거리 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('pr',this.value)"></div><div>보상 배율 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('cm',this.value)"></div><h3>모디파이어</h3><div id="adminMods"></div></div>
+<button id="adminToggle" onclick="adminToggle()">🛡️ 관리자 모드</button><button id="adminReopen" class="hide" onclick="adminOpenPanel()" style="position:fixed;left:8px;bottom:calc(54px + env(safe-area-inset-bottom,0px));z-index:10070;background:#7041a6;border:2px solid #d7b8ff">🛡️ 관리자 패널 열기</button><div id="adminPanel" style="display:none;position:fixed;inset:4%;z-index:10080;overflow:auto;background:#171525;color:white;border:2px solid #b88cff;border-radius:14px;padding:16px"><h2>관리자 컨트롤 <button onclick="adminClosePanel()">닫기</button></h2><p>배율은 0.1~10배. 관리자 값이 인게임 설정보다 우선합니다.</p><div>아군 피해량 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('pd',this.value)"></div>
+<div id="adminNotice" style="display:none;position:fixed;inset:0;z-index:10100;background:#000b;align-items:center;justify-content:center;padding:20px"><div style="width:min(420px,100%);background:#171525;color:white;border:2px solid #b88cff;border-radius:16px;padding:22px;box-shadow:0 12px 40px #000b"><h2 id="adminNoticeTitle" style="margin:0 0 12px">안내</h2><p id="adminNoticeText" style="line-height:1.6;margin:0 0 20px"></p><button onclick="adminHideNotice()" style="background:#7041a6;border:1px solid #d7b8ff;color:white;border-radius:9px;padding:9px 20px">확인</button></div></div><div>적 체력 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('eh',this.value)"></div><div>적 이동 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('es',this.value)"></div><div>게임 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('spd',this.value)"></div><div>공격 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('ps',1/Number(this.value))"></div><div>사거리 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('pr',this.value)"></div><div>보상 배율 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('cm',this.value)"></div><h3>모디파이어</h3><div id="adminMods"></div></div>
 <button id="mu" class="alt" style="position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:8px;z-index:20;padding:6px 10px" onclick="setR()">⚙️</button>
 <div class="wrap">
 
@@ -1284,6 +1285,8 @@ function show(id){id=='game'?bgmOn():bgmOff();
 const ADMIN_CFG={pd:1,eh:1,es:1,spd:1,ps:1,pr:1,cm:1,mods:[]};
 function adminClosePanel(){$('adminPanel').style.display='none';if(ADMIN_MODE)$('adminReopen').classList.remove('hide')}
 function adminOpenPanel(){if(!ADMIN_MODE)return;$('adminPanel').style.display='block';$('adminReopen').classList.add('hide');adminRenderMods()}
+function adminShowNotice(title,message){$('adminNoticeTitle').textContent=title;$('adminNoticeText').textContent=message;$('adminNotice').style.display='flex'}
+function adminHideNotice(){$('adminNotice').style.display='none'}
 function adminSet(k,v){ADMIN_CFG[k]=Math.max(.1,Math.min(10,Number(v)||1));if(G&&ADMIN_MODE)adminApplyLive()}
 function adminApplyLive(){if(!G)return;Object.assign(G,{pd:ADMIN_CFG.pd,eh:ADMIN_CFG.eh,es:ADMIN_CFG.es,spd:ADMIN_CFG.spd,ps:ADMIN_CFG.ps,pr:ADMIN_CFG.pr,cm:ADMIN_CFG.cm})}
 function adminRenderMods(){$('adminMods').innerHTML=MODS.map(m=>'<label style="display:inline-block;margin:5px"><input type="checkbox" '+(ADMIN_CFG.mods.includes(m.id)?'checked':'')+' onchange="adminModToggle(\''+m.id+'\',this.checked)">'+m.n+'</label>').join('')}
@@ -1311,7 +1314,7 @@ function adminEnable(){
  document.body.classList.add('admin-mode');
  $('adminToggle').textContent='🛡️ 관리자 모드 ON · 종료';$('adminPanel').style.display='block';$('adminReopen').classList.add('hide');adminRenderMods();
  homeR();shopR();treeR();loadR();syncC();
- alert('관리자 모드 활성화! 모든 무기와 트리가 해금됐고 재화가 사실상 무한입니다. 이 모드에서는 저장되지 않습니다.');
+ adminShowNotice('관리자 모드 활성화','모든 무기와 트리가 해금됐고 재화가 무제한으로 설정됐습니다. 관리자 모드에서 변경한 진행도는 저장되지 않습니다.');
 }
 function adminDisable(){
  if(!ADMIN_MODE)return;
