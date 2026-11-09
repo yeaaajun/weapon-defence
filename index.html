@@ -1131,16 +1131,9 @@ S.st.wk=asObject(S.st.wk);
 for(const key of Object.keys(S.st.wk))S.st.wk[key]=safeNum(S.st.wk[key],0);
 S.ach=asObject(S.ach);
 S.tree=asObject(S.tree);
-for(const id of Object.keys(S.tree)){
- const node=TN[id];
- if(!node||node.k==='w'){delete S.tree[id];continue}
- S.tree[id]=safeNum(S.tree[id],0,0,Number(node.mx)||1);
-}
 S.skin=asObject(S.skin);
 S.skins=Array.isArray(S.skins)?[...new Set(S.skins.filter(x=>typeof x==='string'))]:[];
 S.gshop=asObject(S.gshop);
-S.mods=Array.isArray(S.mods)?[...new Set(S.mods.filter(id=>MODS.some(m=>m.id===id)))]:[];
-S.modOn=Array.isArray(S.modOn)?[...new Set(S.modOn.filter(id=>S.mods.includes(id)))]:[];
 S.owned=Array.isArray(S.owned)?[...new Set(S.owned.filter(id=>typeof id==='string'&&WM[id]))]:[];
 if(!S.owned.length)S.owned=['dagger','katana'].filter(id=>WM[id]);
 S.load=Array.isArray(S.load)?[...new Set(S.load.filter(id=>S.owned.includes(id)))].slice(0,4):[];
@@ -1815,6 +1808,16 @@ mkBr('B',[['두둑한 주머니',100,80,l=>`시작 골드 +${l*10}`,(g,l)=>{g.go
 mkBr('C',[['사거리 훈련',150,80,l=>`사거리 +${l*3}%`,(g,l)=>{g.pr*=1+.025*l}],['성벽 보강',150,100,l=>`체력 +${l*4}%`,(g,l)=>{g.lives*=1+.025*l}],['판매 환급',100,100,l=>`판매 환급 +${l*3}%p`,(g,l)=>{g.sv=.03*l}],['요새화',400,250,l=>`체력 +${l*5}% · 사거리 +${l*2}%`,(g,l)=>{g.lives*=1+.05*l;g.pr*=1+.02*l}],['철벽의 맹세',600,300,l=>`체력 +${l*4}%`,(g,l)=>{g.lives*=1+.025*l}]],['repeater','harpoon'],[800,1600,'연노 연마','연노 속사','작살 연마','작살 속사']);
 const XN=[['x1','화력 집중',1150,580,['a3','b2'],l=>`피해 +${l*5}%`,(g,l)=>{g.pd*=1+.05*l}],['x2','보급선',900,1010,['b3','c2'],l=>`시작 골드 +${l*25} · 체력 +${l*3}%`,(g,l)=>{g.gold+=40*l;g.lives*=1+.02*l}],['x3','철벽 포진',650,580,['c3','a2'],l=>`사거리 +${l*3}% · 공속 +${l*2.5}%`,(g,l)=>{g.pr*=1+.02*l;g.ps*=1-.025*l}]];
 XN.forEach(x=>{TN[x[0]]={id:x[0],k:'x',n:x[1],x:x[2],y:x[3],par:x[4],mx:3,c0:350,c1:250,ds:x[5],ef:x[6]}});
+
+// TN과 MODS가 모두 초기화된 뒤 저장된 트리/모디파이어 값을 검증합니다.
+S.mods=Array.isArray(S.mods)?[...new Set(S.mods.filter(id=>MODS.some(m=>m.id===id)))]:[];
+S.modOn=Array.isArray(S.modOn)?[...new Set(S.modOn.filter(id=>S.mods.includes(id)))]:[];
+for(const id of Object.keys(S.tree)){
+ const node=TN[id];
+ if(!node||node.k==='w'){delete S.tree[id];continue}
+ S.tree[id]=safeNum(S.tree[id],0,0,Number(node.mx)||1);
+}
+
 function treeR(){
   let ln='',nd='';const pos=id=>id=='root'?[900,840]:[TN[id].x,TN[id].y];
   for(const id in TN){
