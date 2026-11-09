@@ -149,10 +149,14 @@ body.dungeon-battle-active #stage{display:none!important}
 #dun-modal .dun-modal-actions button{min-width:130px}
 #dun-modal .dun-loadout-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px}
 #dun-modal .dun-loadout-grid .card{min-width:0}
+
+#adminToggle{position:fixed;left:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:10070;background:#7041a6;border:2px solid #d7b8ff;box-shadow:0 3px 16px #0008}
+body.admin-mode #adminToggle{background:#b00065;border-color:#ff9bd2}
 </style>
 </head>
 <body>
 <div id="fl"></div>
+<button id="adminToggle" onclick="adminToggle()">🛡️ 관리자 모드</button>
 <button id="mu" class="alt" style="position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:8px;z-index:20;padding:6px 10px" onclick="setR()">⚙️</button>
 <div class="wrap">
 
@@ -1144,7 +1148,16 @@ const DUNGEON_SHOP=[
  {id:'goedendagSkin',type:'skin',weapon:'goedendag',index:5,name:'묘지의 망령',price:260,desc:'고덴닥 전용 던전 스킨'},
  {id:'fauchardSkin',type:'skin',weapon:'fauchard',index:5,name:'심연의 초승달',price:300,desc:'포샤르 전용 던전 스킨'}
 ];
-let nsv=0;const save=()=>{try{localStorage.setItem('wtd2',JSON.stringify(S))}catch(e){if(!nsv){nsv=1;toast('⚠️ 이 환경에서는 저장이 안 됩니다. 새로고침하면 진행도가 초기화돼요')}}};
+
+/* 관리자 인증값은 배포 전에 반드시 직접 변경하세요.
+   이 게임은 브라우저 단독 실행이라 코드/개발자도구를 볼 수 있는 사람에게
+   완전한 신원 인증이나 비밀 보관을 제공할 수 없습니다. */
+const ADMIN_PASSWORD='CHANGE_THIS_PASSWORD';
+const ADMIN_SECOND_FACTOR='CHANGE_THIS_CONFIRMATION_PHRASE';
+// 나중에 직접 만든 관리자 전용 무기 객체를 여기에 추가할 수 있습니다.
+const ADMIN_EXTRA_WEAPONS=[];
+let ADMIN_MODE=false,ADMIN_BACKUP=null;
+let nsv=0;const save=()=>{if(ADMIN_MODE)return;try{localStorage.setItem('wtd2',JSON.stringify(S))}catch(e){if(!nsv){nsv=1;toast('⚠️ 이 환경에서는 저장이 안 됩니다. 새로고침하면 진행도가 초기화돼요')}}};
 const $=id=>document.getElementById(id);
 let selMap=0,selDiff=1,tab=0,skOpen=null,sp=0,mode=0;
 let VM=1,VB=.6,VS=1;
@@ -1266,6 +1279,39 @@ function show(id){id=='game'?bgmOn():bgmOff();
  for(const s of ['home','stage','loadout','shop','game','ach','tree','quest','season']){const e=$(s);if(e)e.classList.toggle('hide',s!=id)}
  syncC();
  if(id=='home')homeR();if(id=='stage')stageR();if(id=='loadout')loadR();if(id=='shop')shopR();if(id=='ach')achR();if(id=='tree')treeR();if(id=='quest')dqR();if(id=='season')seasonR();
+}
+
+function adminToggle(){
+ if(ADMIN_MODE){if(!confirm('관리자 모드를 종료할까요? 관리자 모드에서 바뀐 진행도는 모두 폐기되고 진입 직전 상태로 돌아갑니다.'))return;adminDisable();return}
+ const p=prompt('관리자 비밀번호를 입력하세요.');if(p===null)return;
+ if(p!==ADMIN_PASSWORD){alert('비밀번호가 틀렸습니다.');return}
+ const second=prompt('2차 확인 문구를 입력하세요.');if(second===null)return;
+ if(second!==ADMIN_SECOND_FACTOR){alert('2차 확인에 실패했습니다.');return}
+ adminEnable();
+}
+function adminEnable(){
+ if(ADMIN_MODE)return;
+ ADMIN_BACKUP=JSON.parse(JSON.stringify(S));ADMIN_MODE=true;
+ const huge=Number.MAX_SAFE_INTEGER;
+ S.coins=huge;S.gems=huge;S.dungeonCoins=huge;S.tm=huge;
+ S.owned=WP.map(w=>w.id);
+ S.load=S.load.concat(S.owned.filter(id=>!S.load.includes(id))).slice(0,4);
+ S.tree=S.tree||{};
+ for(const id in TN){const n=TN[id];if(n.k!=='w')S.tree[id]=n.mx||1;}
+ S.tspent=huge;
+ S.season=S.season||{id:1,xp:0,lv:1,claimed:[]};S.season.xp=huge;S.season.lv=999999;
+ S.dungeonOverdrive=true;
+ document.body.classList.add('admin-mode');
+ $('adminToggle').textContent='🛡️ 관리자 모드 ON · 종료';
+ homeR();shopR();treeR();loadR();syncC();
+ alert('관리자 모드 활성화! 모든 무기와 트리가 해금됐고 재화가 사실상 무한입니다. 이 모드에서는 저장되지 않습니다.');
+}
+function adminDisable(){
+ if(!ADMIN_MODE)return;
+ S=ADMIN_BACKUP;ADMIN_BACKUP=null;ADMIN_MODE=false;
+ document.body.classList.remove('admin-mode');
+ $('adminToggle').textContent='🛡️ 관리자 모드';
+ homeR();shopR();treeR();loadR();syncC();
 }
 function syncC(){const t=S.coins+' · 💎 '+(S.gems||0)+' · 🏅 '+(S.dungeonCoins||0);$('hc').textContent=t;document.querySelectorAll('.cc').forEach(e=>e.textContent=t)}
 function homeR(){
