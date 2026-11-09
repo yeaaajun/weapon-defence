@@ -156,7 +156,7 @@ body.admin-mode #adminToggle{background:#b00065;border-color:#ff9bd2}
 </head>
 <body>
 <div id="fl"></div>
-<button id="adminToggle" onclick="adminToggle()">🛡️ 관리자 모드</button>
+<button id="adminToggle" onclick="adminToggle()">🛡️ 관리자 모드</button><div id="adminPanel" style="display:none;position:fixed;inset:4%;z-index:10080;overflow:auto;background:#171525;color:white;border:2px solid #b88cff;border-radius:14px;padding:16px"><h2>관리자 컨트롤 <button onclick="adminClosePanel()">닫기</button></h2><p>배율은 0.1~10배. 관리자 값이 인게임 설정보다 우선합니다.</p><div>아군 피해량 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('pd',this.value)"></div><div>적 체력 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('eh',this.value)"></div><div>적 이동 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('es',this.value)"></div><div>게임 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('spd',this.value)"></div><div>공격 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('ps',1/Number(this.value))"></div><div>사거리 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('pr',this.value)"></div><div>보상 배율 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('cm',this.value)"></div><h3>모디파이어</h3><div id="adminMods"></div></div>
 <button id="mu" class="alt" style="position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:8px;z-index:20;padding:6px 10px" onclick="setR()">⚙️</button>
 <div class="wrap">
 
@@ -1152,8 +1152,8 @@ const DUNGEON_SHOP=[
 /* 관리자 인증값은 배포 전에 반드시 직접 변경하세요.
    이 게임은 브라우저 단독 실행이라 코드/개발자도구를 볼 수 있는 사람에게
    완전한 신원 인증이나 비밀 보관을 제공할 수 없습니다. */
-const ADMIN_PASSWORD='CHANGE_THIS_PASSWORD';
-const ADMIN_SECOND_FACTOR='CHANGE_THIS_CONFIRMATION_PHRASE';
+const ADMIN_PASSWORD='1406admin';
+const ADMIN_SECOND_FACTOR='DONOTCHANGE';
 // 나중에 직접 만든 관리자 전용 무기 객체를 여기에 추가할 수 있습니다.
 const ADMIN_EXTRA_WEAPONS=[];
 let ADMIN_MODE=false,ADMIN_BACKUP=null;
@@ -1281,6 +1281,12 @@ function show(id){id=='game'?bgmOn():bgmOff();
  if(id=='home')homeR();if(id=='stage')stageR();if(id=='loadout')loadR();if(id=='shop')shopR();if(id=='ach')achR();if(id=='tree')treeR();if(id=='quest')dqR();if(id=='season')seasonR();
 }
 
+const ADMIN_CFG={pd:1,eh:1,es:1,spd:1,ps:1,pr:1,cm:1,mods:[]};
+function adminClosePanel(){$('adminPanel').style.display='none'}
+function adminSet(k,v){ADMIN_CFG[k]=Math.max(.1,Math.min(10,Number(v)||1));if(G&&ADMIN_MODE)adminApplyLive()}
+function adminApplyLive(){if(!G)return;Object.assign(G,{pd:ADMIN_CFG.pd,eh:ADMIN_CFG.eh,es:ADMIN_CFG.es,spd:ADMIN_CFG.spd,ps:ADMIN_CFG.ps,pr:ADMIN_CFG.pr,cm:ADMIN_CFG.cm})}
+function adminRenderMods(){$('adminMods').innerHTML=MODS.map(m=>'<label style="display:inline-block;margin:5px"><input type="checkbox" '+(ADMIN_CFG.mods.includes(m.id)?'checked':'')+' onchange="adminModToggle(\''+m.id+'\',this.checked)">'+m.n+'</label>').join('')}
+function adminModToggle(id,on){ADMIN_CFG.mods=ADMIN_CFG.mods.filter(x=>x!==id);if(on)ADMIN_CFG.mods.push(id)}
 function adminToggle(){
  if(ADMIN_MODE){if(!confirm('관리자 모드를 종료할까요? 관리자 모드에서 바뀐 진행도는 모두 폐기되고 진입 직전 상태로 돌아갑니다.'))return;adminDisable();return}
  const p=prompt('관리자 비밀번호를 입력하세요.');if(p===null)return;
@@ -1302,7 +1308,7 @@ function adminEnable(){
  S.season=S.season||{id:1,xp:0,lv:1,claimed:[]};S.season.xp=huge;S.season.lv=999999;
  S.dungeonOverdrive=true;
  document.body.classList.add('admin-mode');
- $('adminToggle').textContent='🛡️ 관리자 모드 ON · 종료';
+ $('adminToggle').textContent='🛡️ 관리자 모드 ON · 종료';$('adminPanel').style.display='block';adminRenderMods();
  homeR();shopR();treeR();loadR();syncC();
  alert('관리자 모드 활성화! 모든 무기와 트리가 해금됐고 재화가 사실상 무한입니다. 이 모드에서는 저장되지 않습니다.');
 }
@@ -1310,7 +1316,7 @@ function adminDisable(){
  if(!ADMIN_MODE)return;
  S=ADMIN_BACKUP;ADMIN_BACKUP=null;ADMIN_MODE=false;
  document.body.classList.remove('admin-mode');
- $('adminToggle').textContent='🛡️ 관리자 모드';
+ $('adminToggle').textContent='🛡️ 관리자 모드';adminClosePanel();
  homeR();shopR();treeR();loadR();syncC();
 }
 function syncC(){const t=S.coins+' · 💎 '+(S.gems||0)+' · 🏅 '+(S.dungeonCoins||0);$('hc').textContent=t;document.querySelectorAll('.cc').forEach(e=>e.textContent=t)}
@@ -1916,7 +1922,7 @@ function startGame(){
  G={m,d,segs,tot,special:sp&&!ch,inf,chal:ch?MODS[ch.mod]:null,di:ch?ch.df:(sp?4:selDiff),max:dungeonRun?(D.battleKind==='boss'?5:3):(inf?1e9:(sp?20:MAXW)),dungeonRoom:dungeonRun,dungeonBoss:dungeonRun&&D.battleKind==='boss',dungeonBossIndex:dungeonRun?(D.battleBossId||null):null,dungeonFloor:dungeonRun?D.floor:null,auto:false,at:0,gold:d.gold,lives:d.lives,wave:0,en:[],tw:[],fx:[],q:[],sp:0,spd:1,sel:null,slot:(D&&D.inBattle?D.loadout[0]:S.load[0]),over:false,active:false,blk:[],eh:1,es:1,pg:1,pd:1,ps:1,pr:1,cnt:1,cm:1,ws:0};
  
  // ① 모디파이어 적용 (기존 그대로)
- if(!D?.inBattle)(ch?[MODS[ch.mod]]:(sp?[]:S.modOn.map(id=>MODS.find(x=>x.id==id)))).forEach(x=>{x.ap(G);G.cm*=x.cm});
+ if(!ADMIN_MODE&&!D?.inBattle)(ch?[MODS[ch.mod]]:(sp?[]:S.modOn.map(id=>MODS.find(x=>x.id==id)))).forEach(x=>{if(x){x.ap(G);G.cm*=x.cm}});
  
  // ② ★ 트리 무효 체크
  //    - 임파서블 난이도 (일반 모드) → 강제 무의 경지
@@ -1930,6 +1936,7 @@ function startGame(){
  }
  // 젬 상점 영구 버프
  applyGshop(G);
+ if(ADMIN_MODE){for(const id of ADMIN_CFG.mods){const m=MODS.find(x=>x.id===id);if(m){m.ap(G);G.cm*=m.cm||1}}adminApplyLive();}
  // 임파서블은 추가 보상 2.5배 (무의 경지 모디파이어 보상과 별개)
  if(isImpossible){
    G.cm *= 2.5;
@@ -2223,7 +2230,7 @@ cv.onpointerdown=e=>{
  if(G.blk[r*20+c]||G.gold<w.cost)return;
  snd('place');G.gold-=w.cost;G.tw.push({id:w.id,c,r,x:c*40+20,y:r*40+20,lv:1,cd:0,aim:-Math.PI/2,sw:0,inv:w.cost,k:0});dq('place',1);side();hud();
 };
-$('spd').onclick=()=>{if(!G)return;G.spd=G.spd%3+1;$('spd').textContent='x'+G.spd};
+$('spd').onclick=()=>{if(!G)return;if(ADMIN_MODE){adminApplyLive();$('spd').textContent='x'+G.spd;return}G.spd=G.spd%3+1;$('spd').textContent='x'+G.spd};
 $('auto').onclick=()=>{if(!G)return;G.auto=!G.auto;$('auto').textContent='자동: '+(G.auto?'ON':'OFF')};
 $('next').onclick=()=>G&&startWave(G.active);
 $('quit').onclick=()=>{if(G)end(false,true)};
@@ -2270,7 +2277,7 @@ function update(dt){
   e.d+=e.k.sp*dt*(G.es||1)*(e.slow>0?.5:1);
   e.hit=Math.max(0,e.hit-dt);
   [e.x,e.y]=posAt(e.d);
-  if(e.d>=G.tot){e.dead=1;snd('leak');G.leak=1;G.lives-=Math.max(0,Math.ceil(e.hp));if(G.lives<=0){G.lives=0;hud();end(false);return}}
+  if(e.d>=G.tot){e.dead=1;snd('leak');G.leak=1;G.lives-=Math.max(0,Math.ceil(e.hp));if(G.lives<=0){if(ADMIN_MODE){G.lives=1e9}else{G.lives=0;hud();end(false);return}}}
  }
  G.en=G.en.filter(e=>e.hp>0?!e.dead:killed(e));
  for(const t of G.tw){
