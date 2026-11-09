@@ -150,15 +150,10 @@ body.dungeon-battle-active #stage{display:none!important}
 #dun-modal .dun-loadout-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:8px}
 #dun-modal .dun-loadout-grid .card{min-width:0}
 
-#adminToggle{position:fixed;left:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));z-index:10070;background:#7041a6;border:2px solid #d7b8ff;box-shadow:0 3px 16px #0008}
-body.admin-mode #adminToggle{background:#b00065;border-color:#ff9bd2}
 </style>
 </head>
 <body>
 <div id="fl"></div>
-<button id="adminToggle" onclick="adminToggle()">🛡️ 관리자 모드</button><button id="adminReopen" class="hide" onclick="adminOpenPanel()" style="position:fixed;left:8px;bottom:calc(54px + env(safe-area-inset-bottom,0px));z-index:10070;background:#7041a6;border:2px solid #d7b8ff">🛡️ 관리자 패널 열기</button><div id="adminPanel" style="display:none;position:fixed;inset:4%;z-index:10080;overflow:auto;background:#171525;color:white;border:2px solid #b88cff;border-radius:14px;padding:16px"><h2>관리자 컨트롤 <button onclick="adminClosePanel()">닫기</button></h2><p>배율은 0.1~10배. 관리자 값이 인게임 설정보다 우선합니다.</p><div>아군 피해량 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('pd',this.value)"></div>
-<div>적 체력 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('eh',this.value)"></div><div>적 이동 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('es',this.value)"></div><div>게임 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('spd',this.value)"></div><div>공격 속도 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('ps',1/Number(this.value))"></div><div>사거리 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('pr',this.value)"></div><div>보상 배율 <input type="range" min="0.1" max="10" step="0.1" value="1" oninput="adminSet('cm',this.value)"></div><h3>모디파이어</h3><div id="adminMods"></div></div>
-<div id="adminNotice" style="display:none;position:fixed;inset:0;z-index:10100;background:#000b;align-items:center;justify-content:center;padding:20px"><div style="width:min(420px,100%);background:#171525;color:white;border:2px solid #b88cff;border-radius:16px;padding:22px;box-shadow:0 12px 40px #000b"><h2 id="adminNoticeTitle" style="margin:0 0 12px">안내</h2><p id="adminNoticeText" style="line-height:1.6;margin:0 0 20px"></p><button onclick="adminHideNotice()" style="background:#7041a6;border:1px solid #d7b8ff;color:white;border-radius:9px;padding:9px 20px">확인</button></div></div>
 <button id="mu" class="alt" style="position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:8px;z-index:20;padding:6px 10px" onclick="setR()">⚙️</button>
 <div class="wrap">
 
@@ -1115,15 +1110,49 @@ const EN_N=['슬라임','박쥐','고블린','해골','오크','드래곤','유�
 // 6) 상태 / 유틸
 // ============================================================
 let S={coins:300,owned:['dagger','katana'],load:['dagger','katana'],skins:[],skin:{},best:0,st:{k:0,boss:0,wins:0,hard:0,hell:0,sp:0,up:0,spm:[]},ach:{},mods:[],modOn:[],gems:0,dq:null,tree:{},tm:0,tspent:0,season:{id:1,xp:0,lv:1,claimed:[]},gshop:{},dungeonCoins:0,dungeonClears:0,dungeonHardClears:0,dungeonOverdrive:false,dungeonBestFloor:0};
-try{const t=localStorage.getItem('wtd2');if(t)S=Object.assign(S,JSON.parse(t))}catch(e){}
-S.tree=S.tree||{};S.tm=S.tm||0;S.tspent=S.tspent||0;
-// 로드 데이터 방어: owned / load 유효성 검사
-S.owned=(S.owned||[]).filter(id=>WM[id]);
-if(!S.owned.length)S.owned=['dagger','katana'];
-S.load=(S.load||[]).filter(id=>S.owned.includes(id));
+const asObject=v=>v&&typeof v==='object'&&!Array.isArray(v)?v:{};
+const safeNum=(v,fallback=0,min=0,max=Number.MAX_SAFE_INTEGER)=>{const n=Number(v);return Number.isFinite(n)?Math.min(max,Math.max(min,n)):fallback};
+try{
+ const raw=localStorage.getItem('wtd2');
+ if(raw){
+  const saved=JSON.parse(raw);
+  if(saved&&typeof saved==='object'&&!Array.isArray(saved)){
+   const base=S;
+   S={...base,...saved,st:{...base.st,...asObject(saved.st)},season:{...base.season,...asObject(saved.season)}};
+  }
+ }
+}catch(e){}
+for(const key of ['coins','gems','tm','tspent','best','dungeonCoins','dungeonClears','dungeonHardClears','dungeonBestFloor'])S[key]=safeNum(S[key],key==='coins'?300:0);
+S.dungeonOverdrive=!!(S.dungeonOverdrive||S.dungeonHardClears>0);
+S.st=asObject(S.st);
+for(const key of ['k','boss','wins','hard','hell','sp','up','binf','chal','gt','flaw','evo','perks','imp'])S.st[key]=safeNum(S.st[key],0);
+S.st.spm=Array.isArray(S.st.spm)?[...new Set(S.st.spm.filter(x=>typeof x==='string'))]:[];
+S.st.wk=asObject(S.st.wk);
+for(const key of Object.keys(S.st.wk))S.st.wk[key]=safeNum(S.st.wk[key],0);
+S.ach=asObject(S.ach);
+S.tree=asObject(S.tree);
+for(const id of Object.keys(S.tree)){
+ const node=TN[id];
+ if(!node||node.k==='w'){delete S.tree[id];continue}
+ S.tree[id]=safeNum(S.tree[id],0,0,Number(node.mx)||1);
+}
+S.skin=asObject(S.skin);
+S.skins=Array.isArray(S.skins)?[...new Set(S.skins.filter(x=>typeof x==='string'))]:[];
+S.gshop=asObject(S.gshop);
+S.mods=Array.isArray(S.mods)?[...new Set(S.mods.filter(id=>MODS.some(m=>m.id===id)))]:[];
+S.modOn=Array.isArray(S.modOn)?[...new Set(S.modOn.filter(id=>S.mods.includes(id)))]:[];
+S.owned=Array.isArray(S.owned)?[...new Set(S.owned.filter(id=>typeof id==='string'&&WM[id]))]:[];
+if(!S.owned.length)S.owned=['dagger','katana'].filter(id=>WM[id]);
+S.load=Array.isArray(S.load)?[...new Set(S.load.filter(id=>S.owned.includes(id)))].slice(0,4):[];
 if(!S.load.length)S.load=[S.owned[0]];
-
-S.season=S.season||{id:1,xp:0,lv:1,claimed:[]};S.gshop=S.gshop||{};S.dungeonCoins=S.dungeonCoins||0;S.dungeonClears=S.dungeonClears||0;S.dungeonHardClears=S.dungeonHardClears||0;S.dungeonBestFloor=S.dungeonBestFloor||0;S.dungeonOverdrive=!!(S.dungeonOverdrive||(S.dungeonHardClears>0));
+S.season.id=safeNum(S.season.id,1,1,10000000);
+S.season.xp=safeNum(S.season.xp,0,0,10000000);
+S.season.lv=safeNum(S.season.lv,1,1,10000000);
+S.season.claimed=Array.isArray(S.season.claimed)?[...new Set(S.season.claimed.map(x=>safeNum(x,0,1,10000000)))]:[];
+if(S.dq&&typeof S.dq==='object'&&!Array.isArray(S.dq)&&Array.isArray(S.dq.q)&&S.dq.q.length===3&&S.dq.q.every(q=>q&&typeof q.t==='string')){
+ S.dq.all=!!S.dq.all;
+ S.dq.q=S.dq.q.map(q=>({...q,g:safeNum(q.g,1,1,100000000),p:safeNum(q.p,0,0,100000000),c:!!q.c,txt:typeof q.txt==='string'?q.txt:'퀘스트',coin:safeNum(q.coin,0),gem:safeNum(q.gem,0)}));
+}else S.dq=null;
 let D=null;
 const DUNGEON_GIFTS=[
  {id:'edge',n:'날 선 계약',icon:'⚔️',d:'타워 피해 +8%/등급',effect:'pd',v:.08},
@@ -1151,19 +1180,11 @@ const DUNGEON_SHOP=[
  {id:'fauchardSkin',type:'skin',weapon:'fauchard',index:5,name:'심연의 초승달',price:300,desc:'포샤르 전용 던전 스킨'}
 ];
 
-/* 관리자 인증값은 배포 전에 반드시 직접 변경하세요.
-   이 게임은 브라우저 단독 실행이라 코드/개발자도구를 볼 수 있는 사람에게
-   완전한 신원 인증이나 비밀 보관을 제공할 수 없습니다. */
-const ADMIN_PASSWORD='1406admin';
-const ADMIN_SECOND_FACTOR='DONOTCHANGE';
-// 나중에 직접 만든 관리자 전용 무기 객체를 여기에 추가할 수 있습니다.
-const ADMIN_EXTRA_WEAPONS=[];
-let ADMIN_MODE=false,ADMIN_BACKUP=null;
-let nsv=0;const save=()=>{if(ADMIN_MODE)return;try{localStorage.setItem('wtd2',JSON.stringify(S))}catch(e){if(!nsv){nsv=1;toast('⚠️ 이 환경에서는 저장이 안 됩니다. 새로고침하면 진행도가 초기화돼요')}}};
+let nsv=0;const save=()=>{try{localStorage.setItem('wtd2',JSON.stringify(S))}catch(e){if(!nsv){nsv=1;toast('⚠️ 이 환경에서는 저장이 안 됩니다. 새로고침하면 진행도가 초기화돼요')}}};
 const $=id=>document.getElementById(id);
 let selMap=0,selDiff=1,tab=0,skOpen=null,sp=0,mode=0;
 let VM=1,VB=.6,VS=1;
-try{const v=JSON.parse(localStorage.getItem('wtd_vol')||'null');if(v){VM=v[0];VB=v[1];VS=v[2]}}catch(e){}
+try{const v=JSON.parse(localStorage.getItem('wtd_vol')||'null');if(Array.isArray(v)){VM=safeNum(v[0],1,0,1);VB=safeNum(v[1],.6,0,1);VS=safeNum(v[2],1,0,1)}}catch(e){}
 function vsave(){try{localStorage.setItem('wtd_vol',JSON.stringify([VM,VB,VS]))}catch(e){}}
 let LANG='ko';try{LANG=localStorage.getItem('wtd_lang')||'ko'}catch(e){}
 const skOf=id=>{const v=S.skin[id];return Number.isInteger(v)&&v>=0&&v<=WS[id].length?v:0};
@@ -1283,47 +1304,6 @@ function show(id){id=='game'?bgmOn():bgmOff();
  if(id=='home')homeR();if(id=='stage')stageR();if(id=='loadout')loadR();if(id=='shop')shopR();if(id=='ach')achR();if(id=='tree')treeR();if(id=='quest')dqR();if(id=='season')seasonR();
 }
 
-const ADMIN_CFG={pd:1,eh:1,es:1,spd:1,ps:1,pr:1,cm:1,mods:[]};
-function adminClosePanel(){$('adminPanel').style.display='none';if(ADMIN_MODE)$('adminReopen').classList.remove('hide')}
-function adminOpenPanel(){if(!ADMIN_MODE)return;$('adminPanel').style.display='block';$('adminReopen').classList.add('hide');adminRenderMods()}
-function adminShowNotice(title,message){$('adminNoticeTitle').textContent=title;$('adminNoticeText').textContent=message;$('adminNotice').style.display='flex'}
-function adminHideNotice(){$('adminNotice').style.display='none'}
-function adminSet(k,v){ADMIN_CFG[k]=Math.max(.1,Math.min(10,Number(v)||1));if(G&&ADMIN_MODE)adminApplyLive()}
-function adminApplyLive(){if(!G)return;Object.assign(G,{pd:ADMIN_CFG.pd,eh:ADMIN_CFG.eh,es:ADMIN_CFG.es,spd:ADMIN_CFG.spd,ps:ADMIN_CFG.ps,pr:ADMIN_CFG.pr,cm:ADMIN_CFG.cm})}
-function adminRenderMods(){$('adminMods').innerHTML=MODS.map(m=>'<label style="display:inline-block;margin:5px"><input type="checkbox" '+(ADMIN_CFG.mods.includes(m.id)?'checked':'')+' onchange="adminModToggle(\''+m.id+'\',this.checked)">'+m.n+'</label>').join('')}
-function adminModToggle(id,on){ADMIN_CFG.mods=ADMIN_CFG.mods.filter(x=>x!==id);if(on)ADMIN_CFG.mods.push(id)}
-function adminToggle(){
- if(ADMIN_MODE){if(!confirm('관리자 모드를 종료할까요? 관리자 모드에서 바뀐 진행도는 모두 폐기되고 진입 직전 상태로 돌아갑니다.'))return;adminDisable();return}
- const p=prompt('관리자 비밀번호를 입력하세요.');if(p===null)return;
- if(p!==ADMIN_PASSWORD){alert('비밀번호가 틀렸습니다.');return}
- const second=prompt('2차 확인 문구를 입력하세요.');if(second===null)return;
- if(second!==ADMIN_SECOND_FACTOR){alert('2차 확인에 실패했습니다.');return}
- adminEnable();
-}
-function adminEnable(){
- if(ADMIN_MODE)return;
- ADMIN_BACKUP=JSON.parse(JSON.stringify(S));ADMIN_MODE=true;
- const huge=Number.MAX_SAFE_INTEGER;
- S.coins=huge;S.gems=huge;S.dungeonCoins=huge;S.tm=huge;
- S.owned=WP.map(w=>w.id);
- S.load=S.load.concat(S.owned.filter(id=>!S.load.includes(id))).slice(0,4);
- S.tree=S.tree||{};
- for(const id in TN){const n=TN[id];if(n.k!=='w')S.tree[id]=n.mx||1;}
- S.tspent=huge;
- S.season=S.season||{id:1,xp:0,lv:1,claimed:[]};S.season.xp=huge;S.season.lv=999999;
- S.dungeonOverdrive=true;
- document.body.classList.add('admin-mode');
- $('adminToggle').textContent='🛡️ 관리자 모드 ON · 종료';$('adminPanel').style.display='block';$('adminReopen').classList.add('hide');adminRenderMods();
- homeR();shopR();treeR();loadR();syncC();
- adminShowNotice('관리자 모드 활성화','모든 무기와 트리가 해금됐고 재화가 무제한으로 설정됐습니다. 관리자 모드에서 변경한 진행도는 저장되지 않습니다.');
-}
-function adminDisable(){
- if(!ADMIN_MODE)return;
- S=ADMIN_BACKUP;ADMIN_BACKUP=null;ADMIN_MODE=false;
- document.body.classList.remove('admin-mode');
- $('adminToggle').textContent='🛡️ 관리자 모드';$('adminReopen').classList.add('hide');adminClosePanel();
- homeR();shopR();treeR();loadR();syncC();
-}
 function syncC(){const t=S.coins+' · 💎 '+(S.gems||0)+' · 🏅 '+(S.dungeonCoins||0);$('hc').textContent=t;document.querySelectorAll('.cc').forEach(e=>e.textContent=t)}
 function homeR(){
  $('hb2').textContent=(S.best||0)+' / '+MAXW;$('hw').textContent=S.owned.length+' / '+WP.length;
@@ -1909,15 +1889,26 @@ const PERKS=[
 
 PERKS.forEach(p=>{p.ne=PERK_EN[p.n]||p.n;p.de=PERK_D_EN[p.d]||p.d});
 let perkTimer=null,perkChoices=[];
-function perk(){G.pause=true;perkChoices=[...PERKS].sort(()=>Math.random()-.5).slice(0,3);const o=perkChoices;
+function perk(){
+ if(!G||G.over)return;
+ clearInterval(perkTimer);perkTimer=null;perkChoices=[...PERKS].sort(()=>Math.random()-.5).slice(0,3);
+ if(!perkChoices.length){G.pause=false;return}
+ G.pause=true;const o=perkChoices;
  $('pkb').innerHTML='<h2 style="margin-top:0">✨ 퍽 선택 (웨이브 '+G.wave+')</h2><div class="sub" id="pktimer">15초 후 자동 선택됩니다</div>'+o.map((p,i)=>`<div class="card" style="margin:8px 0" onclick="pickPerk(${i})"><b>${LANG==='en'?(p.ne||p.n):p.n}</b><small>${LANG==='en'?(p.de||p.d):p.d}</small></div>`).join('');
- $('pk').style.display='flex';let left=15;clearInterval(perkTimer);
- perkTimer=setInterval(()=>{left--;const el=$('pktimer');if(el)el.textContent=left+'초 후 자동 선택됩니다';if(left<=0){clearInterval(perkTimer);pickPerk(Math.floor(Math.random()*o.length))}},1000)}
-function pickPerk(i){clearInterval(perkTimer);const p=perkChoices[i]||PERKS[i];if(p)p.f();S.st.perks=(S.st.perks||0)+1;G.pause=false;$('pk').style.display='none';hud();chk();side()}
-function pick(id){G.slot=id;G.sel=null;side();hud()}
-function posAt(dd){for(const s of G.segs)if(dd<=s.s+s.l){const t=(dd-s.s)/s.l;return[s.a[0]+(s.b[0]-s.a[0])*t,s.a[1]+(s.b[1]-s.a[1])*t]}const e=G.m.p[G.m.p.length-1];return[e[0],e[1]]}
-function pathDist(x,y){let m=1e9;const sg=G?G.segs:[];for(const s of sg){const dx=s.b[0]-s.a[0],dy=s.b[1]-s.a[1];let t=((x-s.a[0])*dx+(y-s.a[1])*dy)/(s.l*s.l);t=Math.max(0,Math.min(1,t));m=Math.min(m,Math.hypot(x-s.a[0]-dx*t,y-s.a[1]-dy*t))}return m}
+ $('pk').style.display='flex';let left=15;
+ perkTimer=setInterval(()=>{left--;const el=$('pktimer');if(el)el.textContent=left+'초 후 자동 선택됩니다';if(left<=0){clearInterval(perkTimer);perkTimer=null;pickPerk(Math.floor(Math.random()*o.length))}},1000);
+}
+function pickPerk(i){
+ if(!G||G.over||!G.pause)return;
+ const p=perkChoices[i];if(!p)return;
+ clearInterval(perkTimer);perkTimer=null;perkChoices=[];
+ p.f();S.st.perks=(S.st.perks||0)+1;G.pause=false;$('pk').style.display='none';hud();chk();side();
+}
+function pick(id){if(!G||G.over||!WM[id])return;G.slot=id;G.sel=null;side();hud()}
+function posAt(dd){for(const s of G.segs)if(s.l>0&&dd<=s.s+s.l){const t=(dd-s.s)/s.l;return[s.a[0]+(s.b[0]-s.a[0])*t,s.a[1]+(s.b[1]-s.a[1])*t]}const e=G.m.p[G.m.p.length-1];return[e[0],e[1]]}
+function pathDist(x,y){let m=1e9;const sg=G?G.segs:[];for(const s of sg){if(!s.l)continue;const dx=s.b[0]-s.a[0],dy=s.b[1]-s.a[1];let t=((x-s.a[0])*dx+(y-s.a[1])*dy)/(s.l*s.l);t=Math.max(0,Math.min(1,t));m=Math.min(m,Math.hypot(x-s.a[0]-dx*t,y-s.a[1]-dy*t))}return m}
 function startGame(){
+ clearInterval(perkTimer);perkTimer=null;perkChoices=[];$('pk').style.display='none';
  const dungeonRun=!!(D&&D.inBattle);
  document.body.classList.toggle('dungeon-active',dungeonRun);
  document.body.classList.toggle('dungeon-battle-active',dungeonRun);
@@ -1927,7 +1918,7 @@ function startGame(){
  G={m,d,segs,tot,special:sp&&!ch,inf,chal:ch?MODS[ch.mod]:null,di:ch?ch.df:(sp?4:selDiff),max:dungeonRun?(D.battleKind==='boss'?5:3):(inf?1e9:(sp?20:MAXW)),dungeonRoom:dungeonRun,dungeonBoss:dungeonRun&&D.battleKind==='boss',dungeonBossIndex:dungeonRun?(D.battleBossId||null):null,dungeonFloor:dungeonRun?D.floor:null,auto:false,at:0,gold:d.gold,lives:d.lives,wave:0,en:[],tw:[],fx:[],q:[],sp:0,spd:1,sel:null,slot:(D&&D.inBattle?D.loadout[0]:S.load[0]),over:false,active:false,blk:[],eh:1,es:1,pg:1,pd:1,ps:1,pr:1,cnt:1,cm:1,ws:0};
  
  // ① 모디파이어 적용 (기존 그대로)
- if(!ADMIN_MODE&&!D?.inBattle)(ch?[MODS[ch.mod]]:(sp?[]:S.modOn.map(id=>MODS.find(x=>x.id==id)))).forEach(x=>{if(x){x.ap(G);G.cm*=x.cm}});
+ if(!D?.inBattle)(ch?[MODS[ch.mod]]:(sp?[]:S.modOn.map(id=>MODS.find(x=>x.id==id)))).forEach(x=>{if(x){x.ap(G);G.cm*=x.cm}});
  
  // ② ★ 트리 무효 체크
  //    - 임파서블 난이도 (일반 모드) → 강제 무의 경지
@@ -1941,7 +1932,6 @@ function startGame(){
  }
  // 젬 상점 영구 버프
  applyGshop(G);
- if(ADMIN_MODE){for(const id of ADMIN_CFG.mods){const m=MODS.find(x=>x.id===id);if(m){m.ap(G);G.cm*=m.cm||1}}adminApplyLive();}
  // 임파서블은 추가 보상 2.5배 (무의 경지 모디파이어 보상과 별개)
  if(isImpossible){
    G.cm *= 2.5;
@@ -2185,7 +2175,6 @@ function dungeonR(){
  }
  if(modal)dungeonModal(modal);else $('dun-modal').style.display='none'
 }
-function dungeonFinishShopRoom(){if(!D||D.phase!=='shopRoom')return;D.pendingReward='보급을 마치셨습니다. 경로를 계속 탐험해 주세요.';D.phase='reward';dungeonR()}
 function startWave(force){
  if(!G||G.over||(G.active&&!force)||G.wave>=G.max)return;
  if(G.active)G.gold+=30+G.wave*8;
@@ -2221,8 +2210,8 @@ function side(){
   (t.lv<4?`<button id="ub" onclick="upg()" ${G.gold<upCost(t)?'disabled':''}>강화 💰${upCost(t)}</button>`:'<br><b>MAX 레벨</b>')+`<button class="alt" onclick="sell()">판매 💰${Math.round(t.inv*(.6+(G.sv||0)))}</button><button class="alt" onclick="G.sel=null;side()">닫기</button>`;
 }
 function sideLite(){if(!G||!G.sel)return;const t=G.sel,k=document.getElementById('kc');if(k)k.textContent=t.k;const u=document.getElementById('ub');if(u)u.disabled=G.gold<upCost(t)}
-function upg(){const t=G.sel;if(!t||t.lv>=4||G.gold<upCost(t))return;G.gold-=upCost(t);t.inv+=upCost(t);t.lv++;if(t.lv==4){S.st.up=1;chk()}side();hud();dq('up',1)}
-function sell(){const t=G.sel;G.gold+=Math.round(t.inv*(.6+(G.sv||0)));G.tw=G.tw.filter(x=>x!==t);G.sel=null;side();hud()}
+function upg(){if(!G||G.over)return;const t=G.sel;if(!t||t.lv>=4||G.gold<upCost(t))return;G.gold-=upCost(t);t.inv+=upCost(t);t.lv++;if(t.lv==4){S.st.up=1;chk()}side();hud();dq('up',1)}
+function sell(){if(!G||G.over||!G.sel)return;const t=G.sel;G.gold+=Math.round(t.inv*(.6+(G.sv||0)));G.tw=G.tw.filter(x=>x!==t);G.sel=null;side();hud()}
 function pt(e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)*800/r.width,(e.clientY-r.top)*480/r.height]}
 cv.onpointermove=e=>{const p=pt(e);mouse.x=p[0];mouse.y=p[1]};
 cv.onpointerdown=e=>{
@@ -2235,12 +2224,13 @@ cv.onpointerdown=e=>{
  if(G.blk[r*20+c]||G.gold<w.cost)return;
  snd('place');G.gold-=w.cost;G.tw.push({id:w.id,c,r,x:c*40+20,y:r*40+20,lv:1,cd:0,aim:-Math.PI/2,sw:0,inv:w.cost,k:0});dq('place',1);side();hud();
 };
-$('spd').onclick=()=>{if(!G)return;if(ADMIN_MODE){adminApplyLive();$('spd').textContent='x'+G.spd;return}G.spd=G.spd%3+1;$('spd').textContent='x'+G.spd};
+$('spd').onclick=()=>{if(!G||G.over)return;G.spd=G.spd%3+1;$('spd').textContent='x'+G.spd};
 $('auto').onclick=()=>{if(!G)return;G.auto=!G.auto;$('auto').textContent='자동: '+(G.auto?'ON':'OFF')};
 $('next').onclick=()=>G&&startWave(G.active);
 $('quit').onclick=()=>{if(G)end(false,true)};
 function end(win,quit){
  if(!G||G.over)return;
+ clearInterval(perkTimer);perkTimer=null;perkChoices=[];$('pk').style.display='none';
  if(G.dungeonRoom||(D&&D.inBattle)){G.over=true;dungeonBattleEnd(win,quit);return}
  G.over=true;snd(quit?'click':win?'win':'lose');
  let earn=quit?0:Math.round(G.wave*15*G.d.rew+(win?150*G.d.rew:0));earn=Math.round(earn*(G.cm||1));if(win)dq('clear',1);let rw='';
@@ -2282,7 +2272,7 @@ function update(dt){
   e.d+=e.k.sp*dt*(G.es||1)*(e.slow>0?.5:1);
   e.hit=Math.max(0,e.hit-dt);
   [e.x,e.y]=posAt(e.d);
-  if(e.d>=G.tot){e.dead=1;snd('leak');G.leak=1;G.lives-=Math.max(0,Math.ceil(e.hp));if(G.lives<=0){if(ADMIN_MODE){G.lives=1e9}else{G.lives=0;hud();end(false);return}}}
+  if(e.d>=G.tot){e.dead=1;snd('leak');G.leak=1;G.lives-=Math.max(0,Math.ceil(e.hp));if(G.lives<=0){G.lives=0;hud();end(false);return}}
  }
  G.en=G.en.filter(e=>e.hp>0?!e.dead:killed(e));
  for(const t of G.tw){
