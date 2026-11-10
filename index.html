@@ -2407,9 +2407,6 @@ function killed(e){snd('kill');S.st.k++;if(e.boss)S.st.boss++;S.st.wk=S.st.wk||{
  // 시즌 XP (처치당 소량, 저장은 게임 종료 시)
  if(e.boss) addSeasonXp(12, false); else addSeasonXp(1, false);
  hud();sideLite();G.fx.push({type:'coin',x:e.x,y:e.y,t:.6,m:.6,v:e.k.g});return false}
- // 시즌 XP (처치당 소량, 저장은 게임 종료 시)
- if(e.k.r>=30) addSeasonXp(12, false); else addSeasonXp(1, false);
- hud();sideLite();G.fx.push({type:'coin',x:e.x,y:e.y,t:.6,m:.6,v:e.k.g});return false}
 const rs=()=>Array.from({length:10},Math.random);
 const PF={fire:['rise',['#ff9800','#ffeb3b','#ff5722']],poison:['rise',['#76ff03','#33691e']],bubble:['bub',['#80deea']],gold:['burst',['#ffd54f','#fff59d']],red:['burst',['#e53935','#ff8a80']],sand:['drift',['#e0c080','#c8a060']],petal:['fall',['#f8bbd0','#f48fb1']],purple:['burst',['#b388ff','#e040fb','#7c4dff']],water:['fall',['#4fc3f7','#0288d1']],nail:['nail',['#cfd8dc']],binary:['bin',['#00e676']],lightning:['bolt',['#fff59d']],multi:['multi',['#fff']],trail:['burst',['#fff','#e0f7fa']],ding:['burst',['#fff59d','#b0bec5']],chain:['burst',['#cfd8dc']]};
 function pfx(f,p){const[m,cs]=PF[f.k]||PF.gold,q=1-p,x=f.x,y=f.y,s=f.s||rs();cx.save();cx.globalAlpha=Math.min(1,p*1.5);
