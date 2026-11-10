@@ -667,7 +667,8 @@ const WP=[
  {id:'dokkaebi',n:'도깨비 방망이',t:8,cost:320,dmg:250,range:90,cd:1.4,hits:99,g:'knock',gd:'뚝딱! – 맞은 적을 뒤로 밀어냄',price:null,d:'[동지 한정] 두드리면 뭐든 나오는 방망이'},
  {id:'goedendag',n:'고덴닥',t:9,cost:470,dmg:185,range:95,cd:1.15,hits:2,g:'knock',price:null,d:'중세 플랑드르 보병이 사용한 못 박힌 곤봉'},
  {id:'fauchard',n:'포샤르',t:9,cost:520,dmg:135,range:175,cd:.85,hits:4,g:'bleed',price:null,d:'중세 유럽에서 사용한 곡날 장병기'},
- {id:'minigun',n:'미니건',t:7,cost:1300,dmg:20,range:120,cd:.06,hits:1,price:12000,d:'현대전의 정수'}
+ {id:'minigun',n:'미니건',t:7,cost:1300,dmg:20,range:120,cd:.06,hits:1,price:12000,d:'현대전의 정수'},
+ {id:''}
 ];
 WP.forEach(w=>{if(w.price===undefined)w.price=null;if(w.t===undefined)w.t=0});
 const WM=Object.fromEntries(WP.map(w=>[w.id,w]));
@@ -1082,7 +1083,7 @@ const MAPS=[
  {n:'설원',c:'#3a4f5f',t:[[-1,6],[3,6],[3,2],[8,2],[8,9],[12,9],[12,2],[16,2],[16,9],[20,9]]}
 ];
 const MP=m=>m.p=m.t.map(q=>[q[0]*40+20,q[1]*40+20]);MAPS.forEach(MP);
-const DIFF=[{n:'쉬움',hp:.7,gold:400,lives:2000,rew:1},{n:'보통',hp:1,gold:280,lives:1200,rew:1.5},{n:'어려움',hp:1.4,gold:220,lives:800,rew:2.2},{n:'악몽',hp:2,gold:150,lives:500,rew:3.2},{n:'지옥',hp:3,gold:120,lives:300,rew:5},{n:'세미 임파서블',hp:5,gold:100,lives:150,rew:10},{n:'임파서블',hp:7,gold:100,lives:10,rew:15}];
+const DIFF=[{n:'쉬움',hp:.7,gold:400,lives:2000,rew:1},{n:'보통',hp:1,gold:280,lives:1200,rew:1.5},{n:'어려움',hp:1.7,gold:220,lives:800,rew:2.2},{n:'악몽',hp:3,gold:150,lives:600,rew:3.2},{n:'지옥',hp:5,gold:120,lives:500,rew:5},{n:'세미 임파서블',hp:7,gold:100,lives:350,rew:10},{n:'임파서블',hp:10,gold:200,lives:100,rew:15}];
 const SDIFF=[{n:'용염',hp:2,gold:260,lives:800,rew:5},{n:'번개',hp:2.3,gold:250,lives:750,rew:7},{n:'신성',hp:2.6,gold:240,lives:700,rew:10},{n:'서리',hp:2.4,gold:250,lives:700,rew:7},{n:'모래',hp:2.8,gold:240,lives:650,rew:9},{n:'혼돈',hp:3,gold:230,lives:600,rew:12},{n:'해저',hp:2.6,gold:240,lives:650,rew:9},{n:'켈트',hp:3,gold:230,lives:600,rew:12},{n:'봉인',hp:2.8,gold:235,lives:620,rew:11}];
 const SMAPS=[
  {n:'용의 둥지',c:'#4a1f1f',reward:'excal',df:0,t:[[-1,1],[18,1],[18,4],[1,4],[1,7],[18,7],[18,10],[8,10],[8,9]]},
@@ -1793,19 +1794,19 @@ function tpd(e){const p=document.getElementById('tpan');PM=0;if(e.pointerType=='
 function tpm(e){if(!PD)return;const p=document.getElementById('tpan'),dx=e.clientX-PD.x,dy=e.clientY-PD.y;if(Math.abs(dx)+Math.abs(dy)>5)PM=1;p.scrollLeft=PD.l-dx;p.scrollTop=PD.t-dy}
 function tpu(){PD=null;setTimeout(()=>{PM=0},0)}
 // 트리 노드 정의
-function mkBr(b,sp,ws,wn){const o=ORG[b],q=b.toLowerCase(),add=(id,k,nm,u,v,par,mx,c0,c1,ds,ef,wid)=>{const p=o(u,v);TN[id]={id,k,n:nm,x:p[0],y:p[1],par,mx,c0,c1,ds,ef,wid,b}};
+function mkBr(b,sp,ws,wn,mul){mul=mul||1;const o=ORG[b],q=b.toLowerCase(),add=(id,k,nm,u,v,par,mx,c0,c1,ds,ef,wid)=>{const p=o(u,v);TN[id]={id,k,n:nm,x:p[0],y:p[1],par,mx,c0,c1,ds,ef,wid,b}};
  sp.slice(0,3).forEach((a,i)=>add(q+(i+1),'n',a[0],i?270:150,i==1?-130:i==2?130:0,i?[q+'1']:['root'],5,a[1],a[2],a[3],a[4]));
  add(q+'4','n',sp[3][0],400,0,[q+'2',q+'3'],3,sp[3][1],sp[3][2],sp[3][3],sp[3][4]);
  add('w'+q+'1','w',WM[ws[0]].n,530,0,[q+'4'],1,wn[0],0,null,null,ws[0]);
- add('s'+q+'1','s',wn[2],530,-140,['w'+q+'1'],5,250,200,l=>`${tName(WM[ws[0]])} 피해 +${l*8}%`,(g,l)=>wmul(g,ws[0],'wd',1+.08*l),ws[0]);
- add('s'+q+'2','s',wn[3],530,140,['w'+q+'1'],5,250,200,l=>`${tName(WM[ws[0]])} 공속 +${l*4}%`,(g,l)=>wmul(g,ws[0],'wc',1-.04*l),ws[0]);
+ add('s'+q+'1','s',wn[2],530,-140,['w'+q+'1'],5,250,200,l=>`${tName(WM[ws[0]])} 피해 +${+(l*8*mul).toFixed(1)}%`,(g,l)=>wmul(g,ws[0],'wd',1+.08*mul*l),ws[0]);
+ add('s'+q+'2','s',wn[3],530,140,['w'+q+'1'],5,250,200,l=>`${tName(WM[ws[0]])} 공속 +${+(l*4*mul).toFixed(1)}%`,(g,l)=>wmul(g,ws[0],'wc',1-.04*mul*l),ws[0]);
  add(q+'5','n',sp[4][0],660,0,['w'+q+'1'],3,sp[4][1],sp[4][2],sp[4][3],sp[4][4]);
  add('w'+q+'2','w',WM[ws[1]].n,790,0,[q+'5'],1,wn[1],0,null,null,ws[1]);
- add('t'+q+'1','s',wn[4],790,-140,['w'+q+'2'],5,350,250,l=>`${tName(WM[ws[1]])} 피해 +${l*8}%`,(g,l)=>wmul(g,ws[1],'wd',1+.08*l),ws[1]);
- add('t'+q+'2','s',wn[5],790,140,['w'+q+'2'],5,350,250,l=>`${tName(WM[ws[1]])} 공속 +${l*4}%`,(g,l)=>wmul(g,ws[1],'wc',1-.04*l),ws[1])}
+ add('t'+q+'1','s',wn[4],790,-140,['w'+q+'2'],5,350,250,l=>`${tName(WM[ws[1]])} 피해 +${+(l*8*mul).toFixed(1)}%`,(g,l)=>wmul(g,ws[1],'wd',1+.08*mul*l),ws[1]);
+ add('t'+q+'2','s',wn[5],790,140,['w'+q+'2'],5,350,250,l=>`${tName(WM[ws[1]])} 공속 +${+(l*4*mul).toFixed(1)}%`,(g,l)=>wmul(g,ws[1],'wc',1-.04*mul*l),ws[1])}
 mkBr('A',[['날 갈기',120,80,l=>`피해 +${l*3}%`,(g,l)=>{g.pd*=1+.02*l}],['속사 훈련',150,80,l=>`공격 속도 +${l*2.5}%`,(g,l)=>{g.ps*=1-.025*l}],['용 사냥꾼',200,120,l=>`보스 피해 +${l*5}%`,(g,l)=>{g.bd=1+.05*l}],['전투 본능',400,250,l=>`피해 +${l*4}%`,(g,l)=>{g.pd*=1+.025*l}],['대장간의 비전',600,300,l=>`피해 +${l*5}%`,(g,l)=>{g.pd*=1+.05*l}]],['zanbato','falx'],[900,1800,'참마도 연마','참마도 속사','팔크스 연마','팔크스 속사']);
-mkBr('B',[['두둑한 주머니',100,80,l=>`시작 골드 +${l*10}`,(g,l)=>{g.gold+=10*l}],['전리품 수집',150,100,l=>`처치 골드 +${l*2}%`,(g,l)=>{g.pg*=1+.02*l}],['전투 보상',150,100,l=>`코인 보상 +${l*2}%`,(g,l)=>{g.cm*=1+.02*l}],['상인 길드',400,250,l=>`시작 골드 +${l*20}`,(g,l)=>{g.gold+=20*l}],['대상인의 인맥',600,300,l=>`코인 보상 +${l*2.5}%`,(g,l)=>{g.cm*=1+.025*l}]],['katar','sai'],[700,1500,'카타르 연마','카타르 속사','사이 연마','사이 속사']);
-mkBr('C',[['사거리 훈련',150,80,l=>`사거리 +${l*3}%`,(g,l)=>{g.pr*=1+.025*l}],['성벽 보강',150,100,l=>`체력 +${l*4}%`,(g,l)=>{g.lives*=1+.025*l}],['판매 환급',100,100,l=>`판매 환급 +${l*3}%p`,(g,l)=>{g.sv=.03*l}],['요새화',400,250,l=>`체력 +${l*5}% · 사거리 +${l*2}%`,(g,l)=>{g.lives*=1+.05*l;g.pr*=1+.02*l}],['철벽의 맹세',600,300,l=>`체력 +${l*4}%`,(g,l)=>{g.lives*=1+.025*l}]],['repeater','harpoon'],[800,1600,'연노 연마','연노 속사','작살 연마','작살 속사']);
+mkBr('B',[['두둑한 주머니',100,80,l=>`시작 골드 +${l*10}`,(g,l)=>{g.gold+=10*l}],['전리품 수집',150,100,l=>`처치 골드 +${l*2}%`,(g,l)=>{g.pg*=1+.02*l}],['전투 보상',150,100,l=>`코인 보상 +${l*2}%`,(g,l)=>{g.cm*=1+.02*l}],['상인 길드',400,250,l=>`시작 골드 +${l*20}`,(g,l)=>{g.gold+=20*l}],['대상인의 인맥',600,300,l=>`코인 보상 +${l*2.5}%`,(g,l)=>{g.cm*=1+.025*l}]],['katar','sai'],[700,1500,'카타르 연마','카타르 속사','사이 연마','사이 속사'],.8);
+mkBr('C',[['사거리 훈련',150,80,l=>`사거리 +${l*3}%`,(g,l)=>{g.pr*=1+.025*l}],['성벽 보강',150,100,l=>`체력 +${l*4}%`,(g,l)=>{g.lives*=1+.025*l}],['판매 환급',100,100,l=>`판매 환급 +${l*3}%p`,(g,l)=>{g.sv=.03*l}],['요새화',400,250,l=>`체력 +${l*5}% · 사거리 +${l*2}%`,(g,l)=>{g.lives*=1+.05*l;g.pr*=1+.02*l}],['철벽의 맹세',600,300,l=>`체력 +${l*4}%`,(g,l)=>{g.lives*=1+.025*l}]],['repeater','harpoon'],[800,1600,'연노 연마','연노 속사','작살 연마','작살 속사'],.6);
 const XN=[['x1','화력 집중',1150,580,['a3','b2'],l=>`피해 +${l*5}%`,(g,l)=>{g.pd*=1+.05*l}],['x2','보급선',900,1010,['b3','c2'],l=>`시작 골드 +${l*25} · 체력 +${l*3}%`,(g,l)=>{g.gold+=40*l;g.lives*=1+.02*l}],['x3','철벽 포진',650,580,['c3','a2'],l=>`사거리 +${l*3}% · 공속 +${l*2.5}%`,(g,l)=>{g.pr*=1+.02*l;g.ps*=1-.025*l}]];
 XN.forEach(x=>{TN[x[0]]={id:x[0],k:'x',n:x[1],x:x[2],y:x[3],par:x[4],mx:3,c0:350,c1:250,ds:x[5],ef:x[6]}});
 
@@ -2192,7 +2193,7 @@ function startWave(force){
   ][G.di];let t=G.active?G.sp:0;
  const n=Math.min(70,Math.round((4+Math.floor(w*1.7))*G.cnt));
  for(let i=0;i<n;i++){t+=Math.max(.35,1-w*.03);G.q.push({t,k:pl[Math.floor(Math.random()*Math.min(pl.length,Math.floor(w/3)+2))]})}
- if(w%5==0)G.q.push({t:t+1.5,k:G.dungeonBossIndex||BOSS_EN[Math.floor(Math.random()*BOSS_EN.length)]});G.q.sort((a,b)=>a.t-b.t);
+ if(w%5==0)G.q.push({t:t+1.5,k:G.dungeonBossIndex||BOSS_EN[Math.floor(Math.random()*BOSS_EN.length)],boss:true});G.q.sort((a,b)=>a.t-b.t);
  snd('wave');if(!G.active)G.sp=0;G.ws=G.sp;G.active=true;hud();
 }
 function hud(){
@@ -2264,7 +2265,7 @@ $('ob').onclick=()=>{$('over').style.display='none';G=null;show('home')};
 function update(dt){
  if(G.active){
   G.sp+=dt;
-  while(G.q.length&&G.q[0].t<=G.sp){const k=G.q.shift(),b=EN[k.k],hp=b.hp*G.d.hp*(G.eh||1)*(1+G.wave*.13);if(b.r>=30){snd('boss');G.bt=3}G.en.push({k:b,hp,mx:hp,d:0,x:0,y:0,hit:0,stun:0})}
+  while(G.q.length&&G.q[0].t<=G.sp){const k=G.q.shift(),b=EN[k.k],hp=b.hp*G.d.hp*(G.eh||1)*(1+G.wave*.13);if(k.boss){snd('boss');G.bt=3}G.en.push({k:b,hp,mx:hp,d:0,x:0,y:0,hit:0,stun:0,boss:!!k.boss})}
   if(!G.q.length&&!G.en.length){G.active=false;G.gold+=30+G.wave*8;dq('wave',1);if(G.wave>=G.max){end(true);return}if(G.inf&&G.wave%10==0)perk();hud();side()}
  }
  if(G.auto&&!G.active&&!G.over){G.at+=dt;if(G.at>2){G.at=0;startWave()}}
@@ -2309,13 +2310,13 @@ function update(dt){
       for(const g of gims){
         if(g.type==='crit' && Math.random() < (g.chance||0.25)){ d2 *= (g.mult||2); isCrit = true; }
         if(g.type==='dbl' && Math.random() < (g.chance||0.3)) d2 *= (g.mult||2);
-        if(g.type==='boss' && e.k.r>=30) d2 *= (g.mult||1.6);
-        if(g.type==='laev') d2 *= (e.k.r>=30 ? (g.bossMult||3) : (g.normalMult||0.5));
+        if(g.type==='boss' && e.boss) d2 *= (g.mult||1.6);
+        if(g.type==='laev') d2 *= (e.boss ? (g.bossMult||3) : (g.normalMult||0.5));
         if(g.type==='exec' && e.hp < e.mx * (g.threshold||0.2)) d2 = e.hp + 1;
       }
 
       // 보스 추가 피해 (트리)
-      if(e.k.r>=30) d2 *= (G.bd||1);
+      if(e.boss) d2 *= (G.bd||1);
       // 방어력 + shred
       let def = (e.k.df||0);
       for(const g of gims) if(g.type==='shred') def = Math.max(0, def - (g.amount||15));
@@ -2402,7 +2403,10 @@ function normalizeGims(g){
   }
   return [];
 }
-function killed(e){snd('kill');S.st.k++;if(e.k.r>=30)S.st.boss++;S.st.wk=S.st.wk||{};if(e.by)S.st.wk[e.by.id]=(S.st.wk[e.by.id]||0)+1;dq('kill',1);if(e.k.r>=30)dq('boss',1);if(e.by)dq('w:'+e.by.id,1);chk();G.gold+=Math.round(e.k.g*(G.pg||1));dq('gold',e.k.g);if(e.by)e.by.k++;
+function killed(e){snd('kill');S.st.k++;if(e.boss)S.st.boss++;S.st.wk=S.st.wk||{};if(e.by)S.st.wk[e.by.id]=(S.st.wk[e.by.id]||0)+1;dq('kill',1);if(e.boss)dq('boss',1);if(e.by)dq('w:'+e.by.id,1);chk();G.gold+=Math.round(e.k.g*(G.pg||1));dq('gold',e.k.g);if(e.by)e.by.k++;
+ // 시즌 XP (처치당 소량, 저장은 게임 종료 시)
+ if(e.boss) addSeasonXp(12, false); else addSeasonXp(1, false);
+ hud();sideLite();G.fx.push({type:'coin',x:e.x,y:e.y,t:.6,m:.6,v:e.k.g});return false}
  // 시즌 XP (처치당 소량, 저장은 게임 종료 시)
  if(e.k.r>=30) addSeasonXp(12, false); else addSeasonXp(1, false);
  hud();sideLite();G.fx.push({type:'coin',x:e.x,y:e.y,t:.6,m:.6,v:e.k.g});return false}
@@ -2501,11 +2505,11 @@ function draw(){
  for(const e of G.en)if(e.k.df){cx.font='12px sans-serif';cx.textAlign='center';cx.fillText('🛡️',e.x+e.k.r*.7,e.y+e.k.r*.9)}
  for(const e of G.en)if(e.bl>0){cx.fillStyle='#e53935';cx.beginPath();cx.arc(e.x-4+Math.sin(performance.now()/120+e.x)*3,e.y+e.k.r*.6+((performance.now()/6)%10),2.5,0,7);cx.fill()}
  for(const e of G.en)if(Math.hypot(e.x-mouse.x,e.y-mouse.y)<e.k.r+6){tip(e);break}
- const bs=G.en.filter(e=>e.k.r>=30);
+ const bs=G.en.filter(e=>e.boss);
  if(bs.length){const b=bs[0],a=.18+.08*Math.sin(performance.now()/250),g=cx.createRadialGradient(400,240,200,400,240,480);g.addColorStop(0,'rgba(255,0,0,0)');g.addColorStop(1,`rgba(255,0,0,${a*2})`);cx.fillStyle=g;cx.fillRect(0,0,800,480);cx.fillStyle='#000a';cx.fillRect(200,8,400,14);cx.fillStyle='#e53935';cx.fillRect(200,8,400*Math.max(0,b.hp/b.mx),14);cx.strokeStyle='#fff';cx.lineWidth=1;cx.strokeRect(200,8,400,14);cx.fillStyle='#fff';cx.font='bold 11px sans-serif';cx.textAlign='center';cx.fillText('BOSS '+Math.ceil(b.hp),400,19)}
  if(G.bt>0){G.bt-=.016;const p=Math.min(1,G.bt/3);cx.save();cx.globalAlpha=Math.min(1,p*2);cx.font='bold 44px sans-serif';cx.textAlign='center';cx.fillStyle='#ff1744';cx.strokeStyle='#000';cx.lineWidth=6;cx.strokeText('⚠ BOSS ⚠',400,240);cx.fillText('⚠ BOSS ⚠',400,240);cx.restore()}
 }
-function tip(e){const i=EN.indexOf(e.k),nm=(tEn(i)||(LANG==='en'?'Enemy':'적'))+(e.k.r>=30?(LANG==='en'?' (Boss)':' (보스)'):''),w=150,h=e.k.df?68:54;let x=Math.min(800-w-4,Math.max(4,e.x-w/2)),y=e.y-e.k.r-h-10;if(y<4)y=e.y+e.k.r+10;
+function tip(e){const i=EN.indexOf(e.k),nm=(tEn(i)||(LANG==='en'?'Enemy':'적'))+(e.boss?(LANG==='en'?' (Boss)':' (보스)'):''),w=150,h=e.k.df?68:54;let x=Math.min(800-w-4,Math.max(4,e.x-w/2)),y=e.y-e.k.r-h-10;if(y<4)y=e.y+e.k.r+10;
  cx.save();cx.fillStyle='rgba(20,22,30,.94)';cx.strokeStyle='#ffc83d';cx.lineWidth=2;cx.beginPath();if(cx.roundRect)cx.roundRect(x,y,w,h,8);else cx.rect(x,y,w,h);cx.fill();cx.stroke();
  cx.textAlign='left';cx.fillStyle='#fff';cx.font='bold 12px sans-serif';cx.fillText(e.k.e+' '+nm,x+8,y+17);
  cx.fillStyle='#000';cx.fillRect(x+8,y+23,w-16,7);cx.fillStyle='#e53935';cx.fillRect(x+8,y+23,(w-16)*Math.max(0,e.hp/e.mx),7);
